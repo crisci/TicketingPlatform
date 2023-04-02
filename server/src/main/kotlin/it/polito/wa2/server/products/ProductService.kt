@@ -1,6 +1,7 @@
-package it.polito.wa2.server.products
+package it.polito.wa2.server.product
 
 interface ProductService {
-    fun getAll() : List<ProductDTO>
-    fun getProduct(ean: String) : ProductDTO?
+    fun getAllProducts() : List<ProductDTO>
+    fun getProduct(productId:String):ProductDTO?
+    fun putProduct(productDTO:ProductDTO)
 }

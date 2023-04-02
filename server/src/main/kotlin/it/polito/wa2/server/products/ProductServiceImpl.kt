@@ -1,24 +1,25 @@
-package it.polito.wa2.server.products
+package it.polito.wa2.server.product
 
+import it.polito.wa2.server.products.Product
+import it.polito.wa2.server.products.fromDTO
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.transaction.annotation.Transactional
 
-@Service //Responsible of business logic
-class ProductServiceImpl(
-    private val productRepository: ProductRepository
-) : ProductService {
-
-    override fun getAll(): List<ProductDTO> {
-        return productRepository.findAll().map { it.toDTO() }
+@Service @Transactional
+class ProductServiceImpl(private val repo: ProductRepository):ProductService {
+    override fun getAllProducts(): List<ProductDTO> {
+        return repo.findAll().map(){p -> p.toDTO()}
     }
 
-    override fun getProduct(ean: String): ProductDTO? {
-        return productRepository
-            .findByIdOrNull(ean)
-            ?.toDTO()
+    override fun getProduct(productId: String): ProductDTO? {
+        return repo.findByIdOrNull(productId)?.toDTO()
     }
 
-
-
+    override fun putProduct(productDTO: ProductDTO) {
+        if(repo.existsById(productDTO.ean)){
+            repo.saveAndFlush(Product().fromDTO(productDTO))
+        }
+        else throw ProductNotFoundException("Can't find a product with the specified EAN")
+    }
 }

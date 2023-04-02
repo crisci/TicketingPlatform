@@ -1,12 +1,13 @@
-package it.polito.wa2.server.products
+package it.polito.wa2.server.product
 
-class ProductDTO(
+import it.polito.wa2.server.products.Product
+
+data class ProductDTO(
     val ean: String,
-    val name: String,
+    val name:String,
     val brand: String
 )
 
-//Extension method of the Product class
-fun Product.toDTO() : ProductDTO {
-    return  ProductDTO(ean, name, brand)
+fun Product.toDTO(): ProductDTO {
+    return ProductDTO(ean,name,brand)
 }
