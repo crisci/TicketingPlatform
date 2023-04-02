@@ -17,3 +17,11 @@ class Profile {
     lateinit var surname: String
     lateinit var email: String
 }
+
+fun Profile.fromDTO(profileDTO: ProfileDTO) : Profile {
+    val profileFromDTO : Profile = Profile()
+    profileFromDTO.name = profileDTO.name
+    profileFromDTO.surname = profileDTO.surname
+    profileFromDTO.email = profileDTO.email
+    return profileFromDTO
+}

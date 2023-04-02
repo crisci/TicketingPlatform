@@ -6,8 +6,8 @@ interface ProfileService {
 
     fun getAll() : List<ProfileDTO>
 
-    fun insertProfile(profile: Profile?)
+    fun insertProfile(profileDTO: ProfileDTO)
 
-    fun updateProfile(profile: Profile?)
+    fun updateProfile(profileDTO: ProfileDTO, email: String)
 
 }
