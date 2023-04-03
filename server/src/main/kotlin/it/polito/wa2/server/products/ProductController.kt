@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class ProductController(val productService: ProductService) {
-    @GetMapping("/API/products")
+    @GetMapping("/API/products/")
     @ResponseStatus(HttpStatus.OK)
     fun getAllProducts() : List<ProductDTO> {
         return productService.getAllProducts()
