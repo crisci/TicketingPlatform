@@ -37,6 +37,6 @@ class ProfileProblemDetailsHandler : ResponseEntityExceptionHandler() {
 
 }
 
-class ProfileNotFoundException(override val message: String?) : Throwable()
-class DuplicatedEmailException(override val message: String?) : Throwable()
+class ProfileNotFoundException(override val message: String?) : RuntimeException()
+class DuplicatedEmailException(override val message: String?) : RuntimeException()
 
