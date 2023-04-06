@@ -17,7 +17,7 @@ function getAllProfiles() {
 
 function getAllProducts() {
     return new Promise((resolve, reject) => { 
-        fetch(`${APIURL}/products/`)
+        fetch(`${APIURL}/products/csasa`)
             .then(result => {
                 if(result.ok)
                     resolve(result.json())
