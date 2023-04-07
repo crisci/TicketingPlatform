@@ -1,31 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import LandingPage from './LandingPage';
+import { DefaultLayout, LandingPage } from './LandingPage';
 
 
 function App() {
   return (
-    <>
-      <Router>
-        <MainApp />
-      </Router>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/*" element={<MainApp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 function MainApp(props) {
-  const navigate = useNavigate();
-
-
 
   return (
     <Routes>
-      <Route path="/" element={<LandingPage/>}></Route>
+      <Route path="/" element={<DefaultLayout/>}>
+        <Route index element={<LandingPage/>}></Route>
+      </Route>
     </Routes>
   );
+  
 }
 
 export default App;
