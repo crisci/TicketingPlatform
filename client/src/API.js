@@ -68,8 +68,8 @@ export function addProfile(data) {
     });
 }
 
-//PUT /api/riddles/:id
-function updateRiddle(data) {
+//PUT /API/profiles/:email
+function updateProfile(data) {
     return new Promise((resolve, reject) => {
         fetch(new URL('profiles/' + data.email, APIURL), {
             method: 'PUT',
@@ -90,3 +90,6 @@ function updateRiddle(data) {
         }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
     });
 }
+
+const API = { getProducts, getProductById, getProfile, addProfile, updateProfile };
+export default API;
