@@ -1,5 +1,7 @@
 package it.polito.wa2.server.product
 
+import it.polito.wa2.server.products.Product
+import it.polito.wa2.server.products.fromDTO
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +18,7 @@ class ProductServiceImpl(private val repo: ProductRepository):ProductService {
 
     override fun putProduct(productDTO: ProductDTO) {
         if(repo.existsById(productDTO.ean)){
-            repo.saveAndFlush(Product(productDTO.ean,productDTO.name,productDTO.brand))
+            repo.saveAndFlush(Product().fromDTO(productDTO))
         }
         else throw ProductNotFoundException("Can't find a product with the specified EAN")
     }
