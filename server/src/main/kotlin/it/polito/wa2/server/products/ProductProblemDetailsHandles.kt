@@ -18,6 +18,6 @@ class ProductProblemDetailsHandles: ResponseEntityExceptionHandler() {
     fun handleDuplicateProduct(e: DuplicateProductException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.CONFLICT, e.message!! )
 }
-
-class ProductNotFoundException(override val message:String?) : Throwable()
-class DuplicateProductException(override val message:String?) : Throwable()
+    
+class ProductNotFoundException(override val message:String?) : RuntimeException()
+class DuplicateProductException(override val message:String?) : RuntimeException()

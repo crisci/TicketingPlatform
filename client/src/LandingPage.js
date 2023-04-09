@@ -1,47 +1,198 @@
-import { useEffect, useState } from "react";
-import { Form, Container, FormControl, FormGroup, FormLabel, Col, Row } from "react-bootstrap";
-import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { Form, Container, FormControl, FormGroup, Col, Row, Button, ListGroup } from "react-bootstrap";
+import API from "./API";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './list.css'
+import { ModalAddProduct, ModalAddProfile } from "./Modals";
 
 
 
 function LandingPage(props) {
 
-    const [field1, setField1] = useState('');
-    const [field2, setField2] = useState('');
+    const [email, setEmail] = useState('');
+    const [ean, setEan] = useState('');
+    const [listOfProfiles, setListOfProfiles] = useState([]);
+    const [listOfProducts, setListOfProducts] = useState([]);
+    const [showModalProfile, setShowModalProfile] = useState(false);
+    const [showModalProduct, setShowModalProduct] = useState(false);
+
+
+    function getProfiles() {
+        API.getAllProfiles().then((profiles) => {
+            setListOfProfiles(profiles)}).catch(error => { 
+                notifyProfileError(error.detail)
+                console.error(error.detail)
+            })
+    }
+
+    function getProducts() {
+        API.getAllProducts().then((products) => {
+            setListOfProducts(products)}).catch(error => {
+                notifyProductError(error.detail)
+                console.error(error.detail)
+            })
+    }
+
+
+    function emptyListOfProfiles() {
+        setListOfProfiles([])
+    }
+
+    function emptyListOfProduct() {
+        setListOfProducts([])
+    }
+
+    function handleSubmitProfile(event) {
+        event.preventDefault()
+        API.getProfile(email).then(profile => {
+            setListOfProfiles([profile])
+        }).catch(error => { 
+            notifyProfileError(error.detail)
+            console.error(error.detail)
+        })
+    }
+    
+
+    function handleSubmitProduct(event) {
+        event.preventDefault()
+        API.getProduct(ean).then(product => {
+            setListOfProducts([product])
+        }).catch(error => {
+            notifyProductError(error.detail)
+            console.error(error.detail)
+        })
+    }
+
+    const handleCloseModalProfile = () => setShowModalProfile(false);
+    const handleShowModalProfile = () => setShowModalProfile(true);
+
+    const handleCloseModalProduct = () => setShowModalProduct(false);
+    const handleShowModalProduct = () => setShowModalProduct(true);
+
+    const notifyProductError = (error) => toast.error(error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+
+    const notifyProfileError = (error) => toast.error(error, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
     
 
     return(
         <Container fluid className="p-5 text-center justify-content-center">
-            <Row className="row d-flex vh-100 justify-content-center m-auto">
+            <ModalAddProduct show={showModalProduct} onHide={handleCloseModalProduct}/>
+            <ModalAddProfile show={showModalProfile} onHide={handleCloseModalProfile}/>
+            <ToastContainer/>
+            <Row className="row d-flex justify-content-center m-auto">
             <Col >
                 <Row><h1>Select the users</h1></Row>
-                <Row className="row d-flex vh-100 justify-content-center m-auto">
-                    <Form noValidate onSubmit={() => {}} className="w-50">
+                <Row className="d-flex justify-content-center m-auto">
+                    <Form noValidate onSubmit={event => handleSubmitProfile(event)} className="w-50">
                         <FormGroup className="mb-3" controlId="testForm">
-                            <FormLabel></FormLabel>
-                            <FormControl autoComplete="off" type="text" placeholder="Enter something..." onChange={(event) => {setField1(event.target.value)}}></FormControl>
+                            <FormControl autoComplete="off" type="text" placeholder="Enter the email..." onChange={(event) => {setEmail(event.target.value)}}></FormControl>
                         </FormGroup>
                     </Form>
                 </Row>
-                <Row><p>{field1}</p></Row>
+                <Row className="w-50 justify-content-center m-auto">
+                    <Col>
+                        {listOfProfiles.length === 0 
+                            ? <Button onClick={() => getProfiles()}>Get profiles</Button>
+                            : <Button variant="danger" onClick={() => emptyListOfProfiles()}>{listOfProfiles.length !== 1 ? "Hide profiles" : "Hide profile"}</Button>}
+                
+                    </Col>
+                    <Col>
+                            <Button onClick={handleShowModalProfile}>Add profile</Button>
+                    </Col>
+                </Row>
+                {listOfProfiles.length !== 0
+                    ?   <Row>
+                            <ListGroup>
+                                <ListGroup.Item key="title" as='li' className="d-flex justify-content-beetween list-titles mt-2">
+                                    <Container>Name</Container>
+                                    <Container>Surname</Container>
+                                    <Container>Email</Container>
+                                </ListGroup.Item>
+                                {listOfProfiles.map( profile => <ProfileRow key={profile.email} profile={profile}/>)}
+                            </ListGroup>
+                        </Row>
+                    : undefined}
             </Col>
             <Col>
                 <Row><h1>Select the products</h1></Row>
-                <Row className="row d-flex vh-100 justify-content-center m-auto">
-                    <Form noValidate onSubmit={() => {}} className="w-50">
+                <Row className="d-flex justify-content-center m-auto">
+                    <Form noValidate onSubmit={event => handleSubmitProduct(event)} className="w-50">
                         <FormGroup className="mb-3" controlId="testForm">
-                            <FormLabel></FormLabel>
-                            <FormControl autoComplete="off" type="text" placeholder="Enter something..." onChange={(event) => {setField2(event.target.value)}}></FormControl>
+                            <FormControl autoComplete="off" type="text" placeholder="Enter the ean..." onChange={(event) => {setEan(event.target.value)}}></FormControl>
                         </FormGroup>
                     </Form>
                 </Row>
-                <Row><p>{field2}</p></Row>
+                <Row className="w-50 justify-content-center m-auto">
+                    <Col>
+                        {listOfProducts.length === 0 
+                            ? <Button onClick={() => getProducts()}>Get products</Button>
+                            : <Button variant="danger" onClick={() => emptyListOfProduct()}>{listOfProducts.length !== 1 ? "Hide products" : "Hide product"}</Button>}
+                    </Col>
+                    <Col>
+                            <Button onClick={handleShowModalProduct}>Add product</Button>
+                    </Col>
+                </Row>
+                {listOfProducts.length !== 0
+                    ?   <Row>
+                            <ListGroup>
+                                <ListGroup.Item key="title" as='li' className="d-flex justify-content-beetween list-titles mt-2">
+                                    <Container>EAN</Container>
+                                    <Container>Name</Container>
+                                    <Container>Brand</Container>
+                                </ListGroup.Item>
+                                {listOfProducts.map( product => <ProductRow key={product.ean} product={product}/>)}
+                            </ListGroup>
+                        </Row>
+                    : undefined}
             </Col>
         </Row>
         </Container>
     )
 }
 
+
+function ProfileRow(props) {
+    return(
+        <ListGroup.Item as='li' className="d-flex justify-content-beetween px-0 py-4 mb-2">
+            <Container>{props.profile.name}</Container>
+            <Container>{props.profile.surname}</Container>
+            <Container>{props.profile.email}</Container>
+        </ListGroup.Item>
+    )
+
+}
+
+
+
+function ProductRow(props) {
+    return(
+        <ListGroup.Item as='li' className="d-flex justify-content-beetween px-0 py-3 mb-2">
+            <Container>{props.product.ean}</Container>
+            <Container>{props.product.name}</Container>
+            <Container>{props.product.brand}</Container>
+        </ListGroup.Item>
+    )
+
+}
 
 
 

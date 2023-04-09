@@ -24,9 +24,9 @@ class ProfileServiceImpl(
         val profileToUpdate: Profile? = profileRepository
             .findProfilesByEmail(email)
             ?.also {
-                it.email = profileDTO.email?:it.email
-                it.name = profileDTO.name?:it.name
-                it.surname = profileDTO.surname?:it.surname
+                it.email = profileDTO.email
+                it.name = profileDTO.name
+                it.surname = profileDTO.surname
             }
         profileRepository.save(profileToUpdate!!)
     }
