@@ -35,8 +35,20 @@ class ProfileProblemDetailsHandler : ResponseEntityExceptionHandler() {
         return d
     }
 
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidEmailFormatException::class)
+    fun handleInvelidEmailFormatException(e: InvalidEmailFormatException) : ProblemDetail {
+        val d = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST)
+        d.title = "The email value provided is not a valid email format"
+        d.detail = e.message
+        return d
+    }
+
 }
 
 class ProfileNotFoundException(override val message: String?) : RuntimeException()
 class DuplicatedEmailException(override val message: String?) : RuntimeException()
+class InvalidEmailFormatException(override val message: String?) : RuntimeException()
 

@@ -35,6 +35,7 @@ class ProfileController(
     @PostMapping("/API/profiles")
     @ResponseStatus(HttpStatus.CREATED)
     fun postProfile(@RequestBody profileDTO: ProfileDTO) {
+        //TODO: Email validation
             if(profileService.getProfileByEmail(profileDTO.email) == null)
                 profileService.insertProfile(profileDTO)
             else
@@ -44,11 +45,13 @@ class ProfileController(
     @PutMapping("/API/profiles/{email}") @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     fun putProfile(@RequestBody profileDTO: ProfileDTO, @PathVariable(name = "email") email: String) {
-            if(profileService.getProfileByEmail(email) != null)
-                profileService.updateProfile(profileDTO, email)
-            else
+            //TODO: Email validation
+            if(profileService.getProfileByEmail(email) != null) {
+                if(profileService.getProfileByEmail(profileDTO.email) == null) profileService.updateProfile(profileDTO, email)
+                else throw DuplicatedEmailException("${profileDTO.email} is already used")
+            } else
                 throw ProfileNotFoundException("Profile not fount with the following email '${email}'")
-
     }
+
 
 }
