@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Container, FormControl, FormGroup, FormLabel, Col, Row, Navbar, Nav } from "react-bootstrap";
+import { Form, Container, FormControl, FormGroup, FormLabel, Col, Row, Navbar, Nav, Button } from "react-bootstrap";
 import { useNavigate, Outlet } from "react-router-dom";
 import './custom.css';
 import API from './API';
@@ -33,28 +33,49 @@ function LandingPage(props){
     const [userField, setUserField] = useState('');
     const [prodField, setProdField] = useState('');
     const [products, setProducts] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState(null);
 
-    const [dirtyProd, setDirtyProd] = useState(true);
-    const [dirtyUser, setDirtyUser] = useState(true);
+    const [dirtyProd, setDirtyProd] = useState(false);
+    const [dirtyUser, setDirtyUser] = useState(false);
+    const [hideUserButton, setHideUserButton] = useState(true);
 
     useEffect(() => {
         if(dirtyProd){
-            API.getProducts().then(r => {
-                setProducts(r);
+            if(prodField != ''){
+                API.getProductById(prodField).then(r => {
+                    setProducts(r);
+                });
                 setDirtyProd(false);
-            });
+            }else{
+                API.getProducts().then(r => {
+                    setProducts(r);
+                });
+                setDirtyProd(false);
+            }
+            
         }
     }, [dirtyProd]);
 
     useEffect(() => {
         if(dirtyUser){
-            API.getProfile().then(r => {
-                setUsers(r);
+            if(userField != ''){
+                API.getProfile(userField).then(r => {
+                    setUsers(r);
+                });
                 setDirtyUser(false);
-            });
+            }else{
+                setDirtyUser(false);
+            }
         }
     }, [dirtyUser]);
+
+    useEffect(() => {
+        if(userField != ''){
+            setHideUserButton(false);
+        }else{
+            setHideUserButton(true);
+        }
+    }, [userField]);
 
     return(
         <Container fluid className="p-5 text-center justify-content-center">
@@ -66,11 +87,12 @@ function LandingPage(props){
                         <FormGroup className="mb-3" controlId="testForm">
                             <FormLabel></FormLabel>
                             <FormControl autoComplete="off" type="text" placeholder="Enter something..." onChange={(event) => {setUserField(event.target.value)}}></FormControl>
+                            { hideUserButton ? <Button className="mt-3 mb-3" type="submit" >Get user</Button> : <Button className="mt-3 mb-3" type="submit" >Get user</Button> }
+                            
                         </FormGroup>
                     </Form>
                 </Row>
-                <Row><p>{users}</p></Row>
-                <UserList></UserList>
+                <UserList user={users}></UserList>
             </Col>
             <Col>
                 <Row><h1>Select the products</h1></Row>
@@ -79,11 +101,11 @@ function LandingPage(props){
                         <FormGroup className="mb-3" controlId="testForm">
                             <FormLabel></FormLabel>
                             <FormControl autoComplete="off" type="text" placeholder="Enter something..." onChange={(event) => {setProdField(event.target.value)}}></FormControl>
+                            <Button className="mt-3 mb-3" type="submit" >Get products</Button>
                         </FormGroup>
                     </Form>
                 </Row>
-                <Row><p>{products}</p></Row>
-                <ProdList></ProdList>
+                <ProdList products={products}></ProdList>
             </Col>
             </Row>
         </Container>

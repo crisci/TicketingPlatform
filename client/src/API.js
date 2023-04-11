@@ -1,4 +1,4 @@
-const APIURL = 'http://localhost:8080/API/';
+const APIURL = 'http://localhost:3000/API/';
 
 //GET /API/products
 async function getProducts(){
@@ -20,11 +20,11 @@ async function getProductById(productId){
     const response = await fetch(new URL('products/' + productId, APIURL));
     const res = await response.json();
     if (response.ok) {
-        return res.map((r) => ({
-            ean: r.ean,
-            name: r.name,
-            brand: r.brand
-        }))
+        return ({
+            ean: res.ean,
+            name: res.name,
+            brand: res.brand
+        })
     } else {
       throw res;
     }
@@ -35,12 +35,12 @@ async function getProfile(email){
     const response = await fetch(new URL('profiles/' + email, APIURL));
     const res = await response.json();
     if (response.ok) {
-        return res.map((r) => ({
-            id: r.id,
-            name: r.name,
-            surname: r.surname,
-            email: r.email
-        }))
+        return ({
+            id: res.id,
+            name: res.name,
+            surname: res.surname,
+            email: res.email
+        })
     } else {
         throw res;
     }
