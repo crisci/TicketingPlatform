@@ -4,7 +4,6 @@ import it.polito.wa2.server.utils.EmailValidationUtil
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import java.util.regex.Pattern
 
 
 @RestController
@@ -32,30 +31,38 @@ class ProfileController(
     @PostMapping("/API/profiles")
     @ResponseStatus(HttpStatus.CREATED)
     fun postProfile(@RequestBody profileDTO: ProfileDTO) {
-        if(emailValidator.checkEmail(profileDTO.email)) {
-            if(profileService.getProfileByEmail(profileDTO.email) == null)
-                profileService.insertProfile(profileDTO)
-            else
-                throw DuplicatedEmailException("${profileDTO.email} is already used")
+        if(profileDTO.email.isNotBlank() && profileDTO.name.isNotBlank() && profileDTO.surname.isNotBlank()) {
+            if (emailValidator.checkEmail(profileDTO.email)) {
+                if (profileService.getProfileByEmail(profileDTO.email) == null)
+                    profileService.insertProfile(profileDTO)
+                else
+                    throw DuplicatedEmailException("${profileDTO.email} is already used")
+            } else {
+                throw InvalidEmailFormatException("Invalid email format")
+            }
         } else {
-            throw InvalidEmailFormatException("Invalid email format")
+            throw BlankFieldsException("Invalid blank fields")
         }
     }
 
     @PutMapping("/API/profiles/{email}") @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     fun putProfile(@RequestBody profileDTO: ProfileDTO, @PathVariable(name = "email") email: String) {
-        //TODO: Email validation
-        if(emailValidator.checkEmail(profileDTO.email)) {
-            if (profileService.getProfileByEmail(email) != null) {
-                if (profileService.getProfileByEmail(profileDTO.email) != null) profileService.updateProfile(profileDTO, email)
-                else throw DuplicatedEmailException("${profileDTO.email} is already used")
-            } else
-                throw ProfileNotFoundException("Profile not fount with the following email '${email}'")
+        if(profileDTO.email.isNotBlank() && profileDTO.name.isNotBlank() && profileDTO.surname.isNotBlank()) {
+            if (emailValidator.checkEmail(profileDTO.email)) {
+                if (profileService.getProfileByEmail(email) != null) {
+                    if (profileService.getProfileByEmail(profileDTO.email) != null) profileService.updateProfile(
+                        profileDTO,
+                        email
+                    )
+                    else throw DuplicatedEmailException("${profileDTO.email} is already used")
+                } else
+                    throw ProfileNotFoundException("Profile not fount with the following email '${email}'")
+            } else {
+                throw InvalidEmailFormatException("Invalid email format")
+            }
         } else {
-            throw InvalidEmailFormatException("Invalid email format")
+            throw BlankFieldsException("Invalid blank fields")
         }
     }
-
-
 }

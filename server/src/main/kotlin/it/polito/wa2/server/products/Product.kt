@@ -4,6 +4,7 @@ import it.polito.wa2.server.product.ProductDTO
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.jetbrains.annotations.NotNull
 
 @Entity
 @Table(name = "products")
