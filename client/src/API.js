@@ -10,7 +10,7 @@ function getAllProfiles() {
                     resolve(result.json())
                 }  
             }).catch((err) => {
-                resolve({error: "Unable to communicate with the server"})
+                resolve({detail: "Unable to communicate with the server"})
             });
      })
     
@@ -25,7 +25,7 @@ function getAllProducts() {
                 if(result.ok)
                     resolve(result.json())
             }).catch(err => {
-                resolve({error: "Unable to communicate with the server"})
+                resolve({detail: "Unable to communicate with the server"})
             })
      })
 }
@@ -39,10 +39,10 @@ function getProfile(email) {
                 if(result.ok) 
                     resolve(result.json())
                 else 
-                    result.json().then(error => reject(error)).catch(() => reject({ error: "Cannot parse server response." }))
+                    result.json().then(error => reject(error)).catch(() => reject({ detail: "Cannot parse server response." }))
                 
             }).catch(err => {
-                resolve({error: "Unable to communicate with the server"})
+                resolve({detail: "Unable to communicate with the server"})
             })
      })
 }
@@ -55,36 +55,16 @@ function getProduct(ean) {
                 if(result.ok)
                     resolve(result.json())
                 else 
-                    result.json().then(error => reject(error)).catch(() => reject({ error: "Cannot parse server response." }))
+                    result.json().then(error => reject(error)).catch(() => reject({ detail: "Cannot parse server response." }))
                 
             }).catch(err => {
-                resolve({error: "Unable to communicate with the server"})
+                resolve({detail: "Unable to communicate with the server"})
             })
      })
 }
-
-// //POST /API/products/
-// export function addProduct(product) {
-//     return new Promise((resolve, reject) => { 
-//         fetch(`${APIURL}/products/`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(product)
-//         }).then((result) => {
-//             if(result.ok)
-//                 resolve(result.json())
-//             else
-//                 result.json().then(error => reject(error)).catch(() => reject({error: "Cannot parse server response."}))
-//         }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
-//      })
-// }
-
 //POST /API/profiles
 export function addProfile(profile) {
     return new Promise((resolve, reject) => {
-        console.log(profile)
         fetch(`${APIURL}/profiles`, {
             method: 'POST',
             headers: {
@@ -92,16 +72,15 @@ export function addProfile(profile) {
             },
             body: JSON.stringify(profile),
         }).then((response) => {
-            console.log("RESPONSE")
             if (response.ok) {
                 resolve(null);
             } else {
                 // analyze the cause of error
                 response.json()
                     .then((message) => { reject(message); }) // error message in the response body
-                    .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
+                    .catch(() => { reject({ detail: "Cannot parse server response." }) }); // something else
             }
-        }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+        }).catch(() => { reject({ detail: "Cannot communicate with the server." }) }); // connection errors
     });
 }
 
@@ -122,9 +101,9 @@ function updateProfile(profile) {
                 // analyze the cause of error
                 response.json()
                     .then((obj) => { reject(obj); }) // error message in the response body
-                    .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
+                    .catch(() => { reject({ detail: "Cannot parse server response." }) }); // something else
             }
-        }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+        }).catch(() => { reject({ detail: "Cannot communicate with the server." }) }); // connection errors
     });
 }
 

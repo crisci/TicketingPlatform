@@ -7,6 +7,6 @@ class ProfileDTO(
 )
 
 fun Profile.toDTO() : ProfileDTO {
-    return ProfileDTO(name, surname, email)
+    return ProfileDTO(name, surname, email.lowercase())
 }
 

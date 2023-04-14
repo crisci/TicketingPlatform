@@ -8,11 +8,33 @@ export function ModalProfile(props) {
   const [email, setEmail] = useState("")
   const [newEmail, setNewEmail] = useState("")
 
+
+  var reg = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
   function handleOnClick() {
-    if(props.add) 
-      props.addProfile({name, surname, email})
-    else
-      props.updateProfile({name, surname, email, newEmail})
+    if(props.add) {
+      //fields validation not null
+      if(email.trim() === "" || name.trim() === "" || surname.trim() === "") {
+        props.notifyProfileError("Fields must not be blank")
+        return
+      } 
+      //email validation
+      if (!reg.test(email)) {
+        props.notifyProfileError("Invalid email format")
+        return
+      }
+      props.addProfile({name: name.trim(), surname: surname.trim(), email: email.toLocaleLowerCase().trim()})
+    } else {
+      if(email.trim() === "" || name.trim() === "" || surname.trim() === "" || newEmail.trim() === "") {
+        props.notifyProfileError("Fields must not be blank")
+        return
+      }
+      if (!reg.test(email) || !reg.test(newEmail)) {
+        props.notifyProfileError("Invalid email format")
+        return
+      }
+      props.updateProfile({name: name.trim(), surname: surname.trim(), email: email.toLocaleLowerCase().trim(), newEmail: newEmail.toLocaleLowerCase().trim()})
+    }
     props.onHide()
     setName("")
     setSurname("")
@@ -28,7 +50,7 @@ export function ModalProfile(props) {
     setNewEmail("")
   }
 
-  const {addProfile, updateProfile, add, ...rest} = props //to avoid react warning on the modal creation
+  const {addProfile, updateProfile, add, notifyProfileError, ...rest} = props //to avoid react warning on the modal creation
 
     return (
         <Modal

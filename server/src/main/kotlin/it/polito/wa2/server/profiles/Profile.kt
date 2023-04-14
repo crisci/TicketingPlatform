@@ -23,6 +23,6 @@ fun Profile.fromDTO(profileDTO: ProfileDTO) : Profile {
     val profileFromDTO : Profile = Profile()
     profileFromDTO.name = profileDTO.name
     profileFromDTO.surname = profileDTO.surname
-    profileFromDTO.email = profileDTO.email
+    profileFromDTO.email = profileDTO.email.lowercase()
     return profileFromDTO
 }

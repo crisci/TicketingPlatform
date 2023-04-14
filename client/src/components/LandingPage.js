@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Form, Container, FormControl, FormGroup, Col, Row, Button, ListGroup } from "react-bootstrap";
-import API from "./API";
+import API from "../API";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './list.css'
 import { ModalProfile } from "./modals/ModalProfile";
+import { CustomNavbar } from "./CustomNavbar";
 
 
 function LandingPage(props) {
+
 
     const [email, setEmail] = useState('');
     const [ean, setEan] = useState('');
@@ -44,7 +46,7 @@ function LandingPage(props) {
 
     function handleSubmitProfile(event) {
         event.preventDefault()
-        API.getProfile(email).then(profile => {
+        API.getProfile(email.toLocaleLowerCase()).then(profile => {
             setListOfProfiles([profile])
         }).catch(error => { 
             notifyProfileError(error.detail)
@@ -65,10 +67,6 @@ function LandingPage(props) {
 
     const addProfile = (profile) => {
         //profile validation
-        if(profile.email === "" || profile.name === "" || profile.surname === "") {
-            notifyProfileError("Invalid parameters")
-            return
-        }
         API.addProfile(profile).then(
             profile => {
                 notifyProfileSuccess("Profile added correctly!")
@@ -82,10 +80,6 @@ function LandingPage(props) {
 
     const updateProfile = (profile) => {
         //profile validation
-        if(profile.email === "" || profile.name === "" || profile.surname === "" || profile.newEmail === "") {
-            notifyProfileError("Invalid parameters")
-            return
-        }
         API.updateProfile(profile).then(
             profile => {
                 notifyProfileSuccess("Profile updated correctly!")
@@ -137,8 +131,10 @@ function LandingPage(props) {
     
 
     return(
-        <Container fluid className="p-5 text-center justify-content-center">
-            <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile} updateProfile={updateProfile} add={add}/>
+        <>
+        <CustomNavbar/>
+        <Container fluid className="text-center justify-content-center" style={{ paddingTop: "5rem" }}>
+            <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile} updateProfile={updateProfile} add={add} notifyProfileError={notifyProfileError}/>
             <ToastContainer/>
             <Row className="row d-flex justify-content-center m-auto">
             <Col >
@@ -208,6 +204,7 @@ function LandingPage(props) {
             </Col>
         </Row>
         </Container>
+        </>
     )
 }
 
