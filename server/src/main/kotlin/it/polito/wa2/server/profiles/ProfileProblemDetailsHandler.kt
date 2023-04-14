@@ -21,7 +21,6 @@ class ProfileProblemDetailsHandler : ResponseEntityExceptionHandler() {
         val d = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST)
         d.title = "Profile not found"
         d.detail = e.message
-        //d.type = URI.create("https://apit.myservice.com/errors/profile-not-found")
         return d
     }
 

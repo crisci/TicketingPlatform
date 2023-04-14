@@ -4,8 +4,8 @@ import API from "./API";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './list.css'
-import { ModalAddProduct, ModalAddProfile } from "./Modals";
-
+import { ModalProfile } from "./modals/ModalProfile";
+import { ModalProduct } from "./modals/ModalProduct";
 
 
 function LandingPage(props) {
@@ -64,6 +64,17 @@ function LandingPage(props) {
         })
     }
 
+    const addProfile = (profile) => {
+        //product validation
+        console.log(profile)
+        API.addProfile(profile).then(
+            profile => {}//notify success
+        ).catch(error => {
+            notifyProfileError(error.detail)
+            console.error(error.detail)
+        })
+    }
+
     const handleCloseModalProfile = () => setShowModalProfile(false);
     const handleShowModalProfile = () => setShowModalProfile(true);
 
@@ -95,8 +106,7 @@ function LandingPage(props) {
 
     return(
         <Container fluid className="p-5 text-center justify-content-center">
-            <ModalAddProduct show={showModalProduct} onHide={handleCloseModalProduct}/>
-            <ModalAddProfile show={showModalProfile} onHide={handleCloseModalProfile}/>
+            <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile}/>
             <ToastContainer/>
             <Row className="row d-flex justify-content-center m-auto">
             <Col >
@@ -146,9 +156,6 @@ function LandingPage(props) {
                         {listOfProducts.length === 0 
                             ? <Button onClick={() => getProducts()}>Get products</Button>
                             : <Button variant="danger" onClick={() => emptyListOfProduct()}>{listOfProducts.length !== 1 ? "Hide products" : "Hide product"}</Button>}
-                    </Col>
-                    <Col>
-                            <Button onClick={handleShowModalProduct}>Add product</Button>
                     </Col>
                 </Row>
                 {listOfProducts.length !== 0
