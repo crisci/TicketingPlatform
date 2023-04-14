@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './list.css'
 import { ModalProfile } from "./modals/ModalProfile";
-import { ModalProduct } from "./modals/ModalProduct";
 
 
 function LandingPage(props) {
@@ -15,7 +14,7 @@ function LandingPage(props) {
     const [listOfProfiles, setListOfProfiles] = useState([]);
     const [listOfProducts, setListOfProducts] = useState([]);
     const [showModalProfile, setShowModalProfile] = useState(false);
-    const [showModalProduct, setShowModalProduct] = useState(false);
+    const [add, setAdd] = useState(false);
 
 
     function getProfiles() {
@@ -65,21 +64,43 @@ function LandingPage(props) {
     }
 
     const addProfile = (profile) => {
-        //product validation
-        console.log(profile)
+        //profile validation
+        if(profile.email === "" || profile.name === "" || profile.surname === "") {
+            notifyProfileError("Invalid parameters")
+            return
+        }
         API.addProfile(profile).then(
-            profile => {}//notify success
+            profile => {
+                notifyProfileSuccess("Profile added correctly!")
+            }//notify success
         ).catch(error => {
             notifyProfileError(error.detail)
             console.error(error.detail)
         })
+        emptyListOfProfiles()
     }
 
-    const handleCloseModalProfile = () => setShowModalProfile(false);
-    const handleShowModalProfile = () => setShowModalProfile(true);
+    const updateProfile = (profile) => {
+        //profile validation
+        if(profile.email === "" || profile.name === "" || profile.surname === "" || profile.newEmail === "") {
+            notifyProfileError("Invalid parameters")
+            return
+        }
+        API.updateProfile(profile).then(
+            profile => {
+                notifyProfileSuccess("Profile updated correctly!")
+            }//notify success
+        ).catch(error => {
+            notifyProfileError(error.detail)
+            console.error(error.detail)
+        })
+        emptyListOfProfiles()
+    }
 
-    const handleCloseModalProduct = () => setShowModalProduct(false);
-    const handleShowModalProduct = () => setShowModalProduct(true);
+
+    const handleCloseModalProfile = () => setShowModalProfile(false);
+    const handleShowModalAddProfile = () => {setAdd(true);setShowModalProfile(true)};
+    const handleShowModalUpdateProfile = () => {setAdd(false);setShowModalProfile(true)};
 
     const notifyProductError = (error) => toast.error(error, {
         position: "top-right",
@@ -102,11 +123,22 @@ function LandingPage(props) {
         progress: undefined,
         theme: "colored",
         });
+
+    const notifyProfileSuccess = (success) => toast.success(success, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
     
 
     return(
         <Container fluid className="p-5 text-center justify-content-center">
-            <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile}/>
+            <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile} updateProfile={updateProfile} add={add}/>
             <ToastContainer/>
             <Row className="row d-flex justify-content-center m-auto">
             <Col >
@@ -118,7 +150,7 @@ function LandingPage(props) {
                         </FormGroup>
                     </Form>
                 </Row>
-                <Row className="w-50 justify-content-center m-auto">
+                <Row className="w-75 justify-content-center m-auto">
                     <Col>
                         {listOfProfiles.length === 0 
                             ? <Button onClick={() => getProfiles()}>Get profiles</Button>
@@ -126,7 +158,10 @@ function LandingPage(props) {
                 
                     </Col>
                     <Col>
-                            <Button onClick={handleShowModalProfile}>Add profile</Button>
+                            <Button onClick={handleShowModalAddProfile}>Add profile</Button>
+                    </Col>
+                    <Col>
+                            <Button onClick={handleShowModalUpdateProfile}>Update profile</Button>
                     </Col>
                 </Row>
                 {listOfProfiles.length !== 0

@@ -82,19 +82,18 @@ function getProduct(ean) {
 // }
 
 //POST /API/profiles
-export function addProfile(data) {
+export function addProfile(profile) {
     return new Promise((resolve, reject) => {
-        console.log(data)
+        console.log(profile)
         fetch(`${APIURL}/profiles`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(profile),
         }).then((response) => {
             console.log("RESPONSE")
             if (response.ok) {
-                console.log("OK?")
                 resolve(null);
             } else {
                 // analyze the cause of error
@@ -107,15 +106,15 @@ export function addProfile(data) {
 }
 
 //PUT /API/profiles/:email
-function updateProfile(data) {
+function updateProfile(profile) {
     return new Promise((resolve, reject) => {
-        fetch(new URL('profiles/' + data.email, APIURL), {
+        fetch(`${APIURL}/profiles/${profile.email}`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: data.id, name: data.name, surname: data.surname, email: data.email }),
+            body: JSON.stringify({name: profile.name, surname: profile.surname, email: profile.newEmail}),
         }).then((response) => {
             if (response.ok) {
                 resolve(null);
@@ -130,5 +129,5 @@ function updateProfile(data) {
 }
 
 
-const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile };
+const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile };
 export default API;

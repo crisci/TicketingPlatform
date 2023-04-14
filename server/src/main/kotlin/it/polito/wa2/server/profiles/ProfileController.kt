@@ -1,21 +1,18 @@
 package it.polito.wa2.server.profiles
 
+import it.polito.wa2.server.utils.EmailValidationUtil
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
-
+import org.springframework.web.bind.annotation.*
+import java.util.regex.Pattern
 
 
 @RestController
 class ProfileController(
     val profileService: ProfileService
 ) {
+
+    private val emailValidator = EmailValidationUtil()
 
     @GetMapping("/API/profiles/{email}")
     @ResponseStatus(HttpStatus.OK)
@@ -35,22 +32,29 @@ class ProfileController(
     @PostMapping("/API/profiles")
     @ResponseStatus(HttpStatus.CREATED)
     fun postProfile(@RequestBody profileDTO: ProfileDTO) {
-        //TODO: Email validation
+        if(emailValidator.checkEmail(profileDTO.email)) {
             if(profileService.getProfileByEmail(profileDTO.email) == null)
                 profileService.insertProfile(profileDTO)
             else
                 throw DuplicatedEmailException("${profileDTO.email} is already used")
+        } else {
+            throw InvalidEmailFormatException("Invalid email format")
+        }
     }
 
     @PutMapping("/API/profiles/{email}") @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     fun putProfile(@RequestBody profileDTO: ProfileDTO, @PathVariable(name = "email") email: String) {
-            //TODO: Email validation
-            if(profileService.getProfileByEmail(email) != null) {
-                if(profileService.getProfileByEmail(profileDTO.email) == null) profileService.updateProfile(profileDTO, email)
+        //TODO: Email validation
+        if(emailValidator.checkEmail(profileDTO.email)) {
+            if (profileService.getProfileByEmail(email) != null) {
+                if (profileService.getProfileByEmail(profileDTO.email) != null) profileService.updateProfile(profileDTO, email)
                 else throw DuplicatedEmailException("${profileDTO.email} is already used")
             } else
                 throw ProfileNotFoundException("Profile not fount with the following email '${email}'")
+        } else {
+            throw InvalidEmailFormatException("Invalid email format")
+        }
     }
 
 
