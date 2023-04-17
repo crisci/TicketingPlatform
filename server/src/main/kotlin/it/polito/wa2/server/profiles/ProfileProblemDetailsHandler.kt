@@ -46,9 +46,19 @@ class ProfileProblemDetailsHandler : ResponseEntityExceptionHandler() {
         return d
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BlankFieldsException::class)
+    fun handleBlankFieldsException(e: BlankFieldsException) : ProblemDetail {
+        val d = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST)
+        d.title = "Empty fields error"
+        d.detail = e.message
+        return d
+    }
+
 }
 
 class ProfileNotFoundException(override val message: String?) : RuntimeException()
 class DuplicatedEmailException(override val message: String?) : RuntimeException()
 class InvalidEmailFormatException(override val message: String?) : RuntimeException()
-
+class BlankFieldsException(override val message: String?) : RuntimeException()

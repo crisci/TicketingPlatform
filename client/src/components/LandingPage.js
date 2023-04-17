@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { Form, Container, FormControl, FormGroup, Col, Row, Button, ListGroup } from "react-bootstrap";
-import API from "./API";
+import API from "../API";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './list.css'
-import { ModalAddProduct, ModalAddProfile } from "./Modals";
-
+import { ModalProfile } from "./modals/ModalProfile";
+import { CustomNavbar } from "./CustomNavbar";
 
 
 function LandingPage(props) {
+
 
     const [email, setEmail] = useState('');
     const [ean, setEan] = useState('');
     const [listOfProfiles, setListOfProfiles] = useState([]);
     const [listOfProducts, setListOfProducts] = useState([]);
     const [showModalProfile, setShowModalProfile] = useState(false);
-    const [showModalProduct, setShowModalProduct] = useState(false);
+    const [add, setAdd] = useState(false);
 
 
     function getProfiles() {
@@ -45,7 +46,7 @@ function LandingPage(props) {
 
     function handleSubmitProfile(event) {
         event.preventDefault()
-        API.getProfile(email).then(profile => {
+        API.getProfile(email.toLocaleLowerCase()).then(profile => {
             setListOfProfiles([profile])
         }).catch(error => { 
             notifyProfileError(error.detail)
@@ -64,11 +65,36 @@ function LandingPage(props) {
         })
     }
 
-    const handleCloseModalProfile = () => setShowModalProfile(false);
-    const handleShowModalProfile = () => setShowModalProfile(true);
+    const addProfile = (profile) => {
+        //profile validation
+        API.addProfile(profile).then(
+            profile => {
+                notifyProfileSuccess("Profile added correctly!")
+            }//notify success
+        ).catch(error => {
+            notifyProfileError(error.detail)
+            console.error(error.detail)
+        })
+        emptyListOfProfiles()
+    }
 
-    const handleCloseModalProduct = () => setShowModalProduct(false);
-    const handleShowModalProduct = () => setShowModalProduct(true);
+    const updateProfile = (profile) => {
+        //profile validation
+        API.updateProfile(profile).then(
+            profile => {
+                notifyProfileSuccess("Profile updated correctly!")
+            }//notify success
+        ).catch(error => {
+            notifyProfileError(error.detail)
+            console.error(error.detail)
+        })
+        emptyListOfProfiles()
+    }
+
+
+    const handleCloseModalProfile = () => setShowModalProfile(false);
+    const handleShowModalAddProfile = () => {setAdd(true);setShowModalProfile(true)};
+    const handleShowModalUpdateProfile = () => {setAdd(false);setShowModalProfile(true)};
 
     const notifyProductError = (error) => toast.error(error, {
         position: "top-right",
@@ -91,12 +117,24 @@ function LandingPage(props) {
         progress: undefined,
         theme: "colored",
         });
+
+    const notifyProfileSuccess = (success) => toast.success(success, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
     
 
     return(
-        <Container fluid className="p-5 text-center justify-content-center">
-            <ModalAddProduct show={showModalProduct} onHide={handleCloseModalProduct}/>
-            <ModalAddProfile show={showModalProfile} onHide={handleCloseModalProfile}/>
+        <>
+        <CustomNavbar/>
+        <Container fluid className="text-center justify-content-center" style={{ paddingTop: "5rem" }}>
+            <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile} updateProfile={updateProfile} add={add} notifyProfileError={notifyProfileError}/>
             <ToastContainer/>
             <Row className="row d-flex justify-content-center m-auto">
             <Col >
@@ -108,7 +146,7 @@ function LandingPage(props) {
                         </FormGroup>
                     </Form>
                 </Row>
-                <Row className="w-50 justify-content-center m-auto">
+                <Row className="w-75 justify-content-center m-auto">
                     <Col>
                         {listOfProfiles.length === 0 
                             ? <Button onClick={() => getProfiles()}>Get profiles</Button>
@@ -116,7 +154,10 @@ function LandingPage(props) {
                 
                     </Col>
                     <Col>
-                            <Button onClick={handleShowModalProfile}>Add profile</Button>
+                            <Button onClick={handleShowModalAddProfile}>Add profile</Button>
+                    </Col>
+                    <Col>
+                            <Button onClick={handleShowModalUpdateProfile}>Update profile</Button>
                     </Col>
                 </Row>
                 {listOfProfiles.length !== 0
@@ -147,9 +188,6 @@ function LandingPage(props) {
                             ? <Button onClick={() => getProducts()}>Get products</Button>
                             : <Button variant="danger" onClick={() => emptyListOfProduct()}>{listOfProducts.length !== 1 ? "Hide products" : "Hide product"}</Button>}
                     </Col>
-                    <Col>
-                            <Button onClick={handleShowModalProduct}>Add product</Button>
-                    </Col>
                 </Row>
                 {listOfProducts.length !== 0
                     ?   <Row>
@@ -166,6 +204,7 @@ function LandingPage(props) {
             </Col>
         </Row>
         </Container>
+        </>
     )
 }
 
