@@ -13,7 +13,7 @@ import jakarta.persistence.Table
 class Profile {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SequenceGenerator(name = "id", sequenceName = "users_id_seq")
-    var id: Int = 0
+    var id: Long = 0
     lateinit var name: String
     lateinit var surname: String
     lateinit var email: String
