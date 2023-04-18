@@ -1,4 +1,4 @@
-package it.polito.wa2.server.product
+package it.polito.wa2.server.products
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail

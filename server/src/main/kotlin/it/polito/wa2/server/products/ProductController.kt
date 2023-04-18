@@ -1,4 +1,4 @@
-package it.polito.wa2.server.product
+package it.polito.wa2.server.products
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -18,12 +18,5 @@ class ProductController(val productService: ProductService) {
         else
             throw ProductNotFoundException("No element found with specified id!")
     }
-    @PutMapping("/API/products/{productId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun putProduct(@PathVariable("productId") productId:String,@RequestBody productDTO: ProductDTO) {
-        if(productId == productDTO.ean)
-            productService.putProduct(productDTO)
-        else
-            throw ProductNotFoundException("Product EANs mismatches!")
-    }
+
 }

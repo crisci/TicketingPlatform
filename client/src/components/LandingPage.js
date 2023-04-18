@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './list.css'
 import { ModalProfile } from "./modals/ModalProfile";
 import { CustomNavbar } from "./CustomNavbar";
+import { ProfileCard, ProductCard } from "./cards/Cards";
 
 
 function LandingPage(props) {
@@ -161,14 +162,9 @@ function LandingPage(props) {
                     </Col>
                 </Row>
                 {listOfProfiles.length !== 0
-                    ?   <Row>
+                    ?   <Row className="mt-2">
                             <ListGroup>
-                                <ListGroup.Item key="title" as='li' className="d-flex justify-content-beetween list-titles mt-2">
-                                    <Container>Name</Container>
-                                    <Container>Surname</Container>
-                                    <Container>Email</Container>
-                                </ListGroup.Item>
-                                {listOfProfiles.map( profile => <ProfileRow key={profile.email} profile={profile}/>)}
+                                {listOfProfiles.map( profile => <ProfileCard key={profile.email} profile={profile}/>)}
                             </ListGroup>
                         </Row>
                     : undefined}
@@ -190,14 +186,9 @@ function LandingPage(props) {
                     </Col>
                 </Row>
                 {listOfProducts.length !== 0
-                    ?   <Row>
+                    ?   <Row className="mt-2">
                             <ListGroup>
-                                <ListGroup.Item key="title" as='li' className="d-flex justify-content-beetween list-titles mt-2">
-                                    <Container>EAN</Container>
-                                    <Container>Name</Container>
-                                    <Container>Brand</Container>
-                                </ListGroup.Item>
-                                {listOfProducts.map( product => <ProductRow key={product.ean} product={product}/>)}
+                                {listOfProducts.map( product => <ProductCard key={product.ean} product={product}/>)}
                             </ListGroup>
                         </Row>
                     : undefined}
@@ -207,32 +198,6 @@ function LandingPage(props) {
         </>
     )
 }
-
-
-function ProfileRow(props) {
-    return(
-        <ListGroup.Item as='li' className="d-flex justify-content-beetween px-0 py-4 mb-2">
-            <Container>{props.profile.name}</Container>
-            <Container>{props.profile.surname}</Container>
-            <Container>{props.profile.email}</Container>
-        </ListGroup.Item>
-    )
-
-}
-
-
-
-function ProductRow(props) {
-    return(
-        <ListGroup.Item as='li' className="d-flex justify-content-beetween px-0 py-3 mb-2">
-            <Container>{props.product.ean}</Container>
-            <Container>{props.product.name}</Container>
-            <Container>{props.product.brand}</Container>
-        </ListGroup.Item>
-    )
-
-}
-
 
 
 export default LandingPage;
