@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Form, Container, FormControl, FormGroup, FormLabel, Col, Row, Navbar, Nav, Button } from "react-bootstrap";
+import { Form, Container, FormControl, FormGroup, FormLabel, Col, Row, Navbar, Nav, Button, ButtonGroup } from "react-bootstrap";
 import { useNavigate, Outlet } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
 import './custom.css';
 import API from './API';
 
-import { UserList, ProdList } from "./Components";
+import { UserList, ProdList, UserModal } from "./Components";
 
 
 function DefaultLayout(props) {
@@ -33,11 +34,10 @@ function LandingPage(props){
     const [userField, setUserField] = useState('');
     const [prodField, setProdField] = useState('');
     const [products, setProducts] = useState([]);
-    const [users, setUsers] = useState(null);
+    const [user, setUser] = useState(null);
 
     const [dirtyProd, setDirtyProd] = useState(false);
     const [dirtyUser, setDirtyUser] = useState(false);
-    const [hideUserButton, setHideUserButton] = useState(true);
 
     useEffect(() => {
         if(dirtyProd){
@@ -60,7 +60,7 @@ function LandingPage(props){
         if(dirtyUser){
             if(userField != ''){
                 API.getProfile(userField).then(r => {
-                    setUsers(r);
+                    setUser(r);
                 });
                 setDirtyUser(false);
             }else{
@@ -69,30 +69,21 @@ function LandingPage(props){
         }
     }, [dirtyUser]);
 
-    useEffect(() => {
-        if(userField != ''){
-            setHideUserButton(false);
-        }else{
-            setHideUserButton(true);
-        }
-    }, [userField]);
-
     return(
         <Container fluid className="p-5 text-center justify-content-center">
             <Row className="row d-flex justify-content-center m-auto">
             <Col>
-                <Row><h1>Select the users</h1></Row>
-                <Row className="row d-flex justify-content-center m-auto">
+                <Row><h1>Select the user</h1></Row>
+                <Row className="row d-flex justify-content-center">
                     <Form noValidate onSubmit={(e) => {e.preventDefault(); setDirtyUser(true)}} className="w-50">
-                        <FormGroup className="mb-3" controlId="testForm">
-                            <FormLabel></FormLabel>
+                        <FormGroup>
                             <FormControl autoComplete="off" type="text" placeholder="Enter something..." onChange={(event) => {setUserField(event.target.value)}}></FormControl>
-                            { hideUserButton ? <Button className="mt-3 mb-3" type="submit" >Get user</Button> : <Button className="mt-3 mb-3" type="submit" >Get user</Button> }
-                            
-                        </FormGroup>
+                            <Button className="col-6 mt-3 mb-3" type="submit" >Get user</Button>
+                            <UserModal></UserModal>
+                            </FormGroup>
                     </Form>
                 </Row>
-                <UserList user={users}></UserList>
+                <UserList user={user}></UserList>
             </Col>
             <Col>
                 <Row><h1>Select the products</h1></Row>
