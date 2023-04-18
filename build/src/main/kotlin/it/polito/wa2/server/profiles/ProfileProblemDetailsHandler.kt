@@ -1,7 +1,5 @@
 package it.polito.wa2.server.profiles
 
-import org.springframework.dao.DuplicateKeyException
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.net.URI
 
 @RestControllerAdvice
 class ProfileProblemDetailsHandler : ResponseEntityExceptionHandler() {
@@ -39,7 +36,7 @@ class ProfileProblemDetailsHandler : ResponseEntityExceptionHandler() {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidEmailFormatException::class)
-    fun handleInvelidEmailFormatException(e: InvalidEmailFormatException) : ProblemDetail {
+    fun handleInvalidEmailFormatException(e: InvalidEmailFormatException) : ProblemDetail {
         val d = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST)
         d.title = "The email value provided is not a valid email format"
         d.detail = e.message
