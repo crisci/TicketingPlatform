@@ -5,10 +5,19 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/server" />
-        <option name="gradleJvm" value="openjdk-19" />
+        <option name="gradleJvm" value="19" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/server" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ticketing" />
+        <option name="gradleJvm" value="19" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ticketing" />
           </set>
         </option>
       </GradleProjectSettings>
