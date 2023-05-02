@@ -8,6 +8,4 @@ interface ProfileRepository : JpaRepository<Profile, String> {
 
     fun findProfilesByEmail(email: String) : Profile?
 
-
-
 }

@@ -17,6 +17,7 @@ class Profile {
     lateinit var name: String
     lateinit var surname: String
     lateinit var email: String
+    lateinit var role: String
 }
 
 fun Profile.fromDTO(profileDTO: ProfileDTO) : Profile {
