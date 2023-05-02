@@ -1,4 +1,4 @@
-package it.polito.wa2.ticketing.Ticket
+package it.polito.wa2.ticketing.ticket
 
 interface TicketService {
 }

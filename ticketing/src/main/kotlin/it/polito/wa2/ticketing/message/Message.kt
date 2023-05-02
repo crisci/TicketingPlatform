@@ -1,13 +1,12 @@
-package it.polito.wa2.ticketing.Message
+package it.polito.wa2.ticketing.message
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import it.polito.wa2.ticketing.Ticket.Ticket
-import it.polito.wa2.ticketing.Utils.EntityBase
-import it.polito.wa2.ticketing.attachments.Attachment
+import it.polito.wa2.ticketing.ticket.Ticket
+import it.polito.wa2.ticketing.utils.EntityBase
+import it.polito.wa2.ticketing.attachment.Attachment
 import jakarta.persistence.*
 import java.time.LocalDateTime
-import java.util.Date
 
 @Entity
 @Table(name="messages")

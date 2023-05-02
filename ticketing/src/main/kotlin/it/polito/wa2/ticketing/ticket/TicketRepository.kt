@@ -1,4 +1,4 @@
-package it.polito.wa2.ticketing.Ticket
+package it.polito.wa2.ticketing.ticket
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

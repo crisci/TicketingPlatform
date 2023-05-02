@@ -1,8 +1,8 @@
-package it.polito.wa2.ticketing.Cusotmer
+package it.polito.wa2.ticketing.customer
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import it.polito.wa2.ticketing.Utils.EntityBase
-import it.polito.wa2.ticketing.Ticket.Ticket
+import it.polito.wa2.ticketing.utils.EntityBase
+import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType

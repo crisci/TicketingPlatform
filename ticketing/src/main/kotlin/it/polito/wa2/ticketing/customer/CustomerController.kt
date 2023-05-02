@@ -1,4 +1,4 @@
-package it.polito.wa2.ticketing.Cusotmer
+package it.polito.wa2.ticketing.customer
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping

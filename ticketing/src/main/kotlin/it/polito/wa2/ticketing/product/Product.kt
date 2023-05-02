@@ -1,7 +1,7 @@
-package it.polito.wa2.ticketing.Product
+package it.polito.wa2.ticketing.product
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import it.polito.wa2.ticketing.Ticket.Ticket
+import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany

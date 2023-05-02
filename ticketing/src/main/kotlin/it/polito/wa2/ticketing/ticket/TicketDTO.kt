@@ -1,7 +1,7 @@
-package it.polito.wa2.ticketing.Ticket
+package it.polito.wa2.ticketing.ticket
 
-import it.polito.wa2.ticketing.Cusotmer.Customer
-import it.polito.wa2.ticketing.Utils.PriorityLevel
+import it.polito.wa2.ticketing.customer.Customer
+import it.polito.wa2.ticketing.utils.PriorityLevel
 
 data class TicketDTO(
     var title: String,

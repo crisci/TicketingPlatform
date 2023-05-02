@@ -1,4 +1,4 @@
-package it.polito.wa2.ticketing.Utils
+package it.polito.wa2.ticketing.utils
 
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id

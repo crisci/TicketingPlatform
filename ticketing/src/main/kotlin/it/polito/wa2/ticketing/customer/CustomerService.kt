@@ -1,4 +1,4 @@
-package it.polito.wa2.ticketing.Cusotmer
+package it.polito.wa2.ticketing.customer
 
 interface CustomerService {
 
