@@ -4,5 +4,5 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service @Transactional
-class TicketServiceImpl {
+class TicketServiceImpl(private val repository: TicketRepository): TicketService {
 }

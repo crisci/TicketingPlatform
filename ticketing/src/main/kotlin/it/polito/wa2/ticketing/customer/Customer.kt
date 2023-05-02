@@ -20,6 +20,7 @@ class Customer: EntityBase<Long>() {
     var password: String = ""
     var address: String = ""
     var phone_number: String = ""
+
     @JsonManagedReference
     @OneToMany(mappedBy = "customer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfTicket: MutableSet<Ticket> = mutableSetOf()

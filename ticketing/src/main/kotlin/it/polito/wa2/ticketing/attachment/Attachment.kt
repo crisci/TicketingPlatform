@@ -16,6 +16,6 @@ class Attachment: EntityBase<Long>() {
     lateinit var attachment: Blob
     @JsonBackReference
     @ManyToOne
-    var message: Message? = null
+    lateinit var message: Message
 
 }

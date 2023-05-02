@@ -1,11 +1,13 @@
 package it.polito.wa2.ticketing.ticket
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.product.Product
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import jakarta.persistence.Entity
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
@@ -18,7 +20,7 @@ class Ticket: EntityBase<Long>() {
     @JsonBackReference
     @ManyToOne
     var customer: Customer? = null
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne
     var product: Product? = null
 }
