@@ -16,4 +16,10 @@ class TicketController(val ticketService: TicketService) {
         return ticketService.getTicketsByCustomerId(id)
     }
 
+    @GetMapping("/tickets/{id}/messages")
+    @ResponseStatus(HttpStatus.OK)
+    fun getTicketsWithMessagesByCustomerId(@PathVariable id: Long): Set<TicketWithMessagesDTO>? {
+        return ticketService.getTicketsWithMessagesByCustomerId(id)
+    }
+
 }

@@ -1,7 +1,7 @@
 package it.polito.wa2.ticketing.customer
 
-import it.polito.wa2.ticketing.ticket.TicketDTO
-import it.polito.wa2.ticketing.ticket.toDTO
+import it.polito.wa2.ticketing.ticket.TicketWithMessagesDTO
+
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -12,7 +12,7 @@ class CustomerServiceImpl(private val repository: CustomerRepository): CustomerS
         return repository.findById(id).orElse(null)?.toDTO()
      }
 
-    override fun getCustomerTickets(id: Long): Set<TicketDTO>? {
+    override fun getCustomerTickets(id: Long): Set<TicketWithMessagesDTO>? {
         return repository.findById(id).orElse(null)?.toDTO()?.listOfTicket
     }
 }

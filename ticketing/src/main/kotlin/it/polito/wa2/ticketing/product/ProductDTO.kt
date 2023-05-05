@@ -1,10 +1,5 @@
 package it.polito.wa2.ticketing.product
 
-import it.polito.wa2.ticketing.ticket.Ticket
-import it.polito.wa2.ticketing.ticket.TicketDTO
-import it.polito.wa2.ticketing.ticket.toDTO
-import jakarta.persistence.OneToMany
-
 data class ProductDTO (
     val ean: String,
     val name: String,
