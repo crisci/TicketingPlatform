@@ -1,6 +1,7 @@
 package it.polito.wa2.ticketing.ticket
 
 import it.polito.wa2.ticketing.message.Message
+import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -36,7 +37,7 @@ class TicketController(val ticketService: TicketService) {
     }
     @GetMapping("/tickets/{idExpert}/{ticketId}/messages")
     @ResponseStatus(HttpStatus.OK)
-    fun getMessages(@PathVariable("idExpert") idExpert : Long,@PathVariable("ticketId") ticketId : Long): List<Message> {
+    fun getMessages(@PathVariable("idExpert") idExpert : Long,@PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
         //ToDo("check the idExpert")
         return ticketService.getMessages(ticketId,idExpert)
     }
