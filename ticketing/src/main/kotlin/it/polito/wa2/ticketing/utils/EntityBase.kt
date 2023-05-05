@@ -31,7 +31,8 @@ open class EntityBase<T: Serializable> {
         else this.id == other.id
     }
     override fun hashCode(): Int {
-        return 31 //any value will do
+        //TODO("Performance price if not implemented a right hash algorithm")
+        return 31 //any value will do, but performance price
     }
 
 }

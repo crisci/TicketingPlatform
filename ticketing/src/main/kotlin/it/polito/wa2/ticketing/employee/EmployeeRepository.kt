@@ -1,9 +1,9 @@
-package it.polito.wa2.ticketing.customer
+package it.polito.wa2.ticketing.employee
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CustomerRepository: JpaRepository<Customer, Long> {
+interface EmployeeRepository: JpaRepository<Employee, Long> {
 
 }

@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.ticket.Ticket
+import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
 @Table(name="histories")
-class History: EntityBase<Long>() {
+class History : EntityBase<Long>(),Comparable<History> {
 
-    lateinit var state: String
+    lateinit var state: TicketStatus
     lateinit var date: LocalDateTime
     @JsonBackReference
     @ManyToOne
@@ -19,5 +20,19 @@ class History: EntityBase<Long>() {
     @JsonBackReference
     @ManyToOne
     var employee: Employee? = null
+
+    fun create(state: TicketStatus,date: LocalDateTime,ticket: Ticket?,employee: Employee?):History{
+        val h = History()
+        h.state = state
+        h.date = date
+        h.ticket = ticket
+        h.employee = employee
+        return h
+    }
+
+    override fun compareTo(other: History): Int {
+        //most recent to oldest
+        return -this.date.compareTo(other.date)
+    }
 
 }

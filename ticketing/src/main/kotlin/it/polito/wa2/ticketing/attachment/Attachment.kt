@@ -17,5 +17,4 @@ class Attachment: EntityBase<Long>() {
     @JsonBackReference
     @ManyToOne
     lateinit var message: Message
-
 }
