@@ -1,6 +1,7 @@
 package it.polito.wa2.ticketing.product
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.Entity
@@ -12,10 +13,10 @@ import jakarta.persistence.Table
 @Table(name = "products")
 class Product {
     @Id
-    lateinit var ean: String
-    lateinit var name: String
-    lateinit var brand: String
-    @JsonBackReference
+    var ean: String = ""
+    var name: String = ""
+    var brand: String = ""
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
-    lateinit var listOfTicket: MutableSet<Ticket>
+    var listOfTicket: MutableSet<Ticket> = mutableSetOf()
 }

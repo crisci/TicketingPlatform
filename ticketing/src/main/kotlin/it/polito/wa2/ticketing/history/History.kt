@@ -11,9 +11,8 @@ import java.time.LocalDateTime
 @Entity
 @Table(name="histories")
 class History : EntityBase<Long>(),Comparable<History> {
-
-    lateinit var state: TicketStatus
-    lateinit var date: LocalDateTime
+    var state: TicketStatus = TicketStatus.OPEN
+    var date: LocalDateTime = LocalDateTime.now()
     @JsonBackReference
     @ManyToOne
     var ticket: Ticket? = null

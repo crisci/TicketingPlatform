@@ -4,9 +4,24 @@ import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class TicketController(val ticketService: TicketService) {
+    @GetMapping("/tickets/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getTicketsByCustomerId(@PathVariable id: Long): Set<TicketDTO>? {
+        return ticketService.getTicketsByCustomerId(id)
+    }
+
+    @GetMapping("/tickets/{id}/messages")
+    @ResponseStatus(HttpStatus.OK)
+    fun getTicketsWithMessagesByCustomerId(@PathVariable id: Long): Set<TicketWithMessagesDTO>? {
+        return ticketService.getTicketsWithMessagesByCustomerId(id)
+    }
     @PutMapping("/tickets/{idExpert}/{ticketId}/stop")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun ticketMakeReassignable(@PathVariable("idExpert") idExpert : Long,@PathVariable("ticketId") ticketId : Long){

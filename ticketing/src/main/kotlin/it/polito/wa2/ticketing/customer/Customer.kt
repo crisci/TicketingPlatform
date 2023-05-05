@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.customer
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.ticket.Ticket
@@ -20,8 +21,7 @@ class Customer: EntityBase<Long>() {
     var password: String = ""
     var address: String = ""
     var phone_number: String = ""
-
-    @JsonManagedReference
     @OneToMany(mappedBy = "customer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JsonIgnore
     var listOfTicket: MutableSet<Ticket> = mutableSetOf()
 }

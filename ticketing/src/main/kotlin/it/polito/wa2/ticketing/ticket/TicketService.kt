@@ -8,4 +8,6 @@ interface TicketService {
     fun closeTicket(ticketId: Long, idExpert: Long)
     fun getMessages(ticketId: Long, idExpert: Long): List<Message>
     fun getStatus(ticketId: Long, idExpert: Long): TicketStatus
+    fun getTicketsWithMessagesByCustomerId(customerId: Long): Set<TicketWithMessagesDTO>?
+    fun getTicketsByCustomerId(customerId: Long): Set<TicketDTO>?
 }

@@ -11,10 +11,12 @@ import java.util.*
 @Entity
 @Table(name="employees")
 class Employee: EntityBase<Long>() {
-    lateinit var email: String
-    lateinit var password: String
+    var first_name: String = ""
+    var last_name: String = ""
+    var email: String = ""
+    var password: String = ""
     @Enumerated(EnumType.ORDINAL)
-    lateinit var type: EmployeeRole
+    var type: EmployeeRole = EmployeeRole.EXPERT
     @JsonManagedReference
     @OneToMany(mappedBy = "employee", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfHistory: MutableSet<History> = mutableSetOf()
