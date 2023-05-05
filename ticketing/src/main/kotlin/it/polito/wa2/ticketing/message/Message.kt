@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import it.polito.wa2.ticketing.ticket.Ticket
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.attachment.Attachment
+import it.polito.wa2.ticketing.utils.SenderType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -12,12 +13,12 @@ import java.time.LocalDateTime
 @Table(name="messages")
 class Message: EntityBase<Long>() {
 
-    lateinit var type: String
-    lateinit var body: String
-    lateinit var date: LocalDateTime
-    @JsonManagedReference
+    var type: SenderType? = null
+    var body: String = ""
+    var date: LocalDateTime = LocalDateTime.now()
+    @JsonBackReference
     @OneToMany(mappedBy = "message", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var listOfAttachment: MutableSet<Attachment> = mutableSetOf()
+    var listOfAttachment: MutableSet<Attachment>? = mutableSetOf()
     @JsonBackReference
     @ManyToOne
     var ticket: Ticket? = null

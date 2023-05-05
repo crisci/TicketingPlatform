@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.ticket.Ticket
+import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -11,8 +12,8 @@ import java.time.LocalDateTime
 @Table(name="histories")
 class History: EntityBase<Long>() {
 
-    lateinit var state: String
-    lateinit var date: LocalDateTime
+    var state: TicketStatus = TicketStatus.OPEN
+    var date: LocalDateTime = LocalDateTime.now()
     @JsonBackReference
     @ManyToOne
     var ticket: Ticket? = null

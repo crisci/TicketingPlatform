@@ -1,15 +1,16 @@
 package it.polito.wa2.ticketing.product
 
 import it.polito.wa2.ticketing.ticket.Ticket
+import it.polito.wa2.ticketing.ticket.TicketDTO
+import it.polito.wa2.ticketing.ticket.toDTO
 import jakarta.persistence.OneToMany
 
 data class ProductDTO (
-    var ean: String,
-    var name: String,
-    var brand: String,
-    var listOfTicket: MutableSet<Ticket>
+    val ean: String,
+    val name: String,
+    val brand: String,
 )
 
 fun Product.toDTO(): ProductDTO {
-    return ProductDTO(ean,name,brand,listOfTicket)
+    return ProductDTO(ean,name,brand)
 }

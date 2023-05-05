@@ -13,9 +13,9 @@ import java.sql.Blob
 class Attachment: EntityBase<Long>() {
 
     @Lob
-    lateinit var attachment: Blob
+    var attachment: Blob? = null
     @JsonBackReference
     @ManyToOne
-    lateinit var message: Message
+    var message: Message = Message()
 
 }

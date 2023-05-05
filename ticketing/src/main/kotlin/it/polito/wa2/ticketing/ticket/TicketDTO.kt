@@ -1,17 +1,20 @@
 package it.polito.wa2.ticketing.ticket
 
-import it.polito.wa2.ticketing.customer.Customer
-import it.polito.wa2.ticketing.product.Product
+import it.polito.wa2.ticketing.message.MessageDTO
+import it.polito.wa2.ticketing.message.toDTO
+import it.polito.wa2.ticketing.product.ProductDTO
+import it.polito.wa2.ticketing.product.toDTO
 import it.polito.wa2.ticketing.utils.PriorityLevel
 
 data class TicketDTO(
-    var title: String,
-    var description: String,
-    var priority: PriorityLevel,
-    var customer: Customer?,
-    var product: Product?
+    val id: Long?,
+    val title: String,
+    val description: String,
+    val priority: PriorityLevel,
+    val product: ProductDTO?,
+    val listOfMessage: Set<MessageDTO>?
 )
 
 fun Ticket.toDTO(): TicketDTO {
-    return TicketDTO(title,description,priority,customer, product)
+    return TicketDTO(getId(), title,description,priority, product?.toDTO(), listOfMessage.map { it.toDTO() }.toSet())
 }
