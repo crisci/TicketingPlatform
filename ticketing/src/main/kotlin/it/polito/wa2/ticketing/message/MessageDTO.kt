@@ -1,15 +1,10 @@
 package it.polito.wa2.ticketing.message
 
-import com.fasterxml.jackson.annotation.JsonBackReference
-import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import it.polito.wa2.ticketing.attachment.toDTO
-import it.polito.wa2.ticketing.ticket.Ticket
+import it.polito.wa2.ticketing.employee.EmployeeDTO
+import it.polito.wa2.ticketing.employee.toEmployeeDTO
 import it.polito.wa2.ticketing.utils.SenderType
-import jakarta.persistence.CascadeType
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import java.time.LocalDateTime
 
 data class MessageDTO(
@@ -18,10 +13,11 @@ data class MessageDTO(
     val body: String,
     val date: LocalDateTime,
     val listOfAttachment: Set<AttachmentDTO>? = setOf(),
+    val expert: EmployeeDTO? = null,
 )
 
 fun Message.toDTO(): MessageDTO {
-    return MessageDTO(getId(), type,body,date,listOfAttachment?.map { it.toDTO() }?.toSet())
+    return MessageDTO(getId(), type,body,date,listOfAttachment?.map { it.toDTO() }?.toSet(), expert?.toEmployeeDTO())
 }
 
 

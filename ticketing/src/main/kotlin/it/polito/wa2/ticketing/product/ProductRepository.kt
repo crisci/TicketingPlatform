@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable
 @Repository
 interface ProductRepository: JpaRepository<Product, Long> {
 
-    fun getProductByEan(ean: String): Product?
+    fun findProductByEan(ean: String): Product?
 
 }

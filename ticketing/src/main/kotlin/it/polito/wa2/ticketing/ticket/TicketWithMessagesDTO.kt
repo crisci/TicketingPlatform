@@ -16,5 +16,5 @@ data class TicketWithMessagesDTO(
 )
 
 fun Ticket.toTicketWithMessagesDTO(): TicketWithMessagesDTO {
-    return TicketWithMessagesDTO(getId(), title,description,priority, product?.toDTO(), listOfMessage.map { it.toDTO() }.toSet())
+    return TicketWithMessagesDTO(getId(), title,description,priority, product?.toDTO(), listOfMessage?.map { it.toDTO() }?.toSet())
 }

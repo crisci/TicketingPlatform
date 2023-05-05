@@ -29,6 +29,7 @@ class History : EntityBase<Long>(),Comparable<History> {
         return h
     }
 
+
     override fun compareTo(other: History): Int {
         //most recent to oldest
         return -this.date.compareTo(other.date)

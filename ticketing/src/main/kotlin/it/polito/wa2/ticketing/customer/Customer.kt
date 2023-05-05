@@ -24,4 +24,11 @@ class Customer: EntityBase<Long>() {
     @OneToMany(mappedBy = "customer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonIgnore
     var listOfTicket: MutableSet<Ticket> = mutableSetOf()
+
+    fun addTicket(ticket: Ticket) {
+        ticket.customer = this
+        listOfTicket.add(ticket)
+    }
+
 }
+

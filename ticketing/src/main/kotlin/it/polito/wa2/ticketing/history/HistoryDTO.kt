@@ -1,7 +1,7 @@
 package it.polito.wa2.ticketing.history
 
 import it.polito.wa2.ticketing.employee.EmployeeDTO
-import it.polito.wa2.ticketing.employee.toDTO
+import it.polito.wa2.ticketing.employee.toEmployeeDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.ticket.toTicketDTO
 import it.polito.wa2.ticketing.utils.TicketStatus
@@ -16,5 +16,5 @@ data class HistoryDTO(
 )
 
 fun History.toDTO(): HistoryDTO {
-    return HistoryDTO(getId(), state,date,ticket?.toTicketDTO(),employee?.toDTO())
+    return HistoryDTO(getId(), state,date,ticket?.toTicketDTO(),employee?.toEmployeeDTO())
 }

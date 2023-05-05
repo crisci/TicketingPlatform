@@ -24,4 +24,9 @@ class Employee: EntityBase<Long>() {
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfMessages: MutableSet<Message> = mutableSetOf()
 
+    fun addMessage(m: Message){
+        m.expert = this
+        listOfMessages.add(m)
+    }
+
 }
