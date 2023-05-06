@@ -11,7 +11,7 @@ data class MessageDTO(
     val id: Long?,
     val type: SenderType?,
     val body: String,
-    val date: LocalDateTime,
+    val date: LocalDateTime?,
     val listOfAttachment: Set<AttachmentDTO>? = setOf(),
     val expert: EmployeeDTO? = null,
 )

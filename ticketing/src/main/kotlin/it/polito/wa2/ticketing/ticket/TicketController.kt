@@ -32,6 +32,8 @@ class TicketController(val ticketService: TicketService) {
     }
 
     @PutMapping("/tickets/{idExpert}/{ticketId}/close")
+    //TODO: Who cares if the ticket is closed by the user or not?
+    //Only a general method to close the ticket from both parties?
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun ticketCloseByExpert(@PathVariable("idExpert") idExpert: Long, @PathVariable("ticketId") ticketId: Long) {
         //ToDo("check the idExpert")
@@ -63,5 +65,17 @@ class TicketController(val ticketService: TicketService) {
     fun addTicket(@RequestBody ticket: TicketDTO, @PathVariable idCustomer: Long) {
         ticketService.addTicket(ticket, idCustomer)
     }
+
+    @PutMapping("/tickets/{idTicket}/resolve")
+    fun ticketResolved(@PathVariable idTicket: Long) {
+        ticketService.resolveTicket(idTicket)
+    }
+
+    @PutMapping("/tickets/{idTicket}/reopen")
+    fun ticketReopen(@PathVariable idTicket: Long) {
+        ticketService.reopenTicket(idTicket)
+    }
+
+
 
 }

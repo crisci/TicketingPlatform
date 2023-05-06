@@ -11,8 +11,8 @@ interface TicketService {
     fun getStatus(ticketId: Long, idExpert: Long): TicketStatus
     fun getTicketsWithMessagesByCustomerId(customerId: Long): Set<TicketWithMessagesDTO>?
     fun getTicketsByCustomerId(customerId: Long): Set<TicketDTO>?
-
     fun addMessage(idTicket: Long, message: MessageDTO)
-
     fun addTicket(ticket: TicketDTO, idCustomer: Long)
+    fun resolveTicket(ticketId: Long)
+    fun reopenTicket(ticketId: Long)
 }
