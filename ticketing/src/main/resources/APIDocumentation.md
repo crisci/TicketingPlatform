@@ -36,6 +36,7 @@
               {
                   "id": 1,
                   "title": "Title",
+                  "dateTime": "2017-05-06T11:08:48", 
                   "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                   "priority": "MEDIUM",
                   "product": {
@@ -61,111 +62,5 @@
    
         ]
 
-
-
-
-            "available": 1,
-          "plan": [
--
-                      {
-                        "codice": "01UDFOV",
-                        "titolo": "Applicazioni Web I",
-                        "crediti": 6,
-                        "incompatibilita": "01TXYOV",
-                        "propedeuticita": null
-                      },
-                      {
-                        "codice": "01URROV",
-                        "titolo": "Computational intelligence",
-                        "crediti": 6,
-                        "incompatibilita": null,
-                        "propedeuticita": null
-                      },
-                      ...
-                    ]
-          }
-
-    - Response status: `200 Success`, `422 Unprocessable Entity` (invalid format), `503 Internal Server Error`  (generic server error).
-    - Response body:
-
-          {
-               "type": 1,
-               "plan": [
-                         {
-                           "codice": "01UDFOV",
-                           "titolo": "Applicazioni Web I",
-                           "crediti": 6,
-                           "incompatibilita": "01TXYOV",
-                           "propedeuticita": null
-                         },
-                         {
-                           "codice": "01URROV",
-                           "titolo": "Computational intelligence",
-                           "crediti": 6,
-                           "incompatibilita": null,
-                           "propedeuticita": null
-                         },
-                         ...
-                       ]
-          }
-
-
-- PUT `/api/plans`
-    - Description: permette di modificare un piano di studi esistente.
-    - Request body:
-
-          {
-            "available": 1,
-            "plan": [
-                      {
-                          "codice": "03UEWOV",
-                          "titolo": "Challenge",
-                          "crediti": 5,
-                          "incompatibilita": null,
-                          "propedeuticita": null
-                      },
-                      {
-                          "codice": "05BIDOV",
-                          "titolo": "Ingegneria del software",
-                          "crediti": 6,
-                          "incompatibilita": "04GSPOV",
-                          "propedeuticita": "02GOLOV"
-                      },
-                      ...
-                    ]
-          }
-    - Response status: `200 Success`, `401 Unauthorized` (not authenticated), `503 Internal Server Error`.
-    - Response body:
-
-          {
-                "available": 1,
-                "plan": [
-                          {
-                              "codice": "03UEWOV",
-                              "titolo": "Challenge",
-                              "crediti": 5,
-                              "incompatibilita": null,
-                              "propedeuticita": null
-                          },
-                          {
-                              "codice": "05BIDOV",
-                              "titolo": "Ingegneria del software",
-                              "crediti": 6,
-                              "incompatibilita": "04GSPOV",
-                              "propedeuticita": "02GOLOV"
-                          },
-                          ...
-                        ]
-          }
-
-- DELETE `/api/plans`
-    - Description: consente di eliminare il piano di studi.
-    - Request body: `none`
-    - Response status: `200 Success`, `401 Unauthorized` (not authenticated), `503 Internal Server Error`.
-    - Response body:
-
-          {
-            "message": "Delete success"
-          }
 
     
