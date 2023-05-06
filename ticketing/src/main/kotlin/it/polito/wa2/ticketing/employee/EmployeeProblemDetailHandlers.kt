@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class EmployeeProblemDetailHandlers: ResponseEntityExceptionHandler() {
     @ExceptionHandler(ExpertNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleTicketNotFound(e: ExpertNotFoundException) = ProblemDetail
+    fun handleExpertNotFound(e: ExpertNotFoundException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
 
 }

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class ProductProblemDetailHandlers: ResponseEntityExceptionHandler() {
     @ExceptionHandler(ProductNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleTicketNotFound(e: ProductNotFoundException) = ProblemDetail
+    fun handleProductNotFound(e: ProductNotFoundException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
 
 }

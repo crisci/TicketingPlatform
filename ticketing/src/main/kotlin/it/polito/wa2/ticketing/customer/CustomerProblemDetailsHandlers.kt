@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class CustomerProblemDetailHandlers: ResponseEntityExceptionHandler() {
     @ExceptionHandler(CustomerNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleTicketNotFound(e: CustomerNotFoundException) = ProblemDetail
+    fun handleCustomerNotFound(e: CustomerNotFoundException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
 
 }
