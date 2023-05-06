@@ -40,7 +40,7 @@ class Ticket : EntityBase<Long>() {
 
     fun addHistory(h: History){
         h.ticket = this
-        history.add(h)
+        history!!.add(h)
     }
 
     fun addMessage(m: Message) {

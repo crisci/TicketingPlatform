@@ -44,7 +44,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         ticketRepository.findById(ticketId).ifPresentOrElse(
             {
                 var admin: Employee? = null
-                for (h: History in it.history.sorted()) {
+                for (h: History in it.history!!.sorted()) {
                     if (h.employee == null || h.employee?.type == EmployeeRole.ADMIN) {
                         admin = h.employee
                         break

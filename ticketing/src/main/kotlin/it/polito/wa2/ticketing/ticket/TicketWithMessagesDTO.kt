@@ -7,14 +7,10 @@ import it.polito.wa2.ticketing.product.toDTO
 import it.polito.wa2.ticketing.utils.PriorityLevel
 
 data class TicketWithMessagesDTO(
-    val id: Long?,
-    val title: String,
-    val description: String,
-    val priority: PriorityLevel,
-    val product: ProductDTO?,
+    val ticket: TicketDTO,
     val listOfMessage: Set<MessageDTO>?
 )
 
 fun Ticket.toTicketWithMessagesDTO(): TicketWithMessagesDTO {
-    return TicketWithMessagesDTO(getId(), title,description,priority, product?.toDTO(), listOfMessage?.map { it.toDTO() }?.toSet())
+    return TicketWithMessagesDTO(this.toTicketDTO(), listOfMessage.map { it.toDTO() }.toSet())
 }

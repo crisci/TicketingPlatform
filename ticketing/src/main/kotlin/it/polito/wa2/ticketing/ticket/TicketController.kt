@@ -60,7 +60,7 @@ class TicketController(val ticketService: TicketService) {
         ticketService.addMessage(idTicket, message)
     }
 
-    @PostMapping("/tickets/{idCustomer}")
+    @PostMapping("/tickets/{idCustomer}") //TODO: change with customer/{id}/tickets
     @ResponseStatus(HttpStatus.CREATED)
     fun addTicket(@RequestBody ticket: TicketDTO, @PathVariable idCustomer: Long) {
         ticketService.addTicket(ticket, idCustomer)
