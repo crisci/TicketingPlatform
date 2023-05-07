@@ -11,4 +11,12 @@ interface CustomerService {
     fun getCustomerTickets(id: Long): Set<TicketDTO>?
 
     fun getByCustomerTicketMessages(idCustomer: Long, idTicket: Long): Set<MessageDTO>?
+
+    fun getCustomerByEmail(email: String) : CustomerDTO?
+
+    fun getCustomers() : List<CustomerDTO>
+
+    fun insertCustomer(customerDTO: CustomerDTO)
+
+    fun updateCustomer(customerDTO: CustomerDTO, email: String)
 }

@@ -16,6 +16,7 @@ import it.polito.wa2.ticketing.message.MessageRepository
 import it.polito.wa2.ticketing.product.ProductNotFoundException
 import it.polito.wa2.ticketing.product.ProductRepository
 import it.polito.wa2.ticketing.utils.EmployeeRole
+import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.SenderType
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
@@ -83,7 +84,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                     val product = productRepository.findProductByEan(ticket.product?.ean!!)
                         ?: throw ProductNotFoundException("The specified product has not been found!")
                     val newTicket = Ticket()
-                        .create(ticket.title, ticket.description, ticket.priority, it, product)
+                        .create(ticket.title, ticket.description, PriorityLevel.NOT_ASSIGNED, it, product) // Priority level assigned by the admin
                     newTicket.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), newTicket, null))
                     newTicket.addHistory(History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), newTicket, null))
                     it.addTicket(newTicket)

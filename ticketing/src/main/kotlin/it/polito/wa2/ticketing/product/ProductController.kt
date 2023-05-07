@@ -15,4 +15,20 @@ class ProductController(private val productService: ProductService) {
     fun findTicketsByProductId(@PathVariable productId: Long): ProductDTO? {
         return productService.getTickets(productId)
     }
+
+    @GetMapping("/API/products/")
+    @ResponseStatus(HttpStatus.OK)
+    fun getAllProducts() : List<ProductDTO> {
+        return productService.getAllProducts()
+    }
+    @GetMapping("/API/products/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getProductById(@PathVariable("productId") productId:String) : ProductDTO {
+        if(productService.getProduct(productId)!=null)
+            return productService.getProduct(productId)!!
+        else
+            throw ProductNotFoundException("No element found with specified id!")
+    }
+
+
 }

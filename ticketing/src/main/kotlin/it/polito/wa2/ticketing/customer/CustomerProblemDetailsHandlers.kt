@@ -14,6 +14,24 @@ class CustomerProblemDetailHandlers: ResponseEntityExceptionHandler() {
     fun handleCustomerNotFound(e: CustomerNotFoundException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
 
+    @ExceptionHandler(DuplicatedEmailException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleDuplicatedEmail(e: DuplicatedEmailException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
+    @ExceptionHandler(InvalidEmailFormatException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInvalidEmailFormat(e: InvalidEmailFormatException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
+    @ExceptionHandler(BlankFieldsException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBlankFields(e: BlankFieldsException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
 }
 
 class CustomerNotFoundException(override val message:String?) : RuntimeException()
+class DuplicatedEmailException(override val message: String?) : RuntimeException()
+class InvalidEmailFormatException(override val message: String?) : RuntimeException()
+class BlankFieldsException(override val message: String?) : RuntimeException()

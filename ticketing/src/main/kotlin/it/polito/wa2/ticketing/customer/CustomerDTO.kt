@@ -12,9 +12,8 @@ data class CustomerDTO(
     val dob: LocalDate?,
     val address: String,
     val phone_number: String,
-    val listOfTicket: Set<TicketDTO>
 )
 
 fun Customer.toDTO(): CustomerDTO {
-    return CustomerDTO(getId(),first_name,last_name,email,dob,address,phone_number,listOfTicket.map { it.toTicketDTO() }.toSet())
+    return CustomerDTO(getId(),first_name,last_name,email,dob,address,phone_number)
 }

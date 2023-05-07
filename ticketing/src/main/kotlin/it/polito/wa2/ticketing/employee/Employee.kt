@@ -13,6 +13,7 @@ import java.util.*
 class Employee: EntityBase<Long>() {
     var first_name: String = ""
     var last_name: String = ""
+    @Column(unique = true)
     var email: String = ""
     var password: String = ""
     @Enumerated(EnumType.ORDINAL)

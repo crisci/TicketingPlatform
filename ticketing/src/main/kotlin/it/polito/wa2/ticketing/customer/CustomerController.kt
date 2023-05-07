@@ -2,13 +2,10 @@ package it.polito.wa2.ticketing.customer
 
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
+import it.polito.wa2.ticketing.utils.EmailValidationUtil
+import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 
@@ -30,6 +27,60 @@ class CustomerController(val customerService: CustomerService) {
     @ResponseStatus(HttpStatus.OK)
     fun getCustomerTicketWithMessages(@PathVariable idCustomer: Long, @PathVariable idTicket: Long): Set<MessageDTO>? {
         return customerService.getByCustomerTicketMessages(idCustomer, idTicket)
+    }
+
+    private val emailValidator = EmailValidationUtil()
+
+    @GetMapping("/API/customers/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getCustomerByEmail(@PathVariable email: String) : CustomerDTO? {
+        if(customerService.getCustomerByEmail(email.lowercase()) == null)
+            throw CustomerNotFoundException("Customer not fount with the following email '${email}'")
+        else
+            return customerService.getCustomerByEmail(email.lowercase())
+    }
+
+    @GetMapping("/API/customers/")
+    @ResponseStatus(HttpStatus.OK)
+    fun getCustomers() : List<CustomerDTO> {
+        return customerService.getCustomers()
+    }
+
+    @PostMapping("/API/customers")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postCustomer(@RequestBody customerDTO: CustomerDTO) {
+        if(customerDTO.email.isNotBlank() && customerDTO.first_name.isNotBlank() && customerDTO.last_name.isNotBlank()) {
+            if (emailValidator.checkEmail(customerDTO.email)) {
+                if (customerService.getCustomerByEmail(customerDTO.email.lowercase()) == null)
+                    customerService.insertCustomer(customerDTO)
+                else {
+                    throw DuplicatedEmailException("${customerDTO.email.lowercase()} is already used")
+                }} else {
+                throw InvalidEmailFormatException("Invalid email format")
+            }} else {
+            throw BlankFieldsException("Fields must not be blank")
+        }
+    }
+
+    @PutMapping("/API/customers/{email}") @Transactional
+    @ResponseStatus(HttpStatus.CREATED)
+    fun putCustomer(@RequestBody customerDTO: CustomerDTO, @PathVariable(name = "email") email: String) {
+        if(customerDTO.email.isNotBlank() && customerDTO.first_name.isNotBlank() && customerDTO.last_name.isNotBlank()) {
+            if (emailValidator.checkEmail(customerDTO.email)) {
+                if (customerService.getCustomerByEmail(email.lowercase()) != null) {
+                    if (customerService.getCustomerByEmail(customerDTO.email.lowercase()) == null) customerService.updateCustomer(
+                        customerDTO,
+                        email.lowercase()
+                    )
+                    else {
+                        throw DuplicatedEmailException("${customerDTO.email.lowercase()} is already used")
+                    }} else {
+                    throw CustomerNotFoundException("Customer not fount with the following email '${email.lowercase()}'")
+                }} else {
+                throw InvalidEmailFormatException("Invalid email format")
+            }} else {
+            throw BlankFieldsException("Fields must not be blank")
+        }
     }
 
 
