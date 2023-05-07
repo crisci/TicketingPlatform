@@ -51,11 +51,15 @@ class CustomerController(val customerService: CustomerService) {
     fun postCustomer(@RequestBody customerWithPasswordDTO: CustomerWithPasswordDTO) {
         if(customerWithPasswordDTO.customer.email.isNotBlank() && customerWithPasswordDTO.customer.first_name.isNotBlank() && customerWithPasswordDTO.customer.last_name.isNotBlank()) {
             if (emailValidator.checkEmail(customerWithPasswordDTO.customer.email)) {
-                if (customerService.getCustomerByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null)
-                    customerService.insertCustomer(customerWithPasswordDTO)
-                else {
-                    throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
-                }} else {
+                if(customerWithPasswordDTO.password.length >= 8) {
+                    if (customerService.getCustomerByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null)
+                        customerService.insertCustomer(customerWithPasswordDTO)
+                    else {
+                        throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
+                    }}
+                else{
+                throw PasswordTooShortException("Password must be at least 8 characters long")
+            }} else {
                 throw InvalidEmailFormatException("Invalid email format")
             }} else {
             throw BlankFieldsException("Fields must not be blank")
@@ -67,15 +71,16 @@ class CustomerController(val customerService: CustomerService) {
     fun putCustomer(@RequestBody customerWithPasswordDTO: CustomerWithPasswordDTO, @PathVariable(name = "email") email: String) {
         if(customerWithPasswordDTO.customer.email.isNotBlank() && customerWithPasswordDTO.customer.first_name.isNotBlank() && customerWithPasswordDTO.customer.last_name.isNotBlank()) {
             if (emailValidator.checkEmail(customerWithPasswordDTO.customer.email)) {
-                if (customerService.getCustomerByEmail(email.lowercase()) != null) {
-                    if (customerService.getCustomerByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null) customerService.updateCustomer(
-                        customerWithPasswordDTO,
-                        email.lowercase()
-                    )
-                    else {
-                        throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
+                if(customerWithPasswordDTO.password.length >= 8 ) {
+                    if (customerService.getCustomerByEmail(email.lowercase()) != null) {
+                        if (customerService.getCustomerByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null)
+                            customerService.updateCustomer(customerWithPasswordDTO, email.lowercase())
+                        else {
+                            throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
                     }} else {
                     throw CustomerNotFoundException("Customer not fount with the following email '${email.lowercase()}'")
+                }} else {
+                    throw PasswordTooShortException("Password must be at least 8 characters long")
                 }} else {
                 throw InvalidEmailFormatException("Invalid email format")
             }} else {
