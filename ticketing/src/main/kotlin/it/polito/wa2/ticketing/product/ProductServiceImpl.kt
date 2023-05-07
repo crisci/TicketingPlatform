@@ -1,14 +1,16 @@
 package it.polito.wa2.ticketing.product
 
 
+import it.polito.wa2.ticketing.ticket.TicketDTO
+import it.polito.wa2.ticketing.ticket.toTicketDTO
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service @Transactional
 class ProductServiceImpl(private val repository: ProductRepository) : ProductService {
-    override fun getTickets(productId: Long): ProductDTO? {
-        return repository.findProductByEan(productId.toString())?.toDTO()
+    override fun getTickets(productId: Long): List<TicketDTO>? {
+        return repository.findProductByEan(productId.toString())?.listOfTicket?.map { it.toTicketDTO() } ?: throw ProductNotFoundException("No product found with specified id!")
     }
 
     override fun getAllProducts(): List<ProductDTO> {
@@ -16,6 +18,6 @@ class ProductServiceImpl(private val repository: ProductRepository) : ProductSer
     }
 
     override fun getProduct(ean: String): ProductDTO? {
-        return repository.findProductByEan(ean)?.toDTO()
+        return repository.findProductByEan(ean)?.toDTO() ?: throw ProductNotFoundException("No product found with specified id!")
     }
 }

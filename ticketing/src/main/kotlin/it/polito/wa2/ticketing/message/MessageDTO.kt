@@ -13,11 +13,11 @@ data class MessageDTO(
     val body: String,
     val date: LocalDateTime?,
     val listOfAttachment: Set<AttachmentDTO>? = setOf(),
-    val expert: EmployeeDTO? = null,
+    val expert: Long? = null,
 )
 
 fun Message.toDTO(): MessageDTO {
-    return MessageDTO(getId(), type,body,date,listOfAttachment?.map { it.toDTO() }?.toSet(), expert?.toEmployeeDTO())
+    return MessageDTO(getId(), type,body,date,listOfAttachment?.map { it.toDTO() }?.toSet(), expert?.getId())
 }
 
 

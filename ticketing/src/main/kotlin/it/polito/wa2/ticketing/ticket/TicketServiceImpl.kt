@@ -44,14 +44,20 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     override fun reassignTicket(ticketId: Long, idExpert: Long) {
         ticketRepository.findById(ticketId).ifPresentOrElse(
             {
-                var admin: Employee? = null
-                for (h: History in it.history!!.sorted()) {
-                    if (h.employee == null || h.employee?.type == EmployeeRole.ADMIN) {
-                        admin = h.employee
-                        break
+                //TODO: check that the last history is not OPEN
+                if (historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().state != TicketStatus.OPEN) {
+
+                    var admin: Employee? = null
+                    for (h: History in it.history.sorted()) {
+                        if (h.employee == null || h.employee?.type == EmployeeRole.ADMIN) {
+                            admin = h.employee
+                            break
+                        }
                     }
+                    it.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), it, admin))
+                } else {
+                    throw OperationNotPermittedException("The ticket is still open!")
                 }
-                it.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), it, admin))
             },
             { throw TicketNotFoundException("The specified ticket has not been found!") })
     }
@@ -78,7 +84,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     }
 
     override fun addTicket(ticket: TicketDTO, idCustomer: Long) {
-        val customer = customerRepository.findById(idCustomer)
+        customerRepository.findById(idCustomer)
             .ifPresentOrElse(
                 {
                     val product = productRepository.findProductByEan(ticket.product?.ean!!)
@@ -86,7 +92,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                     val newTicket = Ticket()
                         .create(ticket.title, ticket.description, PriorityLevel.NOT_ASSIGNED, it, product) // Priority level assigned by the admin
                     newTicket.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), newTicket, null))
-                    newTicket.addHistory(History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), newTicket, null))
+                    //TODO: Setted by the admin -> newTicket.addHistory(History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), newTicket, null))
                     it.addTicket(newTicket)
                 },
                 { throw CustomerNotFoundException("The specified customer has not been found!") }
@@ -96,7 +102,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
 
     override fun addMessage(idTicket: Long, message: MessageDTO) {
         var expert: Employee? = null
-        val ticket = ticketRepository.findById(idTicket)
+        ticketRepository.findById(idTicket)
             .ifPresentOrElse(
                 {
                     if (message.type == SenderType.EXPERT) {
@@ -105,6 +111,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(it.getId()!!)
                         if(lastHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
 
+                        //TODO: Expert missmatch if history is not associated to the expert who replied
                         expert = employeeRepository.findByIdOrNull(lastHistory.first().employee?.getId()!!)
                             ?: throw ExpertNotFoundException("The specified expert has not been found!")
                     }
@@ -127,7 +134,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         if(lastTicketHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
 
         val expert = lastTicketHistory.first().employee
-        if (lastTicketHistory.first().state != TicketStatus.CLOSED) {
+        if (lastTicketHistory.first().state != TicketStatus.CLOSED && lastTicketHistory.first().state != TicketStatus.RESOLVED) {
             ticketRepository.findById(ticketId).ifPresentOrElse(
                 {
                     it.addHistory(
@@ -149,12 +156,13 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         //Check the last history state related to the ticketId
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
         if(lastTicketHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+        println(lastTicketHistory.first().state)
         if (lastTicketHistory.first().state == TicketStatus.CLOSED || lastTicketHistory.first().state == TicketStatus.RESOLVED) {
             ticketRepository.findById(ticketId).ifPresentOrElse(
                 {
                     it.addHistory(
                         History().create(
-                            TicketStatus.RESOLVED,
+                            TicketStatus.REOPENED,
                             LocalDateTime.now(),
                             it,
                             null // reopen so the ticket can be assigned to another expert
