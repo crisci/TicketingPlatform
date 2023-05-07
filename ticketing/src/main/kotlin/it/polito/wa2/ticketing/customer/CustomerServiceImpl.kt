@@ -54,8 +54,9 @@ class CustomerServiceImpl(private val repository: CustomerRepository): CustomerS
 
     //the body of the request must contain all the fields
     override fun updateCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO, email: String) {
-        if (customerWithPasswordDTO.password == repository.findByEmail(email)?.password) {
+        println(repository.findByEmail(email)?.password)
             if (repository.findByEmail(email.lowercase()) != null) {
+                if (customerWithPasswordDTO.password == repository.findByEmail(email)?.password) {
                 if (repository.findByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null) {
                     val profileToUpdate: Customer? = repository
                         .findByEmail(email)
@@ -71,11 +72,10 @@ class CustomerServiceImpl(private val repository: CustomerRepository): CustomerS
                 } else {
                     throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
                 }} else {
+                    throw PasswordMismatchException("The password is not correct")
+                }} else {
                 throw CustomerNotFoundException("Customer not fount with the following email '${email.lowercase()}'")
-            }} else {
-            throw PasswordMismatchException("The password is not correct")
+            }
         }
 
     }
-
-}
