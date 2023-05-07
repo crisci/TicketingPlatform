@@ -28,8 +28,25 @@ class Ticket : EntityBase<Long>() {
     @OneToMany(mappedBy = "ticket", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfMessage: MutableSet<Message> = mutableSetOf()
 
+    fun create(title: String, description: String, priority: PriorityLevel, customer: Customer, product: Product): Ticket {
+        val t = Ticket()
+        t.title = title
+        t.description = description
+        t.priority = priority
+        t.customer = customer
+        t.product = product
+        return t
+    }
+
     fun addHistory(h: History){
         h.ticket = this
-        history.add(h)
+        history!!.add(h)
     }
+
+    fun addMessage(m: Message) {
+        m.ticket = this
+        listOfMessage.add(m)
+    }
+
+
 }

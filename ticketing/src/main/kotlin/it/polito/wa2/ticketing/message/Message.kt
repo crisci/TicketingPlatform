@@ -31,4 +31,18 @@ class Message: EntityBase<Long>(),Comparable<Message> {
         return -this.date.compareTo(other.date)
     }
 
+
+    fun create(type: SenderType,body: String,date: LocalDateTime,listOfAttachment: MutableSet<Attachment>?,ticket: Ticket?,expert: Employee?):Message{
+        val m = Message()
+        m.type = type
+        m.body = body
+        m.date = date
+        m.listOfAttachment = listOfAttachment
+        m.ticket = ticket
+        m.expert = expert
+        return m
+    }
+
+
+
 }

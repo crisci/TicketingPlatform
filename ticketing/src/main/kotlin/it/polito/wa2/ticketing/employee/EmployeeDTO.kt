@@ -11,9 +11,8 @@ data class EmployeeDTO(
     val last_name: String,
     val email: String,
     val type: EmployeeRole,
-    val listOfHistory: Set<HistoryDTO>
 )
 
-fun Employee.toDTO(): EmployeeDTO {
-    return EmployeeDTO(getId(),first_name,last_name,email,type,listOfHistory.map { it.toDTO() }.toSet())
+fun Employee.toEmployeeDTO(): EmployeeDTO {
+    return EmployeeDTO(getId(),first_name,last_name,email,type)
 }
