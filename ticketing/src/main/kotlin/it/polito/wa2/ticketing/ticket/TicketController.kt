@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class TicketController(val ticketService: TicketService) {
-    @GetMapping("/tickets/{id}")
+    @GetMapping("/API/tickets/{idCustomer}")
     @ResponseStatus(HttpStatus.OK)
-    fun getTicketsByCustomerId(@PathVariable id: Long): Set<TicketDTO>? {
-        return ticketService.getTicketsByCustomerId(id)
+    fun getTicketsByCustomerId(@PathVariable idCustomer: Long): Set<TicketDTO>? {
+        return ticketService.getTicketsByCustomerId(idCustomer)
     }
 
-    @GetMapping("/tickets/{id}/messages")
+    @GetMapping("/API/tickets/{idCustomer}/messages")
     @ResponseStatus(HttpStatus.OK)
-    fun getTicketsWithMessagesByCustomerId(@PathVariable id: Long): Set<TicketWithMessagesDTO>? {
-        return ticketService.getTicketsWithMessagesByCustomerId(id)
+    fun getTicketsWithMessagesByCustomerId(@PathVariable idCustomer: Long): Set<TicketWithMessagesDTO>? {
+        return ticketService.getTicketsWithMessagesByCustomerId(idCustomer)
     }
 
-    @PutMapping("/tickets/{idExpert}/{ticketId}/stop")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/API/tickets/{idExpert}/{ticketId}/stop")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun ticketMakeReassignable(@PathVariable("idExpert") idExpert: Long, @PathVariable("ticketId") ticketId: Long) {
         //ToDo("check the idExpert")
         return ticketService.reassignTicket(ticketId, idExpert)
     }
 
-    @PutMapping("/tickets/{idExpert}/{ticketId}/close")
+    @PutMapping("/API/tickets/{idExpert}/{ticketId}/close")
     //TODO: Who cares if the ticket is closed by the user or not?
     //Only a general method to close the ticket from both parties?
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -39,38 +39,40 @@ class TicketController(val ticketService: TicketService) {
         return ticketService.closeTicket(ticketId, idExpert)
     }
 
-    @GetMapping("/tickets/{idExpert}/{ticketId}/messages")
+    @GetMapping("/API/tickets/{idExpert}/{ticketId}/messages")
     @ResponseStatus(HttpStatus.OK)
     fun getMessages(@PathVariable("idExpert") idExpert : Long,@PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
         //ToDo("check the idExpert")
         return ticketService.getMessages(ticketId, idExpert)
     }
 
-    @GetMapping("/tickets/{idExpert}/{ticketId}/status")
+    @GetMapping("/API/tickets/{idExpert}/{ticketId}/status") //TODO: idExpert is not needed
     @ResponseStatus(HttpStatus.OK)
     fun getStatus(@PathVariable("idExpert") idExpert: Long, @PathVariable("ticketId") ticketId: Long): TicketStatus {
         //ToDo("check the idExpert")
         return ticketService.getStatus(ticketId, idExpert)
     }
 
-    @PostMapping("/tickets/{idTicket}/messages")
+    @PostMapping("/API/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.CREATED)
     fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
         ticketService.addMessage(idTicket, message)
     }
 
-    @PostMapping("/tickets/{idCustomer}") //TODO: change with customers/{id}/tickets
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/API/tickets/{idCustomer}") //TODO: change with customers/{id}/tickets
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun addTicket(@RequestBody ticket: TicketDTO, @PathVariable idCustomer: Long) {
         ticketService.addTicket(ticket, idCustomer)
     }
 
-    @PutMapping("/tickets/{idTicket}/resolve")
+    @PutMapping("/API/tickets/{idTicket}/resolved")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun ticketResolved(@PathVariable idTicket: Long) {
         ticketService.resolveTicket(idTicket)
     }
 
-    @PutMapping("/tickets/{idTicket}/reopen")
+    @PutMapping("/API/tickets/{idTicket}/reopen")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun ticketReopen(@PathVariable idTicket: Long) {
         ticketService.reopenTicket(idTicket)
     }
