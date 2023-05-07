@@ -30,4 +30,9 @@ class Employee: EntityBase<Long>() {
         listOfMessages.add(m)
     }
 
+    fun addHistory(h: History){
+        h.employee = this
+        listOfHistory.add(h)
+    }
+
 }

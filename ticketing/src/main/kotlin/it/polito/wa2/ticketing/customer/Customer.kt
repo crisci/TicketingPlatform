@@ -1,7 +1,6 @@
 package it.polito.wa2.ticketing.customer
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.*

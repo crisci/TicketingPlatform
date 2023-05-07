@@ -17,7 +17,7 @@ data class MessageDTO(
 )
 
 fun Message.toDTO(): MessageDTO {
-    return MessageDTO(getId(), type,body,date,listOfAttachment?.map { it.toDTO() }?.toSet(), expert?.toEmployeeDTO())
+    return MessageDTO(getId(), type,body,date,listOfAttachment.map { it.toDTO() }.toSet(), expert?.toEmployeeDTO())
 }
 
 

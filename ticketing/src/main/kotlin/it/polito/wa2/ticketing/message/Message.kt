@@ -19,7 +19,7 @@ class Message: EntityBase<Long>(),Comparable<Message> {
     var date: LocalDateTime = LocalDateTime.now()
     @JsonBackReference
     @OneToMany(mappedBy = "message", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var listOfAttachment: MutableSet<Attachment>? = mutableSetOf()
+    var listOfAttachment: MutableSet<Attachment> = mutableSetOf()
     @JsonBackReference
     @ManyToOne
     var ticket: Ticket? = null
@@ -37,12 +37,16 @@ class Message: EntityBase<Long>(),Comparable<Message> {
         m.type = type
         m.body = body
         m.date = date
-        m.listOfAttachment = listOfAttachment
+        if(listOfAttachment != null)
+            m.listOfAttachment = listOfAttachment
         m.ticket = ticket
         m.expert = expert
         return m
     }
 
-
+    fun addAttachment(a: Attachment){
+        a.message = this
+        listOfAttachment.add(a)
+    }
 
 }
