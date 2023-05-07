@@ -4,7 +4,7 @@ import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.ticket.toTicketDTO
 
 data class CustomerWithTicketsDTO (
-    val customerDTO: CustomerDTO,
+    val customer: CustomerDTO,
     val listOfTicket: Set<TicketDTO>
 )
 

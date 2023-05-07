@@ -48,13 +48,13 @@ class CustomerController(val customerService: CustomerService) {
 
     @PostMapping("/API/customers")
     @ResponseStatus(HttpStatus.CREATED)
-    fun postCustomer(@RequestBody customerDTO: CustomerDTO) {
-        if(customerDTO.email.isNotBlank() && customerDTO.first_name.isNotBlank() && customerDTO.last_name.isNotBlank()) {
-            if (emailValidator.checkEmail(customerDTO.email)) {
-                if (customerService.getCustomerByEmail(customerDTO.email.lowercase()) == null)
-                    customerService.insertCustomer(customerDTO)
+    fun postCustomer(@RequestBody customerWithPasswordDTO: CustomerWithPasswordDTO) {
+        if(customerWithPasswordDTO.customer.email.isNotBlank() && customerWithPasswordDTO.customer.first_name.isNotBlank() && customerWithPasswordDTO.customer.last_name.isNotBlank()) {
+            if (emailValidator.checkEmail(customerWithPasswordDTO.customer.email)) {
+                if (customerService.getCustomerByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null)
+                    customerService.insertCustomer(customerWithPasswordDTO)
                 else {
-                    throw DuplicatedEmailException("${customerDTO.email.lowercase()} is already used")
+                    throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
                 }} else {
                 throw InvalidEmailFormatException("Invalid email format")
             }} else {
@@ -64,16 +64,16 @@ class CustomerController(val customerService: CustomerService) {
 
     @PutMapping("/API/customers/{email}") @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    fun putCustomer(@RequestBody customerDTO: CustomerDTO, @PathVariable(name = "email") email: String) {
-        if(customerDTO.email.isNotBlank() && customerDTO.first_name.isNotBlank() && customerDTO.last_name.isNotBlank()) {
-            if (emailValidator.checkEmail(customerDTO.email)) {
+    fun putCustomer(@RequestBody customerWithPasswordDTO: CustomerWithPasswordDTO, @PathVariable(name = "email") email: String) {
+        if(customerWithPasswordDTO.customer.email.isNotBlank() && customerWithPasswordDTO.customer.first_name.isNotBlank() && customerWithPasswordDTO.customer.last_name.isNotBlank()) {
+            if (emailValidator.checkEmail(customerWithPasswordDTO.customer.email)) {
                 if (customerService.getCustomerByEmail(email.lowercase()) != null) {
-                    if (customerService.getCustomerByEmail(customerDTO.email.lowercase()) == null) customerService.updateCustomer(
-                        customerDTO,
+                    if (customerService.getCustomerByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null) customerService.updateCustomer(
+                        customerWithPasswordDTO,
                         email.lowercase()
                     )
                     else {
-                        throw DuplicatedEmailException("${customerDTO.email.lowercase()} is already used")
+                        throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
                     }} else {
                     throw CustomerNotFoundException("Customer not fount with the following email '${email.lowercase()}'")
                 }} else {
