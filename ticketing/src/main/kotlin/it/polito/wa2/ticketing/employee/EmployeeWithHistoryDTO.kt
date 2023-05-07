@@ -2,7 +2,6 @@ package it.polito.wa2.ticketing.employee
 
 import it.polito.wa2.ticketing.history.HistoryDTO
 import it.polito.wa2.ticketing.history.toDTO
-import it.polito.wa2.ticketing.utils.EmployeeRole
 
 data class EmployeeWithHistoryDTO(
     val employee: EmployeeDTO,

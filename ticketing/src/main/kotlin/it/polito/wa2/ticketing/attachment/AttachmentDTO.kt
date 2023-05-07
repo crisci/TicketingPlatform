@@ -1,6 +1,5 @@
 package it.polito.wa2.ticketing.attachment
 
-import it.polito.wa2.ticketing.message.MessageDTO
 import java.sql.Blob
 
 data class AttachmentDTO(

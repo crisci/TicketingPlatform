@@ -1,6 +1,5 @@
 package it.polito.wa2.ticketing.employee
 
-import it.polito.wa2.ticketing.ticket.DuplicateTicketException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler

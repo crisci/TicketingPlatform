@@ -5,7 +5,6 @@ import it.polito.wa2.ticketing.ticket.Ticket
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.employee.Employee
-import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.utils.SenderType
 import jakarta.persistence.*
 import java.time.LocalDateTime

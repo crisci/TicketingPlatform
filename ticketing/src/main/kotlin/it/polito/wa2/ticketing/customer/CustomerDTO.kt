@@ -1,7 +1,5 @@
 package it.polito.wa2.ticketing.customer
 
-import it.polito.wa2.ticketing.ticket.TicketDTO
-import it.polito.wa2.ticketing.ticket.toTicketDTO
 import java.time.LocalDate
 
 data class CustomerDTO(

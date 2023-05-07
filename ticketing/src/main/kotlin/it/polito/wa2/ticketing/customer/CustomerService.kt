@@ -2,7 +2,6 @@ package it.polito.wa2.ticketing.customer
 
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
-import it.polito.wa2.ticketing.ticket.TicketWithMessagesDTO
 
 interface CustomerService {
 
