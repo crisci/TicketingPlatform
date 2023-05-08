@@ -1,6 +1,5 @@
 package it.polito.wa2.ticketing
 
-import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentRepository
 import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.customer.CustomerRepository
@@ -8,6 +7,7 @@ import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryRepository
+import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageRepository
 import it.polito.wa2.ticketing.product.Product
@@ -18,7 +18,12 @@ import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.SenderType
 import it.polito.wa2.ticketing.utils.TicketStatus
+import it.polito.wa2.ticketing.ticket.TicketService
+import it.polito.wa2.ticketing.ticket.toTicketDTO
+import org.junit.Rule
+import org.junit.internal.runners.statements.ExpectException
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,8 +34,9 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.sql.Blob
+import java.lang.RuntimeException
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Testcontainers
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -66,6 +72,9 @@ class TicketingApplicationTests {
 	lateinit var messageRepository: MessageRepository
 	@Autowired
 	lateinit var attachmentRepository: AttachmentRepository
+	@Autowired
+	lateinit var ticketService: TicketService
+
 
 	var customer: Customer = Customer()
 	var product: Product = Product()
@@ -77,6 +86,7 @@ class TicketingApplicationTests {
 	var message1: Message = Message()
 	var message2: Message = Message()
 	//var attachment: Attachment = Attachment()
+
 
 	fun initialization() {
 		customer.first_name = "Pietro"
@@ -168,6 +178,81 @@ class TicketingApplicationTests {
 	@Test
 	fun integrationTest(){
 		initialization()
+	}
+
+
+
+	@Test
+	fun operationNotPermitted() {
+		//RESOLVED When Ticket is CLOSED or RESOLVED is not permitted
+		customer.apply {
+			first_name = "Luigi"
+			last_name = "Crisci"
+			email = "xyz@xyz.it"
+			password = "password"
+			dob = LocalDate.of(1998,9,13)
+			address = "Via Rivalta"
+			phone_number = "0000000000"
+		}
+		customerRepository.save(customer)
+
+		product.apply {
+			ean = "4935531465706"
+			name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+			brand = "JMT"
+		}
+		productRepository.save(product)
+
+		ticket.apply {
+			title = "Can't use the product"
+			description = "How should i assemble the product?"
+			priority = PriorityLevel.HIGH
+		}
+		ticketRepository.save(ticket)
+
+		expert.apply {
+			first_name = "Giorgio"
+			last_name = "P"
+			email = "giorgio.p@polito.i"
+			password = "password"
+			type = EmployeeRole.EXPERT
+		}
+		employeeRepository.save(expert)
+
+		history1.apply {
+			state = TicketStatus.CLOSED
+			date = LocalDateTime.now()
+		}
+		historyRepository.save(history1)
+
+		product.addTicket(ticket)
+		customer.addTicket(ticket)
+		product.addTicket(ticket)
+		ticket.addHistory(history1)
+
+		customerRepository.save(customer)
+		employeeRepository.save(expert)
+		productRepository.save(product)
+		ticketRepository.save(ticket)
+		historyRepository.save(history1)
+
+		assertThrows<OperationNotPermittedException> {
+			ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+		}
+
+		history1.apply {
+			state = TicketStatus.RESOLVED
+		}
+		historyRepository.save(history1)
+		assertThrows<OperationNotPermittedException> {
+			ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+		}
+
+		customerRepository.flush()
+		productRepository.flush()
+		ticketRepository.flush()
+		historyRepository.flush()
+		employeeRepository.flush()
 	}
 
 }

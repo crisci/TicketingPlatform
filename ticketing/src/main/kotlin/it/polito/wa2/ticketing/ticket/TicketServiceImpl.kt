@@ -105,26 +105,31 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         ticketRepository.findById(idTicket)
             .ifPresentOrElse(
                 {
-                    if (message.type == SenderType.EXPERT) {
-                        //It is an expert
-                        //TODO: Throw exception if history is empty
-                        val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(it.getId()!!)
-                        if(lastHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+                    if (historyRepository.findByTicketIdOrderByDateDesc(idTicket)
+                            .first().state == TicketStatus.IN_PROGRESS
+                    ) {
+                        if (message.type == SenderType.EXPERT) {
+                            //It is an expert
+                            //TODO: Throw exception if history is empty
+                            val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(it.getId()!!)
+                            if (lastHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
 
-                        //TODO: Expert missmatch if history is not associated to the expert who replied
-                        expert = employeeRepository.findByIdOrNull(lastHistory.first().employee?.getId()!!)
-                            ?: throw ExpertNotFoundException("The specified expert has not been found!")
-                    }
-                    it.addMessage(
-                        Message().create(
-                            message.type!!,
-                            message.body,
-                            LocalDateTime.now(),
-                            null,
-                            it,
-                            expert //if not expert it remains null otherwise it is set
+                            //TODO: Expert missmatch if history is not associated to the expert who replied
+                            expert = employeeRepository.findByIdOrNull(lastHistory.first().employee?.getId()!!)
+                                ?: throw ExpertNotFoundException("The specified expert has not been found!")
+                        }
+                        it.addMessage(
+                            Message().create(
+                                message.type!!,
+                                message.body,
+                                LocalDateTime.now(),
+                                null,
+                                it,
+                                expert //if not expert it remains null otherwise it is set
+                            )
                         )
-                    )
+                    } else
+                        throw OperationNotPermittedException("The ticket is not in progress!")
                 },
                 { throw TicketNotFoundException("The specified ticket has not been found!") })
     }
