@@ -47,7 +47,6 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     override fun reassignTicket(ticketId: Long, idExpert: Long) {
         ticketRepository.findById(ticketId).ifPresentOrElse(
             {
-                //TODO: check that the last history is not OPEN
                 if (historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().state != TicketStatus.OPEN) {
 
                     var admin: Employee? = null
@@ -58,18 +57,21 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         }
                     }
                     it.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), it, admin))
+                    ticketRepository.save(it)
                 } else {
                     throw OperationNotPermittedException("The ticket is still open!")
                 }
             },
             { throw TicketNotFoundException("The specified ticket has not been found!") })
+        ticketRepository.flush()
     }
 
     override fun closeTicket(ticketId: Long, idExpert: Long) {
         val expert = employeeRepository.findByIdOrNull(idExpert)!!
         ticketRepository.findById(ticketId).ifPresentOrElse(
-            { it.addHistory(History().create(TicketStatus.CLOSED, LocalDateTime.now(), it, expert)) },
+            { it.addHistory(History().create(TicketStatus.CLOSED, LocalDateTime.now(), it, expert)); ticketRepository.save(it) },
             { throw TicketNotFoundException("The specified ticket has not been found!") })
+        ticketRepository.flush()
     }
 
     override fun getMessages(ticketId: Long, idExpert: Long): List<MessageDTO> {

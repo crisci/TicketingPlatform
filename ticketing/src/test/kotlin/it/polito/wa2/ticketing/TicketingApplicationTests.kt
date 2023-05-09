@@ -32,6 +32,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
@@ -77,6 +78,8 @@ class TicketingApplicationTests {
 	lateinit var messageRepository: MessageRepository
 	@Autowired
 	lateinit var attachmentRepository: AttachmentRepository
+	@Autowired
+	lateinit var ticketService: TicketService
 
 
 	var customer: Customer = Customer()
@@ -641,8 +644,10 @@ class TicketingApplicationTests {
 		message2.body = "The picture is in the attachment!"
 		messageRepository.save(message2)
 
-		history2.state = TicketStatus.IN_PROGRESS
+		history1.date = LocalDateTime.now().minusDays(1)
 		historyRepository.save(history1)
+
+		history2.state = TicketStatus.IN_PROGRESS
 		historyRepository.save(history2)
 
 		//attachment.attachment = null
@@ -688,10 +693,121 @@ class TicketingApplicationTests {
 		//attachmentRepository.flush()
 	}
 	@Test
-	fun integrationTest(){
+	fun expertOperatingOnTicketsTest(){
 		initialization()
+		val ticketId =  ticket.getId()!!
+		assert(ticketRepository.findByIdOrNull(ticketId) == ticket)
+		val hs = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
+		val i = hs.iterator()
+		assert(i.next() == history2)
+		assert(i.next() == history1)
+		assert(!i.hasNext())
+
+        val expertId = expert.getId()!!
+        val adminId = admin.getId()!!
+		assert(employeeRepository.findByIdOrNull(expertId) == expert)
+		assert(employeeRepository.findByIdOrNull(adminId) == admin)
+
+        val tIt = ticketService.getMessages(ticketId,expertId).iterator()
+        assert(tIt.next().id!! == message1.toDTO().id!!)
+        assert(tIt.next().id!! == message2.toDTO().id!!)
+        assert(!tIt.hasNext())
+        assertThrows<TicketNotFoundException> {
+            ticketService.getMessages(ticketId.inc(),expertId)
+        }
+
+        assert(ticketService.getStatus(ticketId,expertId) == TicketStatus.IN_PROGRESS)
+        assertThrows<TicketNotFoundException> {
+            ticketService.getStatus(ticketId.inc(),expertId)
+        }
+
+		assertThrows<TicketNotFoundException> {
+			ticketService.reassignTicket(ticketId.inc(),expertId)
+		}
+		ticketService.reassignTicket(ticketId,expertId)
+		assertThrows<OperationNotPermittedException> {
+			ticketService.reassignTicket(ticketId,expertId)
+		}
+
+		assertThrows<TicketNotFoundException> {
+			ticketService.closeTicket(ticketId.inc(),expertId)
+		}
+		ticketService.closeTicket(ticketId,expertId)
 	}
 
 
+
+	@Test
+	fun operationNotPermitted() {
+		//RESOLVED When Ticket is CLOSED or RESOLVED is not permitted
+		customer.apply {
+			first_name = "Luigi"
+			last_name = "Crisci"
+			email = "xyz@xyz.it"
+			password = "password"
+			dob = LocalDate.of(1998,9,13)
+			address = "Via Rivalta"
+			phone_number = "0000000000"
+		}
+		customerRepository.save(customer)
+
+		product.apply {
+			ean = "4935531465706"
+			name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+			brand = "JMT"
+		}
+		productRepository.save(product)
+
+		ticket.apply {
+			title = "Can't use the product"
+			description = "How should i assemble the product?"
+			priority = PriorityLevel.HIGH
+		}
+		ticketRepository.save(ticket)
+
+		expert.apply {
+			first_name = "Giorgio"
+			last_name = "P"
+			email = "giorgio.p@polito.i"
+			password = "password"
+			type = EmployeeRole.EXPERT
+		}
+		employeeRepository.save(expert)
+
+		history1.apply {
+			state = TicketStatus.CLOSED
+			date = LocalDateTime.now()
+		}
+		historyRepository.save(history1)
+
+		product.addTicket(ticket)
+		customer.addTicket(ticket)
+		product.addTicket(ticket)
+		ticket.addHistory(history1)
+
+		customerRepository.save(customer)
+		employeeRepository.save(expert)
+		productRepository.save(product)
+		ticketRepository.save(ticket)
+		historyRepository.save(history1)
+
+		assertThrows<OperationNotPermittedException> {
+			ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+		}
+
+		history1.apply {
+			state = TicketStatus.RESOLVED
+		}
+		historyRepository.save(history1)
+		assertThrows<OperationNotPermittedException> {
+			ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+		}
+
+		customerRepository.flush()
+		productRepository.flush()
+		ticketRepository.flush()
+		historyRepository.flush()
+		employeeRepository.flush()
+	}
 
 }
