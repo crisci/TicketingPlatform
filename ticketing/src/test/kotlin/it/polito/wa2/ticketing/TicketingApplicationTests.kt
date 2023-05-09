@@ -10,16 +10,14 @@ import it.polito.wa2.ticketing.history.HistoryRepository
 import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageRepository
+import it.polito.wa2.ticketing.message.toDTO
 import it.polito.wa2.ticketing.product.Product
 import it.polito.wa2.ticketing.product.ProductRepository
-import it.polito.wa2.ticketing.ticket.Ticket
-import it.polito.wa2.ticketing.ticket.TicketRepository
+import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.SenderType
 import it.polito.wa2.ticketing.utils.TicketStatus
-import it.polito.wa2.ticketing.ticket.TicketService
-import it.polito.wa2.ticketing.ticket.toTicketDTO
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -186,9 +184,36 @@ class TicketingApplicationTests {
 		assert(i.next() == history1)
 		assert(!i.hasNext())
 
-		assert(employeeRepository.findByIdOrNull(expert.getId()!!) == expert)
-		assert(employeeRepository.findByIdOrNull(admin.getId()!!) == admin)
+        val expertId = expert.getId()!!
+        val adminId = admin.getId()!!
+		assert(employeeRepository.findByIdOrNull(expertId) == expert)
+		assert(employeeRepository.findByIdOrNull(adminId) == admin)
 
+        val tIt = ticketService.getMessages(ticketId,expertId).iterator()
+        assert(tIt.next().id!! == message1.toDTO().id!!)
+        assert(tIt.next().id!! == message2.toDTO().id!!)
+        assert(!tIt.hasNext())
+        assertThrows<TicketNotFoundException> {
+            ticketService.getMessages(ticketId.inc(),expertId)
+        }
+
+        assert(ticketService.getStatus(ticketId,expertId) == TicketStatus.IN_PROGRESS)
+        assertThrows<TicketNotFoundException> {
+            ticketService.getStatus(ticketId.inc(),expertId)
+        }
+
+		assertThrows<TicketNotFoundException> {
+			ticketService.reassignTicket(ticketId.inc(),expertId)
+		}
+		ticketService.reassignTicket(ticketId,expertId)
+		assertThrows<OperationNotPermittedException> {
+			ticketService.reassignTicket(ticketId,expertId)
+		}
+
+		assertThrows<TicketNotFoundException> {
+			ticketService.closeTicket(ticketId.inc(),expertId)
+		}
+		ticketService.closeTicket(ticketId,expertId)
 	}
 
 
