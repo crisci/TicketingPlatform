@@ -32,11 +32,15 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         private val customerRepository: CustomerRepository,
                         private val productRepository: ProductRepository
 ): TicketService {
-    override fun getTicketsWithMessagesByCustomerId(customerId: Long): Set<TicketWithMessagesDTO>? {
+    override fun getTicketsWithMessagesByCustomerId(customerId: Long): Set<TicketWithMessagesDTO> {
+        if(!customerRepository.existsById(customerId))
+            throw CustomerNotFoundException("No customer found with specified id!")
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketWithMessagesDTO() }.toSet()
     }
 
-    override fun getTicketsByCustomerId(customerId: Long): Set<TicketDTO>? {
+    override fun getTicketsByCustomerId(customerId: Long): Set<TicketDTO> {
+        if(!customerRepository.existsById(customerId))
+            throw CustomerNotFoundException("No customer found with specified id!")
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketDTO() }.toSet()
     }
 
@@ -135,48 +139,49 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     }
 
     override fun resolveTicket(ticketId: Long) {
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
-        if(lastTicketHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
-
-        val expert = lastTicketHistory.first().employee
-        if (lastTicketHistory.first().state != TicketStatus.CLOSED && lastTicketHistory.first().state != TicketStatus.RESOLVED) {
-            ticketRepository.findById(ticketId).ifPresentOrElse(
-                {
-                    it.addHistory(
+        if(lastTicketHistory.isNotEmpty()) {
+            val expert = lastTicketHistory.first().employee
+            if (lastTicketHistory.first().state != TicketStatus.CLOSED && lastTicketHistory.first().state != TicketStatus.RESOLVED) {
+                    ticket.addHistory(
                         History().create(
                             TicketStatus.RESOLVED,
                             LocalDateTime.now(),
-                            it,
+                            ticket,
                             expert //If null than the ticket is closed before than an expert is assigned
                         )
                     )
-                },
-                { throw TicketNotFoundException("The specified ticket has not been found!") })
+            } else {
+                throw OperationNotPermittedException("This operation is not permitted because the ticket is closed!")
+            }
         } else {
-            throw OperationNotPermittedException("This operation is not permitted because the ticket is closed!")
+                throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
         }
     }
 
     override fun reopenTicket(ticketId: Long) {
         //Check the last history state related to the ticketId
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
-        if(lastTicketHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+        if(lastTicketHistory.isNotEmpty()) {
         println(lastTicketHistory.first().state)
         if (lastTicketHistory.first().state == TicketStatus.CLOSED || lastTicketHistory.first().state == TicketStatus.RESOLVED) {
-            ticketRepository.findById(ticketId).ifPresentOrElse(
-                {
-                    it.addHistory(
-                        History().create(
-                            TicketStatus.REOPENED,
-                            LocalDateTime.now(),
-                            it,
-                            null // reopen so the ticket can be assigned to another expert
-                        )
-                    )
-                },
-                { throw TicketNotFoundException("The specified ticket has not been found!") })
+            ticket.addHistory(
+                History().create(
+                    TicketStatus.OPEN,
+                    LocalDateTime.now(),
+                    ticket,
+                    null
+                )
+            )
         } else {
             throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
+        }} else {
+            throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
         }
+
     }
 }
