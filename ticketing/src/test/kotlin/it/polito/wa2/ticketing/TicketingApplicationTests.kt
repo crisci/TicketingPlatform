@@ -20,8 +20,6 @@ import it.polito.wa2.ticketing.utils.SenderType
 import it.polito.wa2.ticketing.utils.TicketStatus
 import it.polito.wa2.ticketing.ticket.TicketService
 import it.polito.wa2.ticketing.ticket.toTicketDTO
-import org.junit.Rule
-import org.junit.internal.runners.statements.ExpectException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,12 +27,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.lang.RuntimeException
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -129,8 +127,10 @@ class TicketingApplicationTests {
 		message2.body = "The picture is in the attachment!"
 		messageRepository.save(message2)
 
-		history2.state = TicketStatus.IN_PROGRESS
+		history1.date = LocalDateTime.now().minusDays(1)
 		historyRepository.save(history1)
+
+		history2.state = TicketStatus.IN_PROGRESS
 		historyRepository.save(history2)
 
 		//attachment.attachment = null
@@ -176,8 +176,19 @@ class TicketingApplicationTests {
 		//attachmentRepository.flush()
 	}
 	@Test
-	fun integrationTest(){
+	fun expertOperatingOnTicketsTest(){
 		initialization()
+		val ticketId =  ticket.getId()!!
+		assert(ticketRepository.findByIdOrNull(ticketId) == ticket)
+		val hs = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
+		var i = hs.iterator()
+		assert(i.next() == history2)
+		assert(i.next() == history1)
+		assert(!i.hasNext())
+
+		assert(employeeRepository.findByIdOrNull(expert.getId()!!) == expert)
+		assert(employeeRepository.findByIdOrNull(admin.getId()!!) == admin)
+
 	}
 
 
