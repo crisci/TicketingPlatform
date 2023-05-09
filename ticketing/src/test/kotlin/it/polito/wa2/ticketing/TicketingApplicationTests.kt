@@ -181,7 +181,7 @@ class TicketingApplicationTests {
 		val ticketId =  ticket.getId()!!
 		assert(ticketRepository.findByIdOrNull(ticketId) == ticket)
 		val hs = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
-		var i = hs.iterator()
+		val i = hs.iterator()
 		assert(i.next() == history2)
 		assert(i.next() == history1)
 		assert(!i.hasNext())
