@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AttachmentRepository: JpaRepository<Attachment, Long> {
 
+    fun findAttachmentsByMessageId(messageId: Long): Set<Attachment>
+
 }
