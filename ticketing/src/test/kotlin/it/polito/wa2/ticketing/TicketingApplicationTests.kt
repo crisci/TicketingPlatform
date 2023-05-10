@@ -7,7 +7,6 @@ import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.customer.InvalidEmailFormatException
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
-import it.polito.wa2.ticketing.employee.toEmployeeDTO
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryNotFoundException
 import it.polito.wa2.ticketing.history.HistoryRepository
@@ -36,7 +35,6 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
@@ -715,11 +713,9 @@ class TicketingApplicationTests {
 		ticket.priority = PriorityLevel.MEDIUM
 		ticketRepository.save(ticket)
 
-		message1.type = SenderType.EXPERT
 		message1.body = "Try sending a picture"
 		messageRepository.save(message1)
 
-		message2.type = SenderType.CUSTOMER
 		message2.body = "The picture is in the attachment!"
 		messageRepository.save(message2)
 
