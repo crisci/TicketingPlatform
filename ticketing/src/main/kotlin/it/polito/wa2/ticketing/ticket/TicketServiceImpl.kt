@@ -162,7 +162,6 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
         if(lastTicketHistory.isNotEmpty()) {
-        println(lastTicketHistory.first().state)
         if (lastTicketHistory.first().state == TicketStatus.CLOSED || lastTicketHistory.first().state == TicketStatus.RESOLVED) {
             ticket.addHistory(
                 History().create(
@@ -178,6 +177,32 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
             throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
         }
 
+    }
+
+    override fun assignTicket(idTicket: Long, idExpert: Long, priorityLevel: PriorityLevel) {
+        val ticket = ticketRepository.findById(idTicket)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+        val expert = employeeRepository.findByIdAndType(idExpert,EmployeeRole.EXPERT)
+            .orElseThrow { ExpertNotFoundException("The specified expert has not been found!") }
+        val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(idTicket)
+        if(lastTicketHistory.first().state == TicketStatus.OPEN || lastTicketHistory.first().state == TicketStatus.REOPENED) {
+            ticket.addHistory(
+                History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
+            )
+            ticket.priority = priorityLevel
+            ticketRepository.save(ticket)
+        } else {
+            throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
+        }
+
+    }
+
+    override fun getTicketsByStatus(status: TicketStatus?): Set<TicketDTO?> {
+        return if(status != null) {
+            historyRepository.findMostRecentStateByStatus(status).map { it.ticket?.toTicketDTO() }.toSet()
+        } else {
+            historyRepository.findMostRecentState().map { it.ticket?.toTicketDTO() }.toSet()
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package it.polito.wa2.ticketing.ticket
 
 import it.polito.wa2.ticketing.history.HistoryDTO
 import it.polito.wa2.ticketing.message.MessageDTO
+import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -77,5 +78,18 @@ class TicketController(val ticketService: TicketService) {
     fun ticketReopen(@PathVariable idTicket: Long) {
         ticketService.reopenTicket(idTicket)
     }
+
+    @PutMapping("/API/tickets/{idTicket}/assign")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun ticketAssign(@PathVariable idTicket: Long, @RequestParam("expert") idExpert: Long, @RequestParam("priority") priorityLevel: PriorityLevel) {
+        ticketService.assignTicket(idTicket, idExpert, priorityLevel)
+    }
+
+    @GetMapping("/API/tickets/status={status}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getTicketsByStatus(@PathVariable(required = false) status: TicketStatus?): Set<TicketDTO?> {
+        return ticketService.getTicketsByStatus(status)
+    }
+
 
 }

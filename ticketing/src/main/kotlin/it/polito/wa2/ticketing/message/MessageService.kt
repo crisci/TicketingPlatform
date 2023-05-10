@@ -9,5 +9,6 @@ interface MessageService {
     fun getMessageAttachments(messageId: Long): Set<AttachmentDTO>?
     fun addAttachments(messageId: Long, attachments: Set<AttachmentDTO>)
     fun editMessage(messageId: Long, message: String)
+    fun getMessagesByIdTickets(idTicket: Long): List<MessageDTO?>
 
 }

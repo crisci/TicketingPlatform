@@ -296,6 +296,29 @@ API
         
                 "IN_PROGESS"
 
+- GET `/API/tickets/status={status}`
+  - Description: Return all the tickets with the given status
+  - Request body: `none`
+  - Response status: `200 Success`, `400 Bad Request`, `500 Internal Server Error`
+  - Response Body: 
+            
+        [
+            {
+                "id": 1,
+                "dateTime": "2017-05-06T11:08:48",
+                "title": "Title",
+                "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "priority": "MEDIUM",
+                "product": {
+                    "ean": "1",
+                    "name": "iPad",
+                    "brand": "Apple"
+                }
+            },
+            ...
+        ]
+
+
 - POST `/API/tickets/{idTicket}/messages`
     - Description: It is used to send the message for the given ticket identified by idTicket
     - Request body: 
@@ -362,6 +385,13 @@ API
     - Response status: `204 No Content`, 
     - Response body: `none`
 
+- PUT `/API/tickets/100/assign?expert={idExpert}&priority={priorityLevel}`
+    - Description: It is used by the expert identified by idExpert to close the ticket
+    - Request body: `none`
+    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+    - Response body: `none`
+
+
 ### __Messages API__
 - GET `/API/messages/{messageId}/attachments`
     - Description: Returns all the attachments given the messageId
@@ -376,6 +406,22 @@ API
                 },
                 ...
              ]
+
+- GET `/API/messages?ticket={idTicket}`
+    - Description: Return all the tickets with the given status
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response Body: 
+
+            [
+                {
+                    "id": 1,
+                    "body": "Text",
+                    "date": "2023-05-07T20:53:23",
+                    "expert": 1
+                },
+                ...
+        ]
 
 - POST `/API/messages/{messageId}/attachments`
     - Description: Adds all the provided attachments given the messageId
