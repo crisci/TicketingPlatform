@@ -3,6 +3,8 @@ package it.polito.wa2.ticketing.message
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import it.polito.wa2.ticketing.attachment.AttachmentRepository
+import it.polito.wa2.ticketing.utils.ImageUtil
+import jdk.jfr.ContentType
 import org.apache.tomcat.util.http.fileupload.FileUpload
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -41,16 +43,17 @@ class MessageController(val messageService: MessageService, val messageRepositor
 
     @PostMapping("/API/{messageId}/attachments")
     @ResponseStatus(HttpStatus.OK)
-    fun test(@PathVariable messageId: Long, @ModelAttribute("fileUpload") attachment: MultipartFile) {
-        val convertedFile = File(attachment.originalFilename ?: "tempfile")
-        try {
-            attachment.transferTo(convertedFile)
-            val att = Attachment().create(convertedFile, messageRepository.findById(1).get())
-            attamentRepository.save(att)
-        } catch (e: IOException) {
-            // Handle the exception according to your needs
-            throw e
-        }
+    fun test(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
+       attamentRepository
+           .save(Attachment().create(ImageUtil().compressImage(attachment.bytes), messageRepository.findById(messageId).get()))
+    }
+
+    @GetMapping("/API/{name}/attachments", produces = ["image/jpeg", "image/png"])
+    @ResponseStatus(HttpStatus.OK)
+    fun attGet(@PathVariable name: Long): ByteArray {
+        val v = attamentRepository.findById(name).get()
+        val i = ImageUtil().decompressImage(v.attachment!!)
+        return i!!
     }
 
 }
