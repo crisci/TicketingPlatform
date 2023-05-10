@@ -110,13 +110,14 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                     ) {
                         if (message.expert != null) {
                             //It is an expert
-                            //TODO: Throw exception if history is empty
                             val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(it.getId()!!)
                             if (lastHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
 
                             //TODO: Expert missmatch if history is not associated to the expert who replied
                             expert = employeeRepository.findByIdOrNull(lastHistory.first().employee?.getId()!!)
                                 ?: throw ExpertNotFoundException("The specified expert has not been found!")
+                            if(expert!!.getId() != message.expert)
+                                throw OperationNotPermittedException("The specified expert has not been found!")
                         }
                         it.addMessage(
                             Message().create(
