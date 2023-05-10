@@ -362,3 +362,43 @@ API
     - Response status: 
     - Response body: 
 
+### __Messages API__
+- GET `/API/messages/{messageId}/attachments`
+    - Description: Returns all the attachments given the messageId
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found`, `503 Internal Server Error`
+    - Response body:
+
+             [
+                {
+                    "id": 1,
+                    "attachment": "Blob"
+                },
+                ...
+             ]
+
+- POST `/API/messages/{messageId}/attachments`
+    - Description: Adds all the provided attachments given the messageId
+    - Request body: 
+
+            [
+                {
+                    "id": 1,
+                    "attachment": Blob
+                },
+                ...
+            ]
+
+    - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
+
+- PUT `/API/messages/{messageId}`
+    - Description: Updates the body of a given message identified by messageId
+    - Request body: 
+
+            {
+                "message": "Message body"
+            }
+
+  - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+  - Response body: `none`
