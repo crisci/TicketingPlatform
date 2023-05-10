@@ -5,7 +5,6 @@ import it.polito.wa2.ticketing.ticket.Ticket
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.employee.Employee
-import it.polito.wa2.ticketing.utils.SenderType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -13,10 +12,8 @@ import java.time.LocalDateTime
 @Table(name="messages")
 class Message: EntityBase<Long>(),Comparable<Message> {
 
-    var type: SenderType? = null
     var body: String = ""
     var date: LocalDateTime = LocalDateTime.now()
-    @JsonBackReference
     @OneToMany(mappedBy = "message", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfAttachment: MutableSet<Attachment> = mutableSetOf()
     @JsonBackReference
@@ -31,9 +28,8 @@ class Message: EntityBase<Long>(),Comparable<Message> {
     }
 
 
-    fun create(type: SenderType,body: String,date: LocalDateTime,listOfAttachment: MutableSet<Attachment>?,ticket: Ticket?,expert: Employee?):Message{
+    fun create(body: String,date: LocalDateTime,listOfAttachment: MutableSet<Attachment>?,ticket: Ticket?,expert: Employee?):Message{
         val m = Message()
-        m.type = type
         m.body = body
         m.date = date
         if(listOfAttachment != null)
