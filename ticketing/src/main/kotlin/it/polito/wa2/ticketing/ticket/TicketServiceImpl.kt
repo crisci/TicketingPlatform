@@ -12,12 +12,10 @@ import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.message.toDTO
-import it.polito.wa2.ticketing.message.MessageRepository
 import it.polito.wa2.ticketing.product.ProductNotFoundException
 import it.polito.wa2.ticketing.product.ProductRepository
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
-import it.polito.wa2.ticketing.utils.SenderType
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -27,7 +25,6 @@ import java.time.LocalDateTime
 @Service @Transactional
 class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         private val employeeRepository: EmployeeRepository,
-                        private val messageRepository: MessageRepository,
                         private val historyRepository: HistoryRepository,
                         private val customerRepository: CustomerRepository,
                         private val productRepository: ProductRepository
@@ -110,7 +107,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                     if (historyRepository.findByTicketIdOrderByDateDesc(idTicket)
                             .first().state == TicketStatus.IN_PROGRESS
                     ) {
-                        if (message.type == SenderType.EXPERT) {
+                        if (message.expert != null) {
                             //It is an expert
                             //TODO: Throw exception if history is empty
                             val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(it.getId()!!)
@@ -122,7 +119,6 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         }
                         it.addMessage(
                             Message().create(
-                                message.type!!,
                                 message.body,
                                 LocalDateTime.now(),
                                 null,
