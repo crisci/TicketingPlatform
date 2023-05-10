@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.ticket
 
+import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.customer.CustomerNotFoundException
 import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.employee.Employee
@@ -119,14 +120,20 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                             if(expert!!.getId() != message.expert)
                                 throw OperationNotPermittedException("The specified expert has not been found!")
                         }
+                        val newMessage = Message().create(
+                            message.body,
+                            LocalDateTime.now(),
+                            mutableSetOf(), //Mutable set of attachments
+                            it,
+                            expert //if not expert it remains null otherwise it is set
+                        )
+
+                        message.listOfAttachments?.map { a -> Attachment().create(
+                                a.attachment, newMessage
+                            ) }?.toMutableSet()?.forEach { a -> newMessage.addAttachment(a) }
+
                         it.addMessage(
-                            Message().create(
-                                message.body,
-                                LocalDateTime.now(),
-                                null,
-                                it,
-                                expert //if not expert it remains null otherwise it is set
-                            )
+                            newMessage
                         )
                     } else
                         throw OperationNotPermittedException("The ticket is not in progress!")

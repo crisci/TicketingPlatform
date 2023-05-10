@@ -6,18 +6,19 @@ import it.polito.wa2.ticketing.utils.EntityBase
 import jakarta.persistence.Entity
 import jakarta.persistence.Lob
 import jakarta.persistence.ManyToOne
+import java.io.File
 import java.sql.Blob
 
 
 @Entity
 class Attachment: EntityBase<Long>() {
     @Lob
-    var attachment: Blob? = null
+    var attachment: File? = null
     @JsonBackReference
     @ManyToOne
     var message: Message? = null
 
-    fun create(attachment: Blob?, message: Message?): Attachment{
+    fun create(attachment: File?, message: Message?): Attachment{
         val a = Attachment()
         a.attachment = attachment
         a.message = message

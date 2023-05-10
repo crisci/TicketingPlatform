@@ -1,10 +1,11 @@
 package it.polito.wa2.ticketing.attachment
 
+import java.io.File
 import java.sql.Blob
 
 data class AttachmentDTO(
     val id: Long?,
-    val attachment: Blob?
+    val attachment: File?
 )
 
 fun Attachment.toDTO(): AttachmentDTO {
