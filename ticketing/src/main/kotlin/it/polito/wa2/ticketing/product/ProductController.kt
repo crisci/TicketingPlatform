@@ -2,8 +2,12 @@ package it.polito.wa2.ticketing.product
 
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -30,5 +34,40 @@ class ProductController(private val productService: ProductService) {
             throw ProductNotFoundException("No element found with specified id!")
     }
 
+    @PostMapping("/API/products")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun addProduct(@RequestBody product: ProductDTO){
+        if( product.ean.isNotBlank() && product.name.isNotBlank() && product.brand.isNotBlank() )
+        {
+            productService.addProduct(product)
+        }else{
+            throw BlankFieldsException("Fields cannot be black")
+        }
+    }
+
+    @PutMapping("/API/products/{productId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun updateProduct(@PathVariable productId: String, @RequestBody product: ProductDTO){
+        if( product.ean.isNotBlank() && product.name.isNotBlank() && product.brand.isNotBlank() )
+        {
+            if(productService.getProduct(productId) != null){
+                productService.updateProduct(productId, product)
+            }else{
+                throw ProductNotFoundException("No element found with specified id!")
+            }
+        }else{
+            throw BlankFieldsException("Fields cannot be black")
+        }
+    }
+
+    @DeleteMapping("/API/products/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteProduct(@PathVariable productId: String){
+        if(productService.getProduct(productId) != null){
+            productService.deleteProduct(productId)
+        }else{
+            throw ProductNotFoundException("No element found with specified id!")
+        }
+    }
 
 }
