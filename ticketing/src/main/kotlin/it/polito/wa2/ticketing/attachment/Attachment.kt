@@ -15,5 +15,13 @@ class Attachment: EntityBase<Long>() {
     var attachment: Blob? = null
     @JsonBackReference
     @ManyToOne
-    var message: Message = Message()
+    var message: Message? = null
+
+    fun create(attachment: Blob?, message: Message?): Attachment{
+        val a = Attachment()
+        a.attachment = attachment
+        a.message = message
+        return a
+    }
+
 }
