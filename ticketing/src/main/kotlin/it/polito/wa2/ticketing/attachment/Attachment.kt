@@ -13,8 +13,6 @@ import java.sql.Blob
 @Entity
 class Attachment: EntityBase<Long>() {
     var attachment: ByteArray? = null
-    var name: String? = null
-    var type: String? = null
     @JsonBackReference
     @ManyToOne
     var message: Message? = null
