@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.ticket
 
+import it.polito.wa2.ticketing.history.HistoryDTO
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
@@ -76,7 +77,5 @@ class TicketController(val ticketService: TicketService) {
     fun ticketReopen(@PathVariable idTicket: Long) {
         ticketService.reopenTicket(idTicket)
     }
-
-
 
 }

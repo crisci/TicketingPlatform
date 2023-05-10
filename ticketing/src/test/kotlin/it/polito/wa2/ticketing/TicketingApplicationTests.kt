@@ -4,6 +4,7 @@ import it.polito.wa2.ticketing.attachment.AttachmentRepository
 import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.customer.CustomerNotFoundException
 import it.polito.wa2.ticketing.customer.CustomerRepository
+import it.polito.wa2.ticketing.customer.InvalidEmailFormatException
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import it.polito.wa2.ticketing.employee.toEmployeeDTO
@@ -174,7 +175,7 @@ class TicketingApplicationTests {
 			customerRepository.save(customer)
 
 			val response = restTemplate.getForEntity("/API/tickets/${customer.getId()}", String::class.java)
-			assert(response.body!!.length > 0)
+			assert(response.body!!.isNotEmpty())
 
 			customerRepository.flush()
 			productRepository.flush()
@@ -205,7 +206,7 @@ class TicketingApplicationTests {
 		fun customerNotFound() {
 			val customerId = -1
 			val response = restTemplate.postForEntity("/API/tickets/$customerId", ticketWrongProductId.toTicketDTO(), CustomerNotFoundException::class.java)
-			assert(response.body is CustomerNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 		}
 
 		@Test
@@ -220,7 +221,7 @@ class TicketingApplicationTests {
 			customerRepository.save(customer)
 
 			val response = restTemplate.postForEntity("/API/tickets/${customer.getId()}", ticketWrongProductId.toTicketDTO(), ProductNotFoundException::class.java)
-			assert(response.body is ProductNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 
 			customerRepository.deleteAll()
 			productRepository.deleteAll()
@@ -272,7 +273,7 @@ class TicketingApplicationTests {
 		fun ticketNotFound() {
 			val idTicket = -1
 			val response = restTemplate.exchange("/API/tickets/$idTicket/resolved", HttpMethod.PUT, null, TicketNotFoundException::class.java)
-			assert(response.body is TicketNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 		}
 
 		@Test
@@ -285,7 +286,7 @@ class TicketingApplicationTests {
 			ticketRepository.save(ticket)
 
 			val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/resolved", HttpMethod.PUT, null, HistoryNotFoundException::class.java)
-			assert(response.body is HistoryNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 
 			ticketRepository.deleteAll()
 		}
@@ -312,7 +313,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history)
 
 			val response1 = restTemplate.exchange("/API/tickets/${ticket.getId()}/resolved", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response1.body is OperationNotPermittedException)
+			assert(response1.statusCode.is4xxClientError)
 
 			val history2 = History().apply {
 				this.ticket = ticket
@@ -327,7 +328,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history2)
 
 			val response2 = restTemplate.exchange("/API/tickets/${ticket.getId()}/resolved", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response2.body is OperationNotPermittedException)
+			assert(response2.statusCode.is4xxClientError)
 
 			ticketRepository.deleteAll()
 			historyRepository.deleteAll()
@@ -374,7 +375,7 @@ class TicketingApplicationTests {
 		fun ticketNotFound() {
 			val idTicket = -1
 			val response = restTemplate.exchange("/API/tickets/$idTicket/resolved", HttpMethod.PUT, null, TicketNotFoundException::class.java)
-			assert(response.body is TicketNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 		}
 
 		@Test
@@ -387,7 +388,7 @@ class TicketingApplicationTests {
 			ticketRepository.save(ticket)
 
 			val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/resolved", HttpMethod.PUT, null, HistoryNotFoundException::class.java)
-			assert(response.body is HistoryNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 
 			ticketRepository.deleteAll()
 		}
@@ -414,7 +415,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history)
 
 			val response1 = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response1.body is OperationNotPermittedException)
+			assert(response1.statusCode.is4xxClientError)
 			historyRepository.deleteAll()
 
 			val history2 = History().apply {
@@ -430,7 +431,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history2)
 
 			val response2 = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response2.body is OperationNotPermittedException)
+			assert(response2.statusCode.is4xxClientError)
 			historyRepository.deleteAll()
 
 			val history3 = History().apply {
@@ -446,7 +447,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history3)
 
 			val response3 = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response3.body is OperationNotPermittedException)
+			assert(response3.statusCode.is4xxClientError)
 
 
 			ticketRepository.deleteAll()
@@ -494,7 +495,7 @@ class TicketingApplicationTests {
 		fun ticketNotFound() {
 			val idTicket = -1
 			val response = restTemplate.exchange("/API/tickets/$idTicket/resolved", HttpMethod.PUT, null, TicketNotFoundException::class.java)
-			assert(response.body is TicketNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 		}
 
 		@Test
@@ -507,7 +508,7 @@ class TicketingApplicationTests {
 			ticketRepository.save(ticket)
 
 			val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/resolved", HttpMethod.PUT, null, HistoryNotFoundException::class.java)
-			assert(response.body is HistoryNotFoundException)
+			assert(response.statusCode.is4xxClientError)
 
 			ticketRepository.deleteAll()
 		}
@@ -534,7 +535,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history)
 
 			val response1 = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response1.body is OperationNotPermittedException)
+			assert(response1.statusCode.is4xxClientError)
 			historyRepository.deleteAll()
 
 			val history2 = History().apply {
@@ -550,7 +551,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history2)
 
 			val response2 = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response2.body is OperationNotPermittedException)
+			assert(response2.statusCode.is4xxClientError)
 			historyRepository.deleteAll()
 
 			val history3 = History().apply {
@@ -566,7 +567,7 @@ class TicketingApplicationTests {
 			historyRepository.save(history3)
 
 			val response3 = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
-			assert(response3.body is OperationNotPermittedException)
+			assert(response3.statusCode.is4xxClientError)
 
 
 			ticketRepository.deleteAll()
@@ -602,6 +603,84 @@ class TicketingApplicationTests {
 			historyRepository.deleteAll()
 		}
 	}
+
+	@Nested
+	@DisplayName("GET /API/customers/id={idCustomer}")
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	inner class GetCustomerById() {
+
+		@Test
+		fun customerNotFound() {
+			val idCustomer = -1
+			val response = restTemplate.getForEntity("/API/customers/id=$idCustomer", CustomerNotFoundException::class.java)
+			assert(response.statusCode.is4xxClientError)
+		}
+
+		@Test
+		fun returnCustomer() {
+			val customer = Customer().apply {
+				first_name = "Pietro"
+				last_name = "Bertorelle"
+				email = "pit@polito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+
+			val response = restTemplate.getForEntity("/API/customers/id=${customer.getId()}", Customer::class.java)
+			assert(response.body == customer)
+
+			customerRepository.deleteAll()
+		}
+
+	}
+
+	@Nested
+	@DisplayName("GET /API/customers/email={email}")
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	inner class GetCustomerByEmail() {
+
+		@Test
+		fun customerNotFound() {
+			val idCustomer = -1
+			val response = restTemplate.getForEntity("/API/customers/id=$idCustomer", CustomerNotFoundException::class.java)
+			assert(response.statusCode.is4xxClientError)
+		}
+
+		@Test
+		fun invalidEmail() {
+			val customer = Customer().apply {
+				first_name = "Pietro"
+				last_name = "Bertorelle"
+				email = "pitpolito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+
+			val response = restTemplate.getForEntity("/API/customers/email=${customer.email}", InvalidEmailFormatException::class.java)
+			assert(response.statusCode.is4xxClientError)
+
+			customerRepository.deleteAll()
+		}
+
+		@Test
+		fun returnCustomer() {
+			val customer = Customer().apply {
+				first_name = "Pietro"
+				last_name = "Bertorelle"
+				email = "pit@polito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+
+			val response = restTemplate.getForEntity("/API/customers/email=${customer.email}", Customer::class.java)
+			assert(response.body == customer)
+		}
+
+	}
+
 
 	fun initialization() {
 		customer.first_name = "Pietro"

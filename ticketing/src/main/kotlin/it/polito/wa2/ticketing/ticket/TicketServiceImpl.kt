@@ -5,10 +5,7 @@ import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import it.polito.wa2.ticketing.employee.ExpertNotFoundException
-import it.polito.wa2.ticketing.history.History
-import it.polito.wa2.ticketing.history.HistoryNotFoundException
-import it.polito.wa2.ticketing.history.HistoryRepository
-import it.polito.wa2.ticketing.history.OperationNotPermittedException
+import it.polito.wa2.ticketing.history.*
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.message.toDTO
@@ -186,4 +183,5 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         }
 
     }
+
 }

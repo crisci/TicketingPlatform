@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.ticket
 
+import it.polito.wa2.ticketing.history.HistoryDTO
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.utils.TicketStatus
 
@@ -14,4 +15,5 @@ interface TicketService {
     fun addTicket(ticket: TicketDTO, idCustomer: Long)
     fun resolveTicket(ticketId: Long)
     fun reopenTicket(ticketId: Long)
+
 }
