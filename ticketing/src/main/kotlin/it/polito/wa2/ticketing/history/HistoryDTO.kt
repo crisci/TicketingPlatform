@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 data class HistoryDTO(
     val id: Long?,
-    val state: TicketStatus,
+    val state: TicketStatus?,
     val date: LocalDateTime,
     val ticket: TicketDTO?,
     val employee: EmployeeDTO?

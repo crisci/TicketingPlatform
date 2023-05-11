@@ -13,7 +13,9 @@ import java.time.LocalDateTime
 @Table(name="messages")
 class Message: EntityBase<Long>(),Comparable<Message> {
 
+    @NotNull
     var body: String = ""
+    @NotNull
     var date: LocalDateTime = LocalDateTime.now()
     @OneToMany(mappedBy = "message", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfAttachment: MutableSet<Attachment> = mutableSetOf()

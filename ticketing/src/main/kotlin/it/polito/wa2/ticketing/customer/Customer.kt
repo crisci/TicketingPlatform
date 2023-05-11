@@ -4,18 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 import java.time.LocalDate
 
 @Entity
 @Table(name = "customers")
 class Customer: EntityBase<Long>() {
+    @NotNull
     var first_name: String = ""
+    @NotNull
     var last_name: String = ""
     @Column(unique = true)
+    @NotNull
     var email: String = ""
+    @NotNull
     var dob: LocalDate? = null
+    @NotNull
     var password: String = ""
+    @NotNull
     var address: String = ""
+    @NotNull
     var phone_number: String = ""
     @OneToMany(mappedBy = "customer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonIgnore

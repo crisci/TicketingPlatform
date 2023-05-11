@@ -7,14 +7,18 @@ import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 import java.util.*
 
 @Entity
 @Table(name="employees")
 class Employee: EntityBase<Long>() {
+    @NotNull
     var first_name: String = ""
+    @NotNull
     var last_name: String = ""
     @Column(unique = true)
+    @NotNull
     var email: String = ""
     var password: String = ""
     @Enumerated(EnumType.ORDINAL)

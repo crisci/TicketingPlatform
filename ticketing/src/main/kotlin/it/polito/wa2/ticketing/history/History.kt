@@ -6,12 +6,15 @@ import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.ticket.Ticket
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
 
 @Entity
 @Table(name="histories")
 class History : EntityBase<Long>(),Comparable<History> {
+    @NotNull
     var state: TicketStatus = TicketStatus.OPEN
+    @NotNull
     var date: LocalDateTime = LocalDateTime.now()
     @JsonBackReference
     @ManyToOne

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class MessageController(val messageService: MessageService, val messageRepository: MessageRepository, val attachmentRepository: AttachmentRepository) {
 
-    @GetMapping("/API/messages/{messageId}/attachments")
+    @GetMapping("/API/messages/{messageId}/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
     fun getMessageAttachments(@PathVariable messageId: Long): Set<ByteArray>{
         return messageService.getMessageAttachments(messageId)
@@ -40,22 +40,6 @@ class MessageController(val messageService: MessageService, val messageRepositor
     @ResponseStatus(HttpStatus.OK)
     fun editMessage(@PathVariable messageId: Long, @RequestBody message: String){
         messageService.editMessage(messageId, message)
-    }
-
-
-    @PostMapping("/API/{messageId}/attachments")
-    @ResponseStatus(HttpStatus.OK)
-    fun test(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
-        attachmentRepository
-           .save(Attachment().create(ImageUtil().compressImage(attachment.bytes), messageRepository.findById(messageId).get()))
-    }
-
-    @GetMapping("/API/{name}/attachments", produces = ["image/jpeg", "image/png"])
-    @ResponseStatus(HttpStatus.OK)
-    fun attGet(@PathVariable name: Long): ByteArray {
-        val v = attachmentRepository.findById(name).get()
-        val i = ImageUtil().decompressImage(v.attachment!!)
-        return i!!
     }
 
 }

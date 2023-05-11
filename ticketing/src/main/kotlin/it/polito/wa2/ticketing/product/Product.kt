@@ -3,13 +3,16 @@ package it.polito.wa2.ticketing.product
 import com.fasterxml.jackson.annotation.JsonIgnore
 import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 
 @Entity
 @Table(name = "products")
 class Product {
     @Id
     var ean: String = ""
+    @NotNull
     var name: String = ""
+    @NotNull
     var brand: String = ""
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)

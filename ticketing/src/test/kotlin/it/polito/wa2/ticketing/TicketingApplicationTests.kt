@@ -8,6 +8,7 @@ import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.customer.InvalidEmailFormatException
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
+import it.polito.wa2.ticketing.employee.ExpertNotFoundException
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryNotFoundException
 import it.polito.wa2.ticketing.history.HistoryRepository
@@ -678,6 +679,288 @@ class TicketingApplicationTests {
 			assert(response.body == customer)
 		}
 
+	}
+
+	@Nested
+	@DisplayName("PUT /API/tickets/{idTicket}/assign?expert={idExpert}&priority={priorityLevel}")
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	inner class AssignTicket() {
+
+
+		@Test
+		fun ticketNotFound() {
+			val idTicket = -1
+			val response = restTemplate.exchange("/API/tickets/${idTicket}/assign?expert=-1&priority=HIGH", HttpMethod.PUT, null, TicketNotFoundException::class.java)
+			assert(response.statusCode.is4xxClientError)
+		}
+
+		@Test
+		fun expertNotFound() {
+			val customer = Customer().apply {
+				first_name = "Pietro"
+				last_name = "Bertorelle"
+				email = "enf@t.com"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+			val ticket = Ticket().apply {
+				title = "Title"
+				description = "Description"
+				priority = PriorityLevel.NOT_ASSIGNED
+			}
+			ticketRepository.save((ticket))
+
+			customer.addTicket(ticket)
+			customerRepository.save(customer)
+			ticketRepository.save(ticket)
+
+			val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/assign?expert=-1&priority=HIGH", HttpMethod.PUT, null, ExpertNotFoundException::class.java)
+			assert(response.statusCode.is4xxClientError)
+
+			customerRepository.deleteAll()
+			ticketRepository.deleteAll()
+
+		}
+
+		@Test
+		fun operationNotPermitted() {
+			val customer = Customer().apply {
+				first_name = "PP"
+				last_name = "Brt"
+				email = "pp@polito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+			val ticket = Ticket().apply {
+				title = "Title"
+				description = "Description"
+				priority = PriorityLevel.NOT_ASSIGNED
+			}
+			ticketRepository.save(ticket)
+
+			val product = Product().apply {
+				ean = "12398901"
+				name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+				brand = "JMT"
+			}
+			productRepository.save(product)
+
+			val expert = Employee().apply {
+				first_name = "GG"
+				last_name = "PPP"
+				email = "gg.p@polito.i"
+				password = "password"
+				type = EmployeeRole.EXPERT
+			}
+			employeeRepository.save(expert)
+
+			val history = History().apply {
+				employee = null
+				date = LocalDateTime.now()
+				state = TicketStatus.CLOSED
+			}
+			historyRepository.save(history)
+
+			customer.addTicket(ticket)
+			product.addTicket(ticket)
+			ticket.addHistory(history)
+
+			customerRepository.save(customer)
+			ticketRepository.save(ticket)
+			historyRepository.save(history)
+			employeeRepository.save(expert)
+
+
+
+			val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/assign?expert=${expert.getId()}&priority=HIGH", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
+			assert(response.statusCode.is4xxClientError)
+
+			customerRepository.deleteAll()
+			ticketRepository.deleteAll()
+			historyRepository.deleteAll()
+			employeeRepository.deleteAll()
+			productRepository.deleteAll()
+
+		}
+
+		@Test
+		fun assignmentSuccessful() {
+			val customer = Customer().apply {
+				first_name = "GG"
+				last_name = "Crs"
+				email = "gg@polito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+			val ticket = Ticket().apply {
+				title = "Title"
+				description = "Description"
+				priority = PriorityLevel.NOT_ASSIGNED
+			}
+			ticketRepository.save(ticket)
+
+			val product = Product().apply {
+				ean = "109298"
+				name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+				brand = "JMT"
+			}
+			productRepository.save(product)
+
+			val expert = Employee().apply {
+				first_name = "Giorgio"
+				last_name = "P"
+				email = "gio.p@polito.i"
+				password = "password"
+				type = EmployeeRole.EXPERT
+			}
+			employeeRepository.save(expert)
+
+			val history = History().apply {
+				employee = null
+				date = LocalDateTime.now()
+				state = TicketStatus.OPEN
+			}
+			historyRepository.save(history)
+
+			customer.addTicket(ticket)
+			product.addTicket(ticket)
+			ticket.addHistory(history)
+
+
+			customerRepository.save(customer)
+			productRepository.save(product)
+			ticketRepository.save(ticket)
+			historyRepository.save(history)
+			employeeRepository.save(expert)
+
+
+
+			val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/assign?expert=${expert.getId()}&priority=LOW", HttpMethod.PUT, null, OperationNotPermittedException::class.java)
+			assert(response.statusCode.is2xxSuccessful)
+
+			customerRepository.deleteAll()
+			ticketRepository.deleteAll()
+			historyRepository.deleteAll()
+			employeeRepository.deleteAll()
+			productRepository.deleteAll()
+		}
+
+
+	}
+
+	@Nested
+	@DisplayName("GET /API/tickets/status={status}")
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+	inner class LastTicketStatus() {
+
+		@Test
+		fun invalidStatus() {
+			val response = restTemplate.getForEntity("/API/tickets/status=TT", String::class.java)
+			assert(response.statusCode.is4xxClientError)
+		}
+
+		@Test
+		fun emptyList() {
+			val customer = Customer().apply {
+				first_name = "Pietro"
+				last_name = "Bertorelle"
+				email = "pit@polito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+			val ticket = Ticket().apply {
+				title = "Title"
+				description = "Description"
+				priority = PriorityLevel.NOT_ASSIGNED
+			}
+			ticketRepository.save(ticket)
+
+			val product = Product().apply {
+				ean = "4935531465706"
+				name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+				brand = "JMT"
+			}
+			productRepository.save(product)
+
+			val history = History().apply {
+				employee = null
+				date = LocalDateTime.now()
+				state = TicketStatus.OPEN
+			}
+			historyRepository.save(history)
+
+			customer.addTicket(ticket)
+			product.addTicket(ticket)
+			ticket.addHistory(history)
+
+
+			customerRepository.save(customer)
+			productRepository.save(product)
+			ticketRepository.save(ticket)
+			historyRepository.save(history)
+
+			val response = restTemplate.getForEntity("/API/tickets/status=CLOSED", List::class.java)
+			assert(response.body!!.isEmpty())
+
+			customerRepository.deleteAll()
+			productRepository.deleteAll()
+			ticketRepository.deleteAll()
+			historyRepository.deleteAll()
+		}
+
+		@Test
+		fun lastStatus() {
+			val customer = Customer().apply {
+				first_name = "Pietro"
+				last_name = "Bertorelle"
+				email = "pit@polito.it"
+				dob = LocalDate.of(1998,9,13)
+				address = "Address"
+			}
+			customerRepository.save(customer)
+			val ticket = Ticket().apply {
+				title = "Title"
+				description = "Description"
+				priority = PriorityLevel.NOT_ASSIGNED
+			}
+			ticketRepository.save(ticket)
+
+			val product = Product().apply {
+				ean = "4935531465706"
+				name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+				brand = "JMT"
+			}
+			productRepository.save(product)
+
+			val history = History().apply {
+				employee = null
+				date = LocalDateTime.now()
+				state = TicketStatus.OPEN
+			}
+			historyRepository.save(history)
+
+			customer.addTicket(ticket)
+			product.addTicket(ticket)
+			ticket.addHistory(history)
+
+
+			customerRepository.save(customer)
+			productRepository.save(product)
+			ticketRepository.save(ticket)
+			historyRepository.save(history)
+
+			val response = restTemplate.getForEntity("/API/tickets/status=OPEN", List::class.java)
+			assert(response.body!!.isNotEmpty())
+
+			customerRepository.deleteAll()
+			productRepository.deleteAll()
+			ticketRepository.deleteAll()
+			historyRepository.deleteAll()
+		}
 	}
 
 
