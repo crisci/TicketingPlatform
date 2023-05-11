@@ -41,20 +41,4 @@ class MessageController(val messageService: MessageService, val messageRepositor
         messageService.editMessage(messageId, message)
     }
 
-
-    @PostMapping("/API/{messageId}/attachments")
-    @ResponseStatus(HttpStatus.OK)
-    fun test(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
-        attachmentRepository
-           .save(Attachment().create(ImageUtil().compressImage(attachment.bytes), messageRepository.findById(messageId).get()))
-    }
-
-    @GetMapping("/API/{name}/attachments", produces = ["image/jpeg", "image/png"])
-    @ResponseStatus(HttpStatus.OK)
-    fun attGet(@PathVariable name: Long): ByteArray {
-        val v = attachmentRepository.findById(name).get()
-        val i = ImageUtil().decompressImage(v.attachment!!)
-        return i!!
-    }
-
 }
