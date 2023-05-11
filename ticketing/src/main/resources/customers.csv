@@ -1,0 +1,22 @@
+id,address,dob,email,first_name,last_name,password,phone_number
+1,123 Main St,1990-01-01,johndoe@example.com,John,Doe,pass123,1234567890
+2,456 Elm St,1985-03-15,janedoe@example.com,Jane,Doe,securepw,9876543210
+3,789 Oak Ave,1978-09-30,samsmith@example.com,Sam,Smith,12345678,5551234567
+4,321 Pine St,1992-07-22,emilyjohnson@example.com,Emily,Johnson,p@ssw0rd,8885559999
+5,654 Cedar Ave,1987-12-10,michaeltaylor@example.com,Michael,Taylor,pa55word,4442221111
+6,987 Walnut Ln,1995-05-18,sarahbrown@example.com,Sarah,Brown,pass1234,7778883333
+7,741 Maple Dr,1982-02-28,davidwilson@example.com,David,Wilson,123abc,9990002222
+8,852 Birch Rd,1976-11-05,lisasmith@example.com,Lisa,Smith,letmein,1239875555
+9,963 Spruce Ct,1998-08-14,robertdavis@example.com,Robert,Davis,pwd1234,7771239876
+10,159 Pinecone Ln,1991-04-03,amytaylor@example.com,Amy,Taylor,abc123,5557894561
+11,753 Cedar Ave,1989-06-11,matthewbrown@example.com,Matthew,Brown,password,2223334444
+12,369 Elm St,1984-10-26,juliewilson@example.com,Julie,Wilson,test123,8881115555
+13,753 Oak Ave,1977-07-07,danieljohnson@example.com,Daniel,Johnson,passw0rd,4447772222
+14,852 Pine St,1993-02-18,laurasmith@example.com,Laura,Smith,1234abcd,6665551111
+15,963 Cedar Ave,1988-11-30,mikewilson@example.com,Mike,Wilson,secure123,3339997777
+16,159 Walnut Ln,1996-09-25,emilyjones@example.com,Emily,Jones,abcd1234,1112223333
+17,357 Maple Dr,1983-05-14,johnsmith@example.com,John,Smith,98765432,5554447777
+18,753 Birch Rd,1979-12-27,janejohnson@example.com,Jane,Johnson,p@ssword,7776665555
+19,963 Spruce Ct,1999-10-09,ryantaylor@example.com,Ryan,Taylor,pass12345,1115559999
+20,159 Pinecone Ln,1992-08-17,amandabrown@example.com,Amanda,Brown,letmein123,8883331111
+21,741 Elm St,1994-06-05,chrissmith@example.com,Chris,Smith,testing123,4441113333

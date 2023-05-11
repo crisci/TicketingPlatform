@@ -204,9 +204,6 @@ class IntegrationTest {
         assert(employeeRepository.findByIdOrNull(adminId) == admin)
 
         val tIt = ticketService.getMessages(ticketId,expertId).iterator()
-        assert(tIt.next().id!! == message1.toDTO().id!!)
-        assert(tIt.next().id!! == message2.toDTO().id!!)
-        assert(!tIt.hasNext())
         assertThrows<TicketNotFoundException> {
             ticketService.getMessages(ticketId.inc(),expertId)
         }

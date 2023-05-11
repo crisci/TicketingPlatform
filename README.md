@@ -21,3 +21,9 @@
     - execute: 
         - on linux: ./gradlew test --tests "it.polito.wa2.ticketing.TicketingApplicationTests"
         - on windows: gradlew.bat test --tests "it.polito.wa2.ticketing.TicketingApplicationTests"
+    
+- OTHER RESOURCES
+    - can be found "WA-G16.ticketing.src.main.resources":
+        - customers.csv
+        - employees.csv
+        - products.csv
