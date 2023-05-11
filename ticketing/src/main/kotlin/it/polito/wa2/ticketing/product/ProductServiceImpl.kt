@@ -19,4 +19,27 @@ class ProductServiceImpl(private val repository: ProductRepository) : ProductSer
     override fun getProduct(ean: String): ProductDTO? {
         return repository.findProductByEan(ean)?.toDTO() ?: throw ProductNotFoundException("No product found with specified id!")
     }
+
+    override fun addProduct(product: ProductDTO) {
+        repository.save(Product().create(product.ean, product.name, product.brand))
+    }
+
+    override fun updateProduct(productId: String, product: ProductDTO) {
+        val p = repository.findProductByEan(productId)
+        if(p != null){
+            p.ean = product.ean
+            p.name = product.name
+            p.brand = product.brand
+            repository.save(p)
+        }
+    }
+
+    override fun deleteProduct(productId: String) {
+        val p = repository.findProductByEan(productId)
+        if(p != null){
+            repository.delete(p)
+        }
+    }
+
+
 }

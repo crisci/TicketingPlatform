@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing
 
+import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentRepository
 import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.customer.CustomerNotFoundException
@@ -11,16 +12,13 @@ import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryNotFoundException
 import it.polito.wa2.ticketing.history.HistoryRepository
 import it.polito.wa2.ticketing.history.OperationNotPermittedException
-import it.polito.wa2.ticketing.message.Message
-import it.polito.wa2.ticketing.message.MessageRepository
-import it.polito.wa2.ticketing.message.toDTO
+import it.polito.wa2.ticketing.message.*
 import it.polito.wa2.ticketing.product.Product
 import it.polito.wa2.ticketing.product.ProductNotFoundException
 import it.polito.wa2.ticketing.product.ProductRepository
 import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
-import it.polito.wa2.ticketing.utils.SenderType
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -35,13 +33,16 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.web.multipart.MultipartFile
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDate
 import java.time.LocalDateTime
+import javax.sql.rowset.serial.SerialBlob
 
 @Testcontainers
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -79,6 +80,8 @@ class TicketingApplicationTests {
 	lateinit var attachmentRepository: AttachmentRepository
 	@Autowired
 	lateinit var ticketService: TicketService
+	@Autowired
+	lateinit var messageService: MessageService
 
 
 	var customer: Customer = Customer()
@@ -90,7 +93,7 @@ class TicketingApplicationTests {
 	var admin: Employee = Employee()
 	var message1: Message = Message()
 	var message2: Message = Message()
-	//var attachment: Attachment = Attachment()
+	var attachment: Attachment = Attachment()
 
 	//Add before and post to initialize and flush data
 
@@ -725,8 +728,8 @@ class TicketingApplicationTests {
 		history2.state = TicketStatus.IN_PROGRESS
 		historyRepository.save(history2)
 
-		//attachment.attachment = null
-		//attachmentRepository.save(attachment)
+		attachment.attachment = "Attachment Test".toByteArray()
+		attachmentRepository.save(attachment)
 
 		//the customer open the ticket
 		customer.addTicket(ticket)
@@ -810,8 +813,6 @@ class TicketingApplicationTests {
 		ticketService.closeTicket(ticketId,expertId)
 	}
 
-
-
 	@Test
 	fun operationNotPermitted() {
 		//RESOLVED When Ticket is CLOSED or RESOLVED is not permitted
@@ -876,6 +877,100 @@ class TicketingApplicationTests {
 		historyRepository.save(history1)
 		assertThrows<OperationNotPermittedException> {
 			ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+		}
+
+		customerRepository.flush()
+		productRepository.flush()
+		ticketRepository.flush()
+		historyRepository.flush()
+		employeeRepository.flush()
+	}
+
+	@Test
+	fun messageTesting() {
+		customer.apply {
+			first_name = "Daniel"
+			last_name = "Panaite"
+			email = "dani@polito.it"
+			password = "password"
+			dob = LocalDate.of(1998,9,15)
+			address = "Via Po"
+			phone_number = "0000000000"
+		}
+		customerRepository.save(customer)
+
+		product.apply {
+			ean = "928173912863"
+			name = "AirPods"
+			brand = "Pear Electronics"
+		}
+		productRepository.save(product)
+
+		ticket.apply {
+			title = "Non an original product"
+			description = "Why is there no apple on the logo?"
+			priority = PriorityLevel.HIGH
+		}
+		ticketRepository.save(ticket)
+
+		expert.apply {
+			first_name = "Mario"
+			last_name = "Antonio"
+			email = "mario.anto@polito.it"
+			password = "password"
+			type = EmployeeRole.EXPERT
+		}
+		employeeRepository.save(expert)
+
+		history1.apply {
+			state = TicketStatus.CLOSED
+			date = LocalDateTime.now()
+		}
+		historyRepository.save(history1)
+
+		product.addTicket(ticket)
+		customer.addTicket(ticket)
+		product.addTicket(ticket)
+		ticket.addHistory(history1)
+
+		customerRepository.save(customer)
+		employeeRepository.save(expert)
+		productRepository.save(product)
+		ticketRepository.save(ticket)
+		historyRepository.save(history1)
+
+		message1.body = "Try sending a picture"
+		message1.expert = expert
+		messageRepository.save(message1)
+
+		expert.addMessage(message1)
+		ticket.addMessage(message1)
+
+		attachment.attachment = "Attachment Test".toByteArray()
+		attachmentRepository.save(attachment)
+
+		message2.body = "Here it is."
+		messageRepository.save(message2)
+
+		expert.addMessage(message2)
+		ticket.addMessage(message2)
+
+		message2.addAttachment(attachment)
+		expert.addMessage(message2)
+		ticket.addMessage(message2)
+
+		message2.body = "Added attachment."
+		messageService.editMessage(message2.getId()!!, message2.body)
+
+		assert(messageRepository.findByIdOrNull(message1.getId()) == message1)
+		assert(messageRepository.findByIdOrNull(message2.getId()) == message2)
+		message2.listOfAttachment.forEach{
+			assert(attachmentRepository.findByIdOrNull(it.getId()!!) == it)
+		}
+		assert(!message2.listOfAttachment.isEmpty())
+
+		assertThrows<MessageNotFoundException> {
+			messageService.addAttachment(message2.getId()!!.inc(), arrayOf(MockMultipartFile("attachment", "Meow".toByteArray())))
 		}
 
 		customerRepository.flush()

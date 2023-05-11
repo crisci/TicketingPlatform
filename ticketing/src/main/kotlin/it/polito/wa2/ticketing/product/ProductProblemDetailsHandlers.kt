@@ -14,6 +14,12 @@ class ProductProblemDetailHandlers: ResponseEntityExceptionHandler() {
     fun handleProductNotFound(e: ProductNotFoundException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
 
+    @ExceptionHandler(BlankFieldsException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBlankFields(e: BlankFieldsException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
 }
 
 class ProductNotFoundException(override val message:String?) : RuntimeException()
+class BlankFieldsException(override val message: String?) : RuntimeException()

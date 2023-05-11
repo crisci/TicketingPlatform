@@ -11,13 +11,12 @@ import java.sql.Blob
 
 @Entity
 class Attachment: EntityBase<Long>() {
-    @Lob
-    var attachment: Blob? = null
+    var attachment: ByteArray? = null
     @JsonBackReference
     @ManyToOne
     var message: Message? = null
 
-    fun create(attachment: Blob?, message: Message?): Attachment{
+    fun create(attachment: ByteArray?, message: Message?): Attachment{
         val a = Attachment()
         a.attachment = attachment
         a.message = message
