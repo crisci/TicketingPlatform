@@ -11,14 +11,23 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import it.polito.wa2.ticketing.attachment.AttachmentRepository
+import it.polito.wa2.ticketing.utils.ImageUtil
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class MessageController(val messageService: MessageService) {
+class MessageController(val messageService: MessageService, val messageRepository: MessageRepository, val attamentRepository: AttachmentRepository) {
 
     @GetMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.OK)
-    fun getMessageAttachments(@PathVariable messageId: Long): Set<ByteArray>{
+    fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>?{
         return messageService.getMessageAttachments(messageId)
+    }
+
+    @GetMapping("/API/messages")
+    @ResponseStatus(HttpStatus.OK)
+    fun getMessagesByIdTickets(@RequestParam("ticket") idTicket: Long): List<MessageDTO?> {
+        return messageService.getMessagesByIdTickets(idTicket)
     }
 
     @PostMapping("/API/messages/{messageId}/attachments")
@@ -28,9 +37,25 @@ class MessageController(val messageService: MessageService) {
     }
 
     @PutMapping("/API/messages/{messageId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     fun editMessage(@PathVariable messageId: Long, @RequestBody message: String){
         messageService.editMessage(messageId, message)
+    }
+
+
+    @PostMapping("/API/{messageId}/attachments")
+    @ResponseStatus(HttpStatus.OK)
+    fun test(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
+       attamentRepository
+           .save(Attachment().create(ImageUtil().compressImage(attachment.bytes), messageRepository.findById(messageId).get()))
+    }
+
+    @GetMapping("/API/{name}/attachments", produces = ["image/jpeg", "image/png"])
+    @ResponseStatus(HttpStatus.OK)
+    fun attGet(@PathVariable name: Long): ByteArray {
+        val v = attamentRepository.findById(name).get()
+        val i = ImageUtil().decompressImage(v.attachment!!)
+        return i!!
     }
 
 }

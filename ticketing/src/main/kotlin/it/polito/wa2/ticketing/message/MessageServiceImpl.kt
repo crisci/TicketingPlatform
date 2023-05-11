@@ -3,6 +3,8 @@ package it.polito.wa2.ticketing.message
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import it.polito.wa2.ticketing.utils.ImageUtil
+import it.polito.wa2.ticketing.ticket.TicketNotFoundException
+import it.polito.wa2.ticketing.ticket.TicketRepository
 import jakarta.transaction.Transactional
 import org.hibernate.Hibernate
 import org.springframework.stereotype.Service
@@ -11,22 +13,15 @@ import javax.sql.rowset.serial.SerialBlob
 
 @Service @Transactional
 class MessageServiceImpl(
-    private val repository: MessageRepository
+    private val messageRepository: MessageRepository,
+    private val ticketRepository: TicketRepository
 ): MessageService {
-
-    override fun getMessageAttachments(messageId: Long): Set<ByteArray> {
-        val a = repository.findById(messageId)
-            .orElseThrow{ MessageNotFoundException("Message not found with specified id") }
-            .toMessageWithAttachmentsDTO().listOfAttachment
-        val set = mutableSetOf<ByteArray>()
-        a!!.forEach{
-            set.add(ImageUtil().decompressImage(it.attachment!!)!!)
-        }
-        return set
+    override fun getMessageAttachments(messageId: Long): Set<AttachmentDTO>? {
+        return messageRepository.findById(messageId).orElseThrow{ MessageNotFoundException("Message not found with specified id") }.toMessageWithAttachmentsDTO().listOfAttachment
     }
 
     override fun addAttachment(messageId: Long, attachment: Array<MultipartFile>) {
-        repository.findById(messageId).ifPresentOrElse(
+        messageRepository.findById(messageId).ifPresentOrElse(
             { m ->
                 attachment.forEach { a ->
                     if (a.contentType == "image/png" || a.contentType == "image/jpeg") {
@@ -43,16 +38,25 @@ class MessageServiceImpl(
     }
 
     override fun editMessage(messageId: Long, message: String) {
-        repository.findById(messageId).ifPresentOrElse(
+        messageRepository.findById(messageId).ifPresentOrElse(
             {
                 val mes = it
                 mes.body = message
-                repository.save(mes)
+                messageRepository.save(mes)
             },
             {
                 throw MessageNotFoundException("Message not found with specified id")
             }
         )
+    }
+
+    override fun getMessagesByIdTickets(idTicket: Long): List<MessageDTO?> {
+        //Check if the ticket exists
+        if( ticketRepository.findById(idTicket).isPresent)
+            return ticketRepository.findById(idTicket).get().listOfMessage.map { it.toDTO() }
+        else
+            throw TicketNotFoundException("The specified ticket has not been found!")
+
     }
 
 }

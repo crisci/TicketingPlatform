@@ -6,6 +6,7 @@ import it.polito.wa2.ticketing.utils.EntityBase
 import jakarta.persistence.Entity
 import jakarta.persistence.Lob
 import jakarta.persistence.ManyToOne
+import java.io.File
 import java.sql.Blob
 
 
