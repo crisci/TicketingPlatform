@@ -24,8 +24,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.web.multipart.MultipartFile
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -130,7 +132,7 @@ class TicketingApplicationTests {
 		history2.state = TicketStatus.IN_PROGRESS
 		historyRepository.save(history2)
 
-		attachment.attachment = SerialBlob("Attachment Test".toByteArray())
+		attachment.attachment = "Attachment Test".toByteArray()
 		attachmentRepository.save(attachment)
 
 		//the customer open the ticket
@@ -348,7 +350,7 @@ class TicketingApplicationTests {
 		expert.addMessage(message1)
 		ticket.addMessage(message1)
 
-		attachment.attachment = SerialBlob("Attachment Test".toByteArray())
+		attachment.attachment = "Attachment Test".toByteArray()
 		attachmentRepository.save(attachment)
 
 		message2.body = "Here it is."
@@ -369,9 +371,10 @@ class TicketingApplicationTests {
 		message2.listOfAttachment.forEach{
 			assert(attachmentRepository.findByIdOrNull(it.getId()!!) == it)
 		}
+		assert(!message2.listOfAttachment.isEmpty())
 
 		assertThrows<MessageNotFoundException> {
-			messageService.addAttachments(message2.getId()!!.inc(), setOf())
+			messageService.addAttachment(message2.getId()!!.inc(), arrayOf(MockMultipartFile("attachment", "Meow".toByteArray())))
 		}
 
 		customerRepository.flush()
