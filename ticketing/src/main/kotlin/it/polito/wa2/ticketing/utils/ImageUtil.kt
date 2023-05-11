@@ -3,7 +3,6 @@ package it.polito.wa2.ticketing.utils
 import java.io.ByteArrayOutputStream
 import java.util.zip.Deflater
 import java.util.zip.Inflater
-
 class ImageUtil {
 
     fun compressImage(data: ByteArray): ByteArray? {
@@ -39,5 +38,4 @@ class ImageUtil {
         }
         return outputStream.toByteArray()
     }
-
 }

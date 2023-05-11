@@ -273,15 +273,15 @@ API
 - GET `/API/tickets/{idExpert}/{ticketId}/messages`
     - Description: Return all the messages sent by the given expert identified by the idExpert for the given ticket identified by the ticketId
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
     - Response body:
 
              [
                 {
                     "id": 1,
-                    "type": "EXPERT",
                     "body": "Text",
-                    "date": "2023-05-07T20:53:23"
+                    "date": "2023-05-07T20:53:23",
+                    "expert": 1
                 },
                 ...
             ]
@@ -291,10 +291,33 @@ API
 - GET `/API/tickets/{idExpert}/{ticketId}/status`
     - Description: Return the current status of the ticket identified by the ticketId
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
     - Response body:
         
                 "IN_PROGESS"
+
+- GET `/API/tickets/status={status}`
+  - Description: Return all the tickets with the given status
+  - Request body: `none`
+  - Response status: `200 Success`, `400 Bad Request`, `500 Internal Server Error`
+  - Response Body: 
+            
+        [
+            {
+                "id": 1,
+                "dateTime": "2017-05-06T11:08:48",
+                "title": "Title",
+                "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "priority": "MEDIUM",
+                "product": {
+                    "ean": "1",
+                    "name": "iPad",
+                    "brand": "Apple"
+                }
+            },
+            ...
+        ]
+
 
 - POST `/API/tickets/{idTicket}/messages`
     - Description: It is used to send the message for the given ticket identified by idTicket
@@ -347,20 +370,27 @@ API
 - PUT `/API/tickets/{idTicket}/reopen`
     - Description: It set the status of the ticket to reopen.
     - Request body: `none`
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
 - PUT `/API/tickets/{idExpert}/{idTicket}/stop`
     - Description: It is used by the expert identified by idExpert to stop the ticket and make it opened again and reassignable to another expert.
     - Request body: `none`
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
-- PUT `/API/tickets/{idExpert}/{ticketId}/close` (???)
-    - Description:
-    - Request body: 
-    - Response status: 
-    - Response body: 
+- PUT `/API/tickets/{idExpert}/{ticketId}/close` 
+    - Description: It is used by the expert identified by idExpert to close the ticket
+    - Request body: `none`
+    - Response status: `204 No Content`, 
+    - Response body: `none`
+
+- PUT `/API/tickets/100/assign?expert={idExpert}&priority={priorityLevel}`
+    - Description: It is used by the expert identified by idExpert to close the ticket
+    - Request body: `none`
+    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+    - Response body: `none`
+
 
 ### __Messages API__
 - GET `/API/messages/{messageId}/attachments`
@@ -375,6 +405,22 @@ API
                 },
                 ...
              ]
+
+- GET `/API/messages?ticket={idTicket}`
+    - Description: Return all the tickets with the given status
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response Body: 
+
+            [
+                {
+                    "id": 1,
+                    "body": "Text",
+                    "date": "2023-05-07T20:53:23",
+                    "expert": 1
+                },
+                ...
+        ]
 
 - POST `/API/messages/{messageId}/attachments`
     - Description: Adds all the provided attachment given the messageId

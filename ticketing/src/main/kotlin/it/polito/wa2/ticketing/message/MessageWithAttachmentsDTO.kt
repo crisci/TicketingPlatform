@@ -9,5 +9,5 @@ data class MessageWithAttachmentsDTO(
 )
 
 fun Message.toMessageWithAttachmentsDTO(): MessageWithAttachmentsDTO {
-    return MessageWithAttachmentsDTO( toDTO() , listOfAttachment.map { it.toDTO() }.toSet() )
+    return MessageWithAttachmentsDTO( toDTO() , listOfAttachment.map { it.toDTO() }.toSet())
 }

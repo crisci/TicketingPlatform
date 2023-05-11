@@ -1,14 +1,12 @@
 package it.polito.wa2.ticketing.ticket
 
+import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.customer.CustomerNotFoundException
 import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import it.polito.wa2.ticketing.employee.ExpertNotFoundException
-import it.polito.wa2.ticketing.history.History
-import it.polito.wa2.ticketing.history.HistoryNotFoundException
-import it.polito.wa2.ticketing.history.HistoryRepository
-import it.polito.wa2.ticketing.history.OperationNotPermittedException
+import it.polito.wa2.ticketing.history.*
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.message.toDTO
@@ -29,11 +27,15 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         private val customerRepository: CustomerRepository,
                         private val productRepository: ProductRepository
 ): TicketService {
-    override fun getTicketsWithMessagesByCustomerId(customerId: Long): Set<TicketWithMessagesDTO>? {
+    override fun getTicketsWithMessagesByCustomerId(customerId: Long): Set<TicketWithMessagesDTO> {
+        if(!customerRepository.existsById(customerId))
+            throw CustomerNotFoundException("No customer found with specified id!")
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketWithMessagesDTO() }.toSet()
     }
 
-    override fun getTicketsByCustomerId(customerId: Long): Set<TicketDTO>? {
+    override fun getTicketsByCustomerId(customerId: Long): Set<TicketDTO> {
+        if(!customerRepository.existsById(customerId))
+            throw CustomerNotFoundException("No customer found with specified id!")
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketDTO() }.toSet()
     }
 
@@ -109,22 +111,29 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                     ) {
                         if (message.expert != null) {
                             //It is an expert
-                            //TODO: Throw exception if history is empty
                             val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(it.getId()!!)
                             if (lastHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
 
                             //TODO: Expert missmatch if history is not associated to the expert who replied
                             expert = employeeRepository.findByIdOrNull(lastHistory.first().employee?.getId()!!)
                                 ?: throw ExpertNotFoundException("The specified expert has not been found!")
+                            if(expert!!.getId() != message.expert)
+                                throw OperationNotPermittedException("The specified expert has not been found!")
                         }
+                        val newMessage = Message().create(
+                            message.body,
+                            LocalDateTime.now(),
+                            mutableSetOf(), //Mutable set of attachments
+                            it,
+                            expert //if not expert it remains null otherwise it is set
+                        )
+
+                        message.listOfAttachments?.map { a -> Attachment().create(
+                                a.attachment, newMessage
+                            ) }?.toMutableSet()?.forEach { a -> newMessage.addAttachment(a) }
+
                         it.addMessage(
-                            Message().create(
-                                message.body,
-                                LocalDateTime.now(),
-                                null,
-                                it,
-                                expert //if not expert it remains null otherwise it is set
-                            )
+                            newMessage
                         )
                     } else
                         throw OperationNotPermittedException("The ticket is not in progress!")
@@ -133,48 +142,75 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     }
 
     override fun resolveTicket(ticketId: Long) {
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
-        if(lastTicketHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
-
-        val expert = lastTicketHistory.first().employee
-        if (lastTicketHistory.first().state != TicketStatus.CLOSED && lastTicketHistory.first().state != TicketStatus.RESOLVED) {
-            ticketRepository.findById(ticketId).ifPresentOrElse(
-                {
-                    it.addHistory(
+        if(lastTicketHistory.isNotEmpty()) {
+            val expert = lastTicketHistory.first().employee
+            if (lastTicketHistory.first().state != TicketStatus.CLOSED && lastTicketHistory.first().state != TicketStatus.RESOLVED) {
+                    ticket.addHistory(
                         History().create(
                             TicketStatus.RESOLVED,
                             LocalDateTime.now(),
-                            it,
+                            ticket,
                             expert //If null than the ticket is closed before than an expert is assigned
                         )
                     )
-                },
-                { throw TicketNotFoundException("The specified ticket has not been found!") })
+            } else {
+                throw OperationNotPermittedException("This operation is not permitted because the ticket is closed!")
+            }
         } else {
-            throw OperationNotPermittedException("This operation is not permitted because the ticket is closed!")
+                throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
         }
     }
 
     override fun reopenTicket(ticketId: Long) {
         //Check the last history state related to the ticketId
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
-        if(lastTicketHistory.isEmpty()) throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
-        println(lastTicketHistory.first().state)
+        if(lastTicketHistory.isNotEmpty()) {
         if (lastTicketHistory.first().state == TicketStatus.CLOSED || lastTicketHistory.first().state == TicketStatus.RESOLVED) {
-            ticketRepository.findById(ticketId).ifPresentOrElse(
-                {
-                    it.addHistory(
-                        History().create(
-                            TicketStatus.REOPENED,
-                            LocalDateTime.now(),
-                            it,
-                            null // reopen so the ticket can be assigned to another expert
-                        )
-                    )
-                },
-                { throw TicketNotFoundException("The specified ticket has not been found!") })
+            ticket.addHistory(
+                History().create(
+                    TicketStatus.OPEN,
+                    LocalDateTime.now(),
+                    ticket,
+                    null
+                )
+            )
+        } else {
+            throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
+        }} else {
+            throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+        }
+
+    }
+
+    override fun assignTicket(idTicket: Long, idExpert: Long, priorityLevel: PriorityLevel) {
+        val ticket = ticketRepository.findById(idTicket)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+        val expert = employeeRepository.findByIdAndType(idExpert,EmployeeRole.EXPERT)
+            .orElseThrow { ExpertNotFoundException("The specified expert has not been found!") }
+        val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(idTicket)
+        if(lastTicketHistory.first().state == TicketStatus.OPEN || lastTicketHistory.first().state == TicketStatus.REOPENED) {
+            ticket.addHistory(
+                History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
+            )
+            ticket.priority = priorityLevel
+            ticketRepository.save(ticket)
         } else {
             throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
         }
+
     }
+
+    override fun getTicketsByStatus(status: TicketStatus?): Set<TicketDTO?> {
+        return if(status != null) {
+            historyRepository.findMostRecentStateByStatus(status).map { it.ticket?.toTicketDTO() }.toSet()
+        } else {
+            historyRepository.findMostRecentState().map { it.ticket?.toTicketDTO() }.toSet()
+        }
+    }
+
 }

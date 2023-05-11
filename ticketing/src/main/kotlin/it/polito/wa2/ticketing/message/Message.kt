@@ -6,6 +6,7 @@ import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.employee.Employee
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
 
 @Entity
