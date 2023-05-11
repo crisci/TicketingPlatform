@@ -20,7 +20,7 @@ class MessageController(val messageService: MessageService, val messageRepositor
 
     @GetMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.OK)
-    fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>?{
+    fun getMessageAttachments(@PathVariable messageId: Long): Set<ByteArray>{
         return messageService.getMessageAttachments(messageId)
     }
 
