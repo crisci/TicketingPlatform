@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.7.22"
 	kotlin("plugin.spring") version "1.7.22"
 	kotlin("plugin.jpa") version "1.7.22"
+	id("com.google.cloud.tools.jib") version "3.3.1"
 }
 
 group = "it.polito.wa2"
@@ -42,4 +43,16 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+jib {
+	from {
+		image = "amazoncorretto:17-alpine"
+	}
+	to {
+		image = "ticketing-spring-api"
+	}
+	container {
+		ports = listOf("8081")
+	}
 }
