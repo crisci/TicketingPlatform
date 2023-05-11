@@ -1,1 +1,23 @@
-Web Application G16 Repository
+- DOCUMENTATION:
+    - can be found in "WA-G16.ticketing.documentation":
+        - API.md
+        - Data Layer Design.mdj
+- RUN THE SERVER
+    - Start a valid Postgress container with:
+        - url = jdbc:postgresql://localhost:5432/postgres
+        - username = postgres
+        - password = postgres
+        - port = 5432
+    - Server (named:ticketing) run on port: 8081, commands to run:
+        - enter in the folder: .../WA-G16/ticketing
+        - build:
+            - on linux: ./gradlew
+            - [on windows: gradlew.bat]
+            - docker run -d --name ticketing-spring-api -p 8081:8081 ticketing-spring-api
+        - run:
+            - docket start ticketing-spring-api
+- RUN THE TEST
+    - enter in the folder: .../WA-G16/ticketing
+    - execute: 
+        - on linux: ./gradlew test --tests "it.polito.wa2.ticketing.TicketingApplicationTests"
+        - on windows: gradlew.bat test --tests "it.polito.wa2.ticketing.TicketingApplicationTests"
