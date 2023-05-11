@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.multipart.MultipartRequest
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 @RestController
 class TicketController(val ticketService: TicketService) {
@@ -61,12 +58,8 @@ class TicketController(val ticketService: TicketService) {
 
     @PostMapping("/API/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.CREATED)
-    fun addMessage(@PathVariable idTicket: Long,
-                   @RequestBody message: MessageDTO
-        ) {
-        println(message.listOfAttachments.toString())
-
-        //ticketService.addMessage(idTicket, message)
+    fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
+        ticketService.addMessage(idTicket, message)
     }
 
     @PostMapping("/API/tickets/{idCustomer}") //TODO: change with customers/{id}/tickets

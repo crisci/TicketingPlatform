@@ -15,7 +15,7 @@ import it.polito.wa2.ticketing.utils.ImageUtil
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class MessageController(val messageService: MessageService, val messageRepository: MessageRepository, val attachmentRepository: AttachmentRepository) {
+class MessageController(val messageService: MessageService) {
 
     @GetMapping("/API/messages/{messageId}/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
@@ -23,11 +23,19 @@ class MessageController(val messageService: MessageService, val messageRepositor
         return messageService.getMessageAttachments(messageId)
     }
 
+    @GetMapping("/API/attachments", produces = ["image/jpeg", "image/png"])
+    @ResponseStatus(HttpStatus.OK)
+    fun getAttachment(@RequestParam id: Long): ByteArray {
+        return messageService.getAttachment(id)
+    }
+
     @GetMapping("/API/messages")
     @ResponseStatus(HttpStatus.OK)
     fun getMessagesByIdTickets(@RequestParam("ticket") idTicket: Long): List<MessageDTO?> {
         return messageService.getMessagesByIdTickets(idTicket)
     }
+
+
 
     @PostMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.CREATED)
