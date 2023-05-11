@@ -1,7 +1,6 @@
 package it.polito.wa2.ticketing.message
 
-import it.polito.wa2.ticketing.attachment.Attachment
-import it.polito.wa2.ticketing.attachment.AttachmentDTO
+import it.polito.wa2.ticketing.attachment.*
 import it.polito.wa2.ticketing.ticket.TicketNotFoundException
 import it.polito.wa2.ticketing.ticket.TicketRepository
 import it.polito.wa2.ticketing.utils.ImageUtil
@@ -12,7 +11,8 @@ import org.springframework.web.multipart.MultipartFile
 @Service @Transactional
 class MessageServiceImpl(
     private val repository: MessageRepository,
-    private val ticketRepository: TicketRepository
+    private val ticketRepository: TicketRepository,
+    private val attachmentRepository: AttachmentRepository
 ): MessageService {
 
     override fun getMessageAttachments(messageId: Long): Set<AttachmentDTO> {
@@ -64,6 +64,15 @@ class MessageServiceImpl(
         else
             throw TicketNotFoundException("The specified ticket has not been found!")
 
+    }
+
+    override fun getAttachment(idAttachment: Long): ByteArray {
+        if (attachmentRepository.findById(idAttachment).isPresent) {
+            val v = attachmentRepository.findById(idAttachment).get()
+            return ImageUtil().decompressImage(v.attachment!!)!!
+        } else {
+            throw AttachmentNotFoundException("The specified attachment has not been found!")
+        }
     }
 
 }

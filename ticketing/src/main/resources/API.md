@@ -257,7 +257,6 @@ API
                     "listOfMessage": [
                         {
                             "id": 1,
-                            "type": "EXPERT",
                             "body": "Text",
                             "date": "2023-05-07T20:53:23",
                             "listOfAttachment": [],
@@ -324,7 +323,6 @@ API
     - Request body: 
 
             {
-                "type": 0,
                 "body": "Text body",
                 "date": "2023-05-07T20:53:23.000000",
                 "listOfAttachment": [],
@@ -332,7 +330,6 @@ API
             }
                 OR
             {
-                "type": 1,
                 "body": "Text body",
                 "date": "2023-05-07T20:53:23.000000",
                 "listOfAttachment": [],
@@ -385,7 +382,7 @@ API
     - Response status: `204 No Content`, 
     - Response body: `none`
 
-- PUT `/API/tickets/100/assign?expert={idExpert}&priority={priorityLevel}`
+- PUT `/API/tickets/{idTicket}/assign?expert={idExpert}&priority={priorityLevel}`
     - Description: It is used by the expert identified by idExpert to close the ticket
     - Request body: `none`
     - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
@@ -420,7 +417,17 @@ API
                     "expert": 1
                 },
                 ...
-        ]
+            ]
+
+- GET `/API/attachments?id={idAttachment}`
+    - Description: Return the attachment visualizable in image format
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response Body:    
+
+            image.jpeg
+            OR
+            image.png
 
 - POST `/API/messages/{messageId}/attachments`
     - Description: Adds all the provided attachment given the messageId

@@ -11,5 +11,6 @@ interface MessageService {
     fun addAttachment(messageId: Long, attachment: Array<MultipartFile>)
     fun editMessage(messageId: Long, message: String)
     fun getMessagesByIdTickets(idTicket: Long): List<MessageDTO?>
+    fun getAttachment(idAttachment: Long): ByteArray
 
 }

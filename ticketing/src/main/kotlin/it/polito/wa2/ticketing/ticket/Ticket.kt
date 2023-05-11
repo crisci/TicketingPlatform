@@ -9,11 +9,14 @@ import it.polito.wa2.ticketing.product.Product
 import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
 
 @Entity
 @Table(name = "tickets")
 class Ticket : EntityBase<Long>() {
+    @NotNull
     var title: String = ""
+    @NotNull
     var description: String = ""
     var priority: PriorityLevel = PriorityLevel.NOT_ASSIGNED
     @JsonIgnore
