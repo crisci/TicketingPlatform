@@ -370,23 +370,16 @@ API
     - Response body:
 
              [
-                {
-                    "id": 1,
-                    "attachment": "Blob"
-                },
+                "imageAsBytes1",
                 ...
              ]
 
 - POST `/API/messages/{messageId}/attachments`
-    - Description: Adds all the provided attachments given the messageId
+    - Description: Adds all the provided attachment given the messageId
     - Request body: 
 
             [
-                {
-                    "id": 1,
-                    "attachment": Blob
-                },
-                ...
+                "attachment": MultipartFile
             ]
 
     - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
