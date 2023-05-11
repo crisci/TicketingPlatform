@@ -4,7 +4,7 @@ import java.sql.Blob
 
 data class AttachmentDTO(
     val id: Long?,
-    val attachment: Blob?
+    val attachment: ByteArray?
 )
 
 fun Attachment.toDTO(): AttachmentDTO {

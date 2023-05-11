@@ -15,6 +15,12 @@ class MessageProblemDetailHandlers: ResponseEntityExceptionHandler() {
     fun handleMessageNotFound(e: MessageNotFoundException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
 
+    @ExceptionHandler(FileTypeNotSupportedException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleFileTypeNotSupported(e: FileTypeNotSupportedException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
 }
 
 class MessageNotFoundException(override val message:String?): RuntimeException()
+class FileTypeNotSupportedException(override val message:String?): RuntimeException()
