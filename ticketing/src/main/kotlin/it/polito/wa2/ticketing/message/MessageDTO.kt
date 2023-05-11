@@ -10,7 +10,6 @@ data class MessageDTO(
     val date: LocalDateTime?,
     val listOfAttachments: MutableSet<AttachmentDTO>? = null,
     val expert: Long? = null,
-    val listOfAttachments: Set<AttachmentDTO>
 )
 
 fun Message.toDTO(): MessageDTO {

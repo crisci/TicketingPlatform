@@ -6,10 +6,8 @@ import it.polito.wa2.ticketing.utils.ImageUtil
 import it.polito.wa2.ticketing.ticket.TicketNotFoundException
 import it.polito.wa2.ticketing.ticket.TicketRepository
 import jakarta.transaction.Transactional
-import org.hibernate.Hibernate
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import javax.sql.rowset.serial.SerialBlob
 
 @Service @Transactional
 class MessageServiceImpl(

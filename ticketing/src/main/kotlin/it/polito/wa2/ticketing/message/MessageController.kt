@@ -16,7 +16,7 @@ import it.polito.wa2.ticketing.utils.ImageUtil
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class MessageController(val messageService: MessageService, val messageRepository: MessageRepository, val attamentRepository: AttachmentRepository) {
+class MessageController(val messageService: MessageService, val messageRepository: MessageRepository, val attachmentRepository: AttachmentRepository) {
 
     @GetMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.OK)
@@ -46,14 +46,14 @@ class MessageController(val messageService: MessageService, val messageRepositor
     @PostMapping("/API/{messageId}/attachments")
     @ResponseStatus(HttpStatus.OK)
     fun test(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
-       attamentRepository
+        attachmentRepository
            .save(Attachment().create(ImageUtil().compressImage(attachment.bytes), messageRepository.findById(messageId).get()))
     }
 
     @GetMapping("/API/{name}/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
     fun attGet(@PathVariable name: Long): ByteArray {
-        val v = attamentRepository.findById(name).get()
+        val v = attachmentRepository.findById(name).get()
         val i = ImageUtil().decompressImage(v.attachment!!)
         return i!!
     }

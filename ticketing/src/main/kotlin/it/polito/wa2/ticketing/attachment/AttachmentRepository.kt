@@ -9,6 +9,5 @@ interface AttachmentRepository: JpaRepository<Attachment, Long> {
 
     fun findAttachmentsByMessageId(messageId: Long): Set<Attachment>
 
-    fun findByName(name: String): Optional<Attachment>
 
 }
