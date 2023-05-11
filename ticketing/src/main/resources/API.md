@@ -400,7 +400,9 @@ API
     - Response body:
 
              [
-                "imageAsBytes1",
+                {
+                 "attachment": "Image as bytes"
+                },
                 ...
              ]
 

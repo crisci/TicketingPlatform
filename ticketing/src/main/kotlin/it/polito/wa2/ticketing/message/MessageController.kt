@@ -1,6 +1,5 @@
 package it.polito.wa2.ticketing.message
 
-import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,7 +19,7 @@ class MessageController(val messageService: MessageService, val messageRepositor
 
     @GetMapping("/API/messages/{messageId}/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
-    fun getMessageAttachments(@PathVariable messageId: Long): Set<ByteArray>{
+    fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>{
         return messageService.getMessageAttachments(messageId)
     }
 
