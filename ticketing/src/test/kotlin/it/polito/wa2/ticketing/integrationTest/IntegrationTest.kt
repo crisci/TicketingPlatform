@@ -16,6 +16,7 @@ import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.jvm.JvmStatic
@@ -27,6 +28,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.transaction.annotation.Transactional
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -82,6 +84,22 @@ class IntegrationTest {
     var attachment: Attachment = Attachment()
 
     fun myInit1() {
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        ticketRepository.deleteAll()
+        historyRepository.deleteAll()
+        employeeRepository.deleteAll()
+        messageRepository.deleteAll()
+        attachmentRepository.deleteAll()
+
+        customerRepository.flush()
+        productRepository.flush()
+        ticketRepository.flush()
+        historyRepository.flush()
+        employeeRepository.flush()
+        messageRepository.flush()
+        attachmentRepository.flush()
+
         customer.first_name = "Pietro"
         customer.last_name = "Bertorelle"
         customer.email = "email@gmail.com"
@@ -168,6 +186,7 @@ class IntegrationTest {
         messageRepository.flush()
         //attachmentRepository.flush()
     }
+    @Transactional
     @Test
     fun expertOperatingOnTicketsTest(){
         myInit1()
