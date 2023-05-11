@@ -257,7 +257,6 @@ API
                     "listOfMessage": [
                         {
                             "id": 1,
-                            "type": "EXPERT",
                             "body": "Text",
                             "date": "2023-05-07T20:53:23",
                             "listOfAttachment": [],
@@ -324,7 +323,6 @@ API
     - Request body: 
 
             {
-                "type": 0,
                 "body": "Text body",
                 "date": "2023-05-07T20:53:23.000000",
                 "listOfAttachment": [],
@@ -332,7 +330,6 @@ API
             }
                 OR
             {
-                "type": 1,
                 "body": "Text body",
                 "date": "2023-05-07T20:53:23.000000",
                 "listOfAttachment": [],
