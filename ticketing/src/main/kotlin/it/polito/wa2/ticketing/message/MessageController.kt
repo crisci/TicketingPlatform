@@ -1,6 +1,5 @@
 package it.polito.wa2.ticketing.message
 
-import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,7 +19,7 @@ class MessageController(val messageService: MessageService, val messageRepositor
 
     @GetMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.OK)
-    fun getMessageAttachments(@PathVariable messageId: Long): Set<ByteArray>{
+    fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>{
         return messageService.getMessageAttachments(messageId)
     }
 
@@ -40,22 +39,6 @@ class MessageController(val messageService: MessageService, val messageRepositor
     @ResponseStatus(HttpStatus.OK)
     fun editMessage(@PathVariable messageId: Long, @RequestBody message: String){
         messageService.editMessage(messageId, message)
-    }
-
-
-    @PostMapping("/API/{messageId}/attachments")
-    @ResponseStatus(HttpStatus.OK)
-    fun test(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
-        attachmentRepository
-           .save(Attachment().create(ImageUtil().compressImage(attachment.bytes), messageRepository.findById(messageId).get()))
-    }
-
-    @GetMapping("/API/{name}/attachments", produces = ["image/jpeg", "image/png"])
-    @ResponseStatus(HttpStatus.OK)
-    fun attGet(@PathVariable name: Long): ByteArray {
-        val v = attachmentRepository.findById(name).get()
-        val i = ImageUtil().decompressImage(v.attachment!!)
-        return i!!
     }
 
 }
