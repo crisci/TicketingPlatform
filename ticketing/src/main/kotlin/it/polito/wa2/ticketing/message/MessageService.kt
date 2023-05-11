@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile
 interface MessageService {
 
     fun getMessageAttachments(messageId: Long): Set<ByteArray>
-    fun addAttachment(messageId: Long, attachment: MultipartFile)
+    fun addAttachment(messageId: Long, attachment: Array<MultipartFile>)
     fun editMessage(messageId: Long, message: String)
 
 }

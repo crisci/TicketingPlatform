@@ -25,14 +25,16 @@ class MessageServiceImpl(
         return set
     }
 
-    override fun addAttachment(messageId: Long, attachment: MultipartFile) {
+    override fun addAttachment(messageId: Long, attachment: Array<MultipartFile>) {
         repository.findById(messageId).ifPresentOrElse(
             { m ->
-                    if(attachment.contentType == "image/png" || attachment.contentType == "image/jpeg"){
-                        m.addAttachment(Attachment().create(ImageUtil().compressImage(attachment.bytes), m))
-                    }else{
+                attachment.forEach { a ->
+                    if (a.contentType == "image/png" || a.contentType == "image/jpeg") {
+                        m.addAttachment(Attachment().create(ImageUtil().compressImage(a.bytes), m))
+                    } else {
                         throw FileTypeNotSupportedException("Cannot send this type of file")
                     }
+                }
             },
             {
                 throw MessageNotFoundException("Message not found with specified id")

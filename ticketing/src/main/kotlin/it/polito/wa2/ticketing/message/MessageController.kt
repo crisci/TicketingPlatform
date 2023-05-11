@@ -23,7 +23,7 @@ class MessageController(val messageService: MessageService) {
 
     @PostMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.CREATED)
-    fun addAttachments(@PathVariable messageId: Long, @RequestBody attachment: MultipartFile){
+    fun addAttachments(@PathVariable messageId: Long, @RequestBody attachment: Array<MultipartFile>){
         messageService.addAttachment(messageId, attachment)
     }
 
