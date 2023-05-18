@@ -4,26 +4,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="testRunner" value="PLATFORM" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="19" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/server" />
-        <option name="gradleJvm" value="19" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/server" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/ticketing" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../../../../../Gradle/gradle-8.0.2" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/ticketing" />
