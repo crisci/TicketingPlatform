@@ -35,8 +35,8 @@ dependencies {
 	testImplementation ("org.junit.platform:junit-platform-suite-engine:1.8.1")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.projectlombok:lombok:1.18.4")
-	annotationProcessor("org.projectlombok:lombok:1.18.4")
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 
 }
 

@@ -18,7 +18,7 @@ class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()
 
-    @GetMapping("/test/customer")
+    @GetMapping("/test/admin")
     @ResponseStatus(HttpStatus.OK)
     fun testCustomer(principal: Principal): String {
         val token = principal as JwtAuthenticationToken

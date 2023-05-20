@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/WA2-G16.iml" filepath="$PROJECT_DIR$/.idea/WA2-G16.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ticketing.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ticketing.main.iml" />
     </modules>
   </component>
 </project>
