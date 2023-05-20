@@ -17,13 +17,12 @@ class WebSecurityConfig {
     val admin = "admin"
     val customer = "customer"
     val expert = "expert"
-    private val jwtAuthConverter: JwtAuthConverter? = null
+    private val jwtAuthConverter: JwtAuthConverter = JwtAuthConverter()
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
-        println("Ok Filter Chain")
         http.authorizeHttpRequests()
-            .requestMatchers(HttpMethod.GET, "/test/customer").permitAll()
+            .requestMatchers(HttpMethod.GET, "/test/customer").hasAnyRole(admin, customer)
             .anyRequest().authenticated()
         http.oauth2ResourceServer()
             .jwt()
