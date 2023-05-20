@@ -20,8 +20,6 @@ class CustomerController(val customerService: CustomerService) {
 
     @GetMapping("/test/customer")
     @ResponseStatus(HttpStatus.OK)
-    @PreFilter("hasRole('customer')")
-    @Secured("ROLE_customer")
     fun testCustomer(principal: Principal): String {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"] as String?

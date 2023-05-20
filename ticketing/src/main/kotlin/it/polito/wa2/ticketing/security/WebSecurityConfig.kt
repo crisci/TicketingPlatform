@@ -12,7 +12,6 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 class WebSecurityConfig {
 
     val admin = "admin"
@@ -22,11 +21,10 @@ class WebSecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
+        println("Ok Filter Chain")
         http.authorizeHttpRequests()
-            .requestMatchers(HttpMethod.GET, "/test/customer").hasAnyRole(admin, customer)
+            .requestMatchers(HttpMethod.GET, "/test/customer").permitAll()
             .anyRequest().authenticated()
-            .and().formLogin().permitAll()
-            .and().logout().permitAll()
         http.oauth2ResourceServer()
             .jwt()
             .jwtAuthenticationConverter(jwtAuthConverter)
