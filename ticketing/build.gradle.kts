@@ -35,6 +35,11 @@ dependencies {
 	testImplementation ("org.testcontainers:junit-jupiter:1.16.3")
 	testImplementation("org.testcontainers:postgresql:1.16.3")
 	testImplementation ("org.junit.platform:junit-platform-suite-engine:1.8.1")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+
 }
 
 tasks.withType<KotlinCompile> {

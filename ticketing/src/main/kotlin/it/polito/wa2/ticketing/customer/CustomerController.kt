@@ -5,13 +5,28 @@ import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.utils.EmailValidationUtil
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreFilter
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
+
 
 @RestController
 
 class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()
+
+    @GetMapping("/test/admin")
+    @ResponseStatus(HttpStatus.OK)
+    fun testCustomer(principal: Principal): String {
+        val token = principal as JwtAuthenticationToken
+        val userName = token.tokenAttributes["name"] as String?
+        val userEmail = token.tokenAttributes["email"] as String?
+        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail");
+    }
+
 
     @GetMapping("/API/customers/id={id}")
     @ResponseStatus(HttpStatus.OK)
