@@ -17,7 +17,7 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests()
-            .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**").hasRole(ADMIN)
+            .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**").hasRole(MANAGER)
             .anyRequest().authenticated()
         http.oauth2ResourceServer()
             .jwt()
@@ -27,7 +27,8 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
     }
 
     companion object {
-        const val ADMIN = "admin"
-        const val USER = "customer"
+        const val MANAGER = "Manager"
+        const val EXPERT = "Expert"
+        const val CLIENT = "Client"
     }
 }

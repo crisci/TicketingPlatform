@@ -1,6 +1,7 @@
 package it.polito.wa2.ticketing.customer
 
 import it.polito.wa2.ticketing.message.MessageDTO
+import it.polito.wa2.ticketing.security.JwtAuthConverter
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.utils.EmailValidationUtil
 import jakarta.transaction.Transactional
@@ -17,14 +18,14 @@ import java.security.Principal
 class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()
-
     @GetMapping("/test/admin")
     @ResponseStatus(HttpStatus.OK)
     fun testCustomer(principal: Principal): String {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"] as String?
         val userEmail = token.tokenAttributes["email"] as String?
-        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail");
+        
+        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail\nUser Role: $userRole");
     }
 
 
