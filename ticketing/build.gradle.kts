@@ -39,7 +39,7 @@ dependencies {
 	implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
-
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 tasks.withType<KotlinCompile> {
