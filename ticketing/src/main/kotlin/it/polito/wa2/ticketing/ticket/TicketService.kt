@@ -11,7 +11,7 @@ interface TicketService {
     fun reassignTicket(ticketId: Long, idExpert: Long)
     fun closeTicket(ticketId: Long, idExpert: Long)
     fun getMessages(ticketId: Long, idExpert: Long): List<MessageDTO>
-    fun getStatus(ticketId: Long, idExpert: Long): TicketStatus
+    fun getStatus(ticketId: Long): TicketStatus
     fun addMessage(idTicket: Long, message: MessageDTO)
     fun addTicket(ticket: TicketDTO, idCustomer: Long)
     fun resolveTicket(ticketId: Long)

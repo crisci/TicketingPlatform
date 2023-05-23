@@ -5,14 +5,11 @@ import it.polito.wa2.ticketing.security.JwtAuthConverter
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.utils.EmailValidationUtil
 import jakarta.transaction.Transactional
-import org.springframework.http.*
+import org.springframework.http.HttpStatus
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreFilter
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.client.RestTemplate
 import java.security.Principal
 
 
@@ -27,29 +24,7 @@ class CustomerController(val customerService: CustomerService) {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"] as String?
         val userEmail = token.tokenAttributes["email"] as String?
-        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail\n");
-    }
-
-    @PostMapping("/API/login")
-    @ResponseStatus(HttpStatus.OK)
-    fun login(@RequestBody credentials: Map<String, String>): String {
-        val restTemplate = RestTemplate()
-
-        val url = "http://localhost:8080/realms/ticketing/protocol/openid-connect/token"
-
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-
-        val requestBody: MultiValueMap<String, String> = LinkedMultiValueMap()
-        requestBody.add("grant_type", "password")
-        requestBody.add("client_id", "authN")
-        requestBody.add("username", credentials["username"])
-        requestBody.add("password", credentials["password"])
-
-        val requestEntity = HttpEntity(requestBody, headers)
-        val responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
-        println(responseEntity.body)
-        return responseEntity.body ?: "Error occurred during login."
+        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail");
     }
 
 
@@ -84,7 +59,7 @@ class CustomerController(val customerService: CustomerService) {
         }
     }
 
-    @GetMapping("/API/customers/")
+    @GetMapping("/API/customers")
     @ResponseStatus(HttpStatus.OK)
     fun getCustomers() : List<CustomerDTO> {
         return customerService.getCustomers()
