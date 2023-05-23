@@ -34,26 +34,25 @@ class TicketController(val ticketService: TicketService) {
     }
 
     @PutMapping("/API/tickets/{idExpert}/{ticketId}/close")
-    //TODO: Who cares if the ticket is closed by the user or not?
-    //Only a general method to close the ticket from both parties?
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun ticketCloseByExpert(@PathVariable("idExpert") idExpert: Long, @PathVariable("ticketId") ticketId: Long) {
-        //ToDo("check the idExpert")
+    //shared user and expert
+    fun ticketClosing(@PathVariable("idExpert") idExpert: Long, @PathVariable("ticketId") ticketId: Long) {
         return ticketService.closeTicket(ticketId, idExpert)
     }
 
     @GetMapping("/API/tickets/{idExpert}/{ticketId}/messages")
     @ResponseStatus(HttpStatus.OK)
+    //shared user and expert
     fun getMessages(@PathVariable("idExpert") idExpert : Long,@PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
-        //ToDo("check the idExpert")
         return ticketService.getMessages(ticketId, idExpert)
     }
 
-    @GetMapping("/API/tickets/{idExpert}/{ticketId}/status") //TODO: idExpert is not needed
+    @GetMapping("/API/tickets/{ticketId}/status")
     @ResponseStatus(HttpStatus.OK)
-    fun getStatus(@PathVariable("idExpert") idExpert: Long, @PathVariable("ticketId") ticketId: Long): TicketStatus {
+    //shared user and expert
+    fun getStatus(@PathVariable("ticketId") ticketId: Long): TicketStatus {
         //ToDo("check the idExpert")
-        return ticketService.getStatus(ticketId, idExpert)
+        return ticketService.getStatus(ticketId)
     }
 
     @PostMapping("/API/tickets/{idTicket}/messages")

@@ -16,7 +16,6 @@ import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.jvm.JvmStatic
@@ -124,7 +123,7 @@ class IntegrationTest {
         admin.last_name = "Rossetti"
         admin.email = "myemail2@gmail.com"
         admin.password = "password"
-        admin.type = EmployeeRole.ADMIN
+        admin.type = EmployeeRole.MANAGER
         employeeRepository.save(admin)
 
         ticket.title = "Can't use the product"

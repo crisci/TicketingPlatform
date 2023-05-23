@@ -24,8 +24,7 @@ class CustomerController(val customerService: CustomerService) {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"] as String?
         val userEmail = token.tokenAttributes["email"] as String?
-        
-        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail\nUser Role: $userRole");
+        return ("Hello User \nUser Name : $userName\nUser Email : $userEmail");
     }
 
 
@@ -60,7 +59,7 @@ class CustomerController(val customerService: CustomerService) {
         }
     }
 
-    @GetMapping("/API/customers/")
+    @GetMapping("/API/customers")
     @ResponseStatus(HttpStatus.OK)
     fun getCustomers() : List<CustomerDTO> {
         return customerService.getCustomers()

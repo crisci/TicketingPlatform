@@ -46,7 +46,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
 
                     var admin: Employee? = null
                     for (h: History in it.history.sorted()) {
-                        if (h.employee == null || h.employee?.type == EmployeeRole.ADMIN) {
+                        if (h.employee == null || h.employee?.type == EmployeeRole.MANAGER) {
                             admin = h.employee
                             break
                         }
@@ -78,7 +78,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
             }.toList()
     }
 
-    override fun getStatus(ticketId: Long, idExpert: Long): TicketStatus {
+    override fun getStatus(ticketId: Long): TicketStatus {
         return ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
             .history.stream().sorted().findFirst().get().state
