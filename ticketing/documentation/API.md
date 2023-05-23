@@ -287,7 +287,7 @@ API
             
         
 
-- GET `/API/tickets/{idExpert}/{ticketId}/status`
+- GET `/API/tickets/{ticketId}/status`
     - Description: Return the current status of the ticket identified by the ticketId
     - Request body: `none`
     - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
