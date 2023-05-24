@@ -47,4 +47,6 @@ class JwtAuthConverter(private val properties: JwtAuthConverterProperties) : Con
                 .collect(Collectors.toSet())
         }
     }
+
 }
+

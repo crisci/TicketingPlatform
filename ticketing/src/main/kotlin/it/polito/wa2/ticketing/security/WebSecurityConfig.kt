@@ -23,6 +23,10 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
             .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**","/API/customers").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/API/customers/email=*","/API/customers").hasAnyRole(MANAGER,EXPERT)
             .requestMatchers(HttpMethod.PUT, "/API/tickets/*/*/stop").hasAnyRole(MANAGER,EXPERT)
+            .requestMatchers(HttpMethod.GET, "/API/messages", "/API/attachments").authenticated()
+            .requestMatchers(HttpMethod.POST, "/API/messages/*/attachments").authenticated()
+            .requestMatchers(HttpMethod.PUT, "/API/messages/*").authenticated()
+            .anyRequest().permitAll()
         http.oauth2ResourceServer()
             .jwt()
             .jwtAuthenticationConverter(jwtAuthConverter)
@@ -35,4 +39,6 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
         const val EXPERT = "Expert"
         const val CLIENT = "Client"
     }
+
 }
+
