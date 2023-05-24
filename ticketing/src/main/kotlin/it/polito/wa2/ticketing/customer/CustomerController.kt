@@ -47,6 +47,7 @@ class CustomerController(val customerService: CustomerService) {
 
     @GetMapping("/API/customers/email={email}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Expert", "ROLE_Manager")
     fun getCustomerByEmail(@PathVariable email: String) : CustomerDTO? {
         if (emailValidator.checkEmail(email)) {
             if(customerService.getCustomerByEmail(email.lowercase()) == null)
@@ -56,12 +57,6 @@ class CustomerController(val customerService: CustomerService) {
         } else {
             throw InvalidEmailFormatException("Invalid email format")
         }
-    }
-
-    @GetMapping("/API/customers")
-    @ResponseStatus(HttpStatus.OK)
-    fun getCustomers() : List<CustomerDTO> {
-        return customerService.getCustomers()
     }
 
     @PostMapping("/API/customers")

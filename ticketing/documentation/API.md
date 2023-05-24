@@ -14,7 +14,7 @@ API
 - GET `/API/customers/{idCustomer}/tickets`
     - Description: Return the list of all tickets related to the customerId.
     - Request body: `none`
-    - Response status: `200 Success`, `400 Bad Request`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response status: `200 Success`, `400 Bad Request`,`401 Unathorized`, `403 Forbidden`,`404 Not Found` ,`503 Internal Server Error` (generic server error).
     - Response body:
                   
           [
@@ -38,7 +38,7 @@ API
 - GET `/API/customers/{idCustomer}/tickets/{idTicket}/messages`
     - Description: Return the list of all the messages related to the ticketId opened by the customer with customerId
     - Request body: `none`
-    - Response status: `200 Success`, `400 Bad Request`, `404 Not Found` ,`503 Internal Server Error`
+    - Response status: `200 Success`, `400 Bad Request`,`401 Unathorized`, `403 Forbidden`,, `404 Not Found` ,`503 Internal Server Error`
     - Response body:
     
 
@@ -72,7 +72,7 @@ API
 - GET `/API/customers/`
     - Description: Return the list of all the customers
     - Request body: `none`
-    - Response status:  `200 Success`, `503 Internal Server Error`
+    - Response status:  `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
 
                 [
@@ -92,7 +92,7 @@ API
 - GET `/API/customers/email={email}`
     - Description: Return the customer that has the email passed
     - Request body: none
-    - Response status:  `200 Success`, `400 Bad Request`, `404 Not Found` ,`503 Internal Server Error`
+    - Response status:  `200 Success`, `400 Bad Request`, `401 Unathorized`, `403 Forbidden`,`404 Not Found` ,`503 Internal Server Error`
     - Response body:
  
             {
@@ -104,6 +104,27 @@ API
                "address": "Location",
                "phone_number": "00000000000"
             }              
+
+- GET `/API/customer/tickets`
+    - Description: It is used from the customer identified by the customerId to open a ticket.
+    - Request body: `none`
+    - Response status: `201 Created`, `404 Not Found`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
+    - Response body:   
+            
+            [
+                {
+                    "dateTime": "2017-05-06T11:08:48",
+                    "title": "Title",
+                    "description": "Description",
+                    "priority": "HIGH",
+                    "product": {
+                        "ean": "1",
+                        "name": "iPad",
+                        "brand": "Apple"
+                    }
+                },
+                ...
+            ]
 
 - POST `/API/customers`
     - Description: Used to register a new customer inside the system
@@ -120,11 +141,11 @@ API
                 },
                 "password": "12345678"
             }
-    - Response status:  `201 Created`, `400 Bad Request`, `503 Internal Server Error`
+    - Response status:  `201 Created`, `400 Bad Request`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body: `none`
 
 
-- POST `/API/customer/{idCustomer}/tickets`
+- POST `/API/customer/tickets`
     - Description: It is used from the customer identified by the customerId to open a ticket.
     - Request body: 
     
@@ -140,27 +161,9 @@ API
                 }
             }
 
-    - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `201 Created`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
     - Response body: `none`
 
-- PUT `/API/customers/{email}`
-    - Description: It update the customer information if the given password match the previous one
-    - Request body: 
-
-            {
-                "customer": {
-                    "first_name": "Name",
-                    "last_name": "Surname",
-                    "email": "aa1111@polito.it",
-                    "dob": "2000-05-06",
-                    "address": "Location",
-                    "phone_number": "00000000000"
-                },
-                "password": "12345678"
-            }
-
-    - Response status:  `201 Created`, `400 Bad Request`, `503 Internal Server Error`
-    - Response body: `none`
 
 
 ### __Managers API__
@@ -168,7 +171,7 @@ API
 - GET `/API/manager/tickets?status={status}`
   - Description: Return all the tickets with the given status
   - Request body: `none`
-  - Response status: `200 Success`, `400 Bad Request`, `500 Internal Server Error`
+  - Response status: `200 Success`, `400 Bad Request`,`401 Unathorized`, `403 Forbidden`, `500 Internal Server Error`
   - Response Body: 
             
         [
@@ -190,7 +193,7 @@ API
 - GET `/API/manager/customers?id={idCustomer}`
     - Description: Return the customer with the given id.
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
     - Response body:
 
           
@@ -208,7 +211,7 @@ API
 - GET `/API/manager/expert?id={idExpert}`
     - Description: Return the expert with the given id.
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response status: `200 Success`, `401 Unathorized`, `401 Unathorized`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
     - Response body:
 
           
@@ -223,7 +226,7 @@ API
 - GET `/API/manager/experts/`
     - Description: Return the list with all the experts.
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response status: `200 Success`, `401 Unathorized`,`401 Unathorized`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
     - Response body:
 
           
@@ -239,7 +242,7 @@ API
 - GET `/API/manager/tickets//{ticketId}/messages`
     - Description: Return all the messages for the given ticket identified by the ticketId
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`,`404 Not Found`, `500 Internal Server Error`
     - Response body:
 
              [
@@ -258,7 +261,7 @@ API
 - GET `/API/produtcs/`
     - Description: Return all the products registered
     - Request body: `none`
-    - Response status: `200 Success`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
 
             [
@@ -272,7 +275,7 @@ API
 - GET `/API/products/{productId}`
     - Description: Return the information related to the product that has the productId provided
     - Request body: `none`
-    - Response status: `200 Success`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
             
             {
@@ -284,7 +287,7 @@ API
 - GET `/API/products/{productId}/tickets`
     - Description: return all the tickets related to the product that has the productId provided
     - Request body: `none`
-    - Response status: `200 Success`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
             
             [
@@ -306,9 +309,9 @@ API
 
 ### __Tickets API__
 - GET `/API/tickets/{idCustomer}`
-    - Description: It return all the tickets related to the idCustomer provided
+    - Description: It returns all the tickets related to the idCustomer provided
     - Request body: `none`
-    - Response status: `200 Success`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
 
             [
@@ -330,7 +333,7 @@ API
 - GET `/API/tickets/{idCustomer}/messages`
     - Description: Return all the tickets with the list of messages associated to the idCustomer
     - Request body: `none`
-    - Response status: `200 Success`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
 
             [
@@ -365,7 +368,7 @@ API
 - GET `/API/tickets/{idExpert}/{ticketId}/messages`
     - Description: Return all the messages sent by the given expert identified by the idExpert for the given ticket identified by the ticketId
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `200 Success`,`401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body:
 
              [
@@ -383,7 +386,7 @@ API
 - GET `/API/tickets/{idExpert}/{ticketId}/status`
     - Description: Return the current status of the ticket identified by the ticketId
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body:
         
                 "IN_PROGESS"
@@ -407,31 +410,31 @@ API
                 "expert": 1
             }
 
-    - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `201 Created`, `401 Unathorized`, `401 Unathorized`, `404 Not Found`, `503 Internal Server Error`
     - Response body: `none`
 
 - PUT `/API/tickets/{idTicket}/resolved`
     - Description: It set the status of the ticket to resolved.
     - Request body: `none`
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `202 Accepted`, `403 Forbidden`, `401 Unathorized`, `404 Not Found`, `503 Internal Server Error`
     - Response body: `none`
 
 - PUT `/API/tickets/{idTicket}/reopen`
     - Description: It set the status of the ticket to reopen.
     - Request body: `none`
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
 - PUT `/API/tickets/{idExpert}/{idTicket}/stop`
     - Description: It is used by the expert identified by idExpert to stop the ticket and make it opened again and reassignable to another expert.
     - Request body: `none`
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
 - PUT `/API/tickets/{idExpert}/{ticketId}/close` 
     - Description: It is used by the expert identified by idExpert to close the ticket
     - Request body: `none`
-    - Response status: `204 No Content`, 
+    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
 
@@ -439,7 +442,7 @@ API
 - GET `/API/messages/{messageId}/attachments`
     - Description: Returns all the attachments given the messageId
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `401 Unathorized`, `404 Not Found`, `503 Internal Server Error`
     - Response body:
 
              [
@@ -452,7 +455,7 @@ API
 - GET `/API/messages?ticket={idTicket}`
     - Description: Return all the tickets with the given status
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response Body: 
 
             [
@@ -468,7 +471,7 @@ API
 - GET `/API/attachments?id={idAttachment}`
     - Description: Return the attachment visualizable in image format
     - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response Body:    
 
             image.jpeg
@@ -483,7 +486,7 @@ API
                 "attachment": MultipartFile
             ]
 
-    - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `201 Created`, `401 Unathorized`, `403 Forbidden`,`404 Not Found`, `503 Internal Server Error`
     - Response body: `none`
 
 - PUT `/API/messages/{messageId}`
@@ -494,5 +497,5 @@ API
                 "message": "Message body"
             }
 
-  - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+  - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
   - Response body: `none`
