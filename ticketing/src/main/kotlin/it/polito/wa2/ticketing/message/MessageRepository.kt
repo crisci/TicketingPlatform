@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface MessageRepository: JpaRepository<Message, Long> {
 
-    fun findMessagesByTicketId(ticketId: Long): Set<Message>
+    fun findMessagesByTicketId(ticketId: Long): List<Message>
 
 }

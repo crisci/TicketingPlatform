@@ -10,6 +10,7 @@ import it.polito.wa2.ticketing.utils.EntityBase
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
+import org.springframework.beans.factory.annotation.Autowired
 
 @Entity
 @Table(name = "tickets")
