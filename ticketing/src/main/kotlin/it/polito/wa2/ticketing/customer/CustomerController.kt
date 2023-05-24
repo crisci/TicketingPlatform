@@ -67,35 +67,17 @@ class CustomerController(val customerService: CustomerService) {
 
     @PostMapping("/API/customers")
     @ResponseStatus(HttpStatus.CREATED)
-    fun postCustomer(@RequestBody customerWithPasswordDTO: CustomerWithPasswordDTO) {
-        if(customerWithPasswordDTO.customer.email.isNotBlank() && customerWithPasswordDTO.customer.first_name.isNotBlank() && customerWithPasswordDTO.customer.last_name.isNotBlank()) {
-            if (emailValidator.checkEmail(customerWithPasswordDTO.customer.email)) {
-                if(customerWithPasswordDTO.password.length >= 8) {
-                    customerService.insertCustomer(customerWithPasswordDTO)
-                } else{
-                throw PasswordTooShortException("Password must be at least 8 characters long")
-            }} else {
+    fun postCustomer(@RequestBody customerDTO: CustomerDTO) {
+        if(customerDTO.email.isNotBlank() && customerDTO.first_name.isNotBlank() && customerDTO.last_name.isNotBlank()) {
+            if (emailValidator.checkEmail(customerDTO.email)) {
+                    customerService.insertCustomer(customerDTO)
+                } else {
                 throw InvalidEmailFormatException("Invalid email format")
             }} else {
             throw BlankFieldsException("Fields must not be blank")
         }
     }
 
-    @PutMapping("/API/customers/{email}") @Transactional
-    @ResponseStatus(HttpStatus.CREATED)
-    fun putCustomer(@RequestBody customerWithPasswordDTO: CustomerWithPasswordDTO, @PathVariable(name = "email") email: String) {
-        if(customerWithPasswordDTO.customer.email.isNotBlank() && customerWithPasswordDTO.customer.first_name.isNotBlank() && customerWithPasswordDTO.customer.last_name.isNotBlank()) {
-            if (emailValidator.checkEmail(customerWithPasswordDTO.customer.email)) {
-                if(customerWithPasswordDTO.password.length >= 8 ) {
-                    customerService.updateCustomer(customerWithPasswordDTO, email.lowercase())
-                } else {
-                    throw PasswordTooShortException("Password must be at least 8 characters long")
-                }} else {
-                throw InvalidEmailFormatException("Invalid email format")
-            }} else {
-            throw BlankFieldsException("Fields must not be blank")
-        }
-    }
 
 
 }

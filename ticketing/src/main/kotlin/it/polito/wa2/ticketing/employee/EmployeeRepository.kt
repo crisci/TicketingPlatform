@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface EmployeeRepository: JpaRepository<Employee, Long> {
+interface EmployeeRepository: JpaRepository<Employee, UUID> {
 
-    fun findByIdAndType(idExpert: Long, type: EmployeeRole): Optional<Employee>
+    fun findByIdAndType(idExpert: UUID, type: EmployeeRole): Optional<Employee>
 }

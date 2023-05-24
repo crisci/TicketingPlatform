@@ -15,7 +15,6 @@ interface CustomerService {
 
     fun getCustomers() : List<CustomerDTO>
 
-    fun insertCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO)
+    fun insertCustomer(customerDTO: CustomerDTO)
 
-    fun updateCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO, email: String)
 }

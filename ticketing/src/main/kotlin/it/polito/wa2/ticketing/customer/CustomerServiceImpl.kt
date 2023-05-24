@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service
 
 @Service @Transactional
 class CustomerServiceImpl(private val repository: CustomerRepository): CustomerService {
-     override fun getCustomer(id: Long): CustomerDTO? {
+    override fun getCustomer(id: Long): CustomerDTO? {
         return repository.findById(id).orElseThrow {
             CustomerNotFoundException("Customer not found with the following id '${id}'")
         }
             .toDTO()
-     }
+    }
 
     override fun getCustomerTickets(id: Long): Set<TicketDTO>? {
         return repository.findById(id).orElseThrow {
@@ -38,44 +38,22 @@ class CustomerServiceImpl(private val repository: CustomerRepository): CustomerS
         return repository.findAll().map { it.toDTO() }
     }
 
-    override fun insertCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO) {
-        if(repository.findByEmail(customerWithPasswordDTO.customer.email) != null)
-            throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
-        repository.save(Customer()
-            .create(customerWithPasswordDTO.customer.first_name,
-                customerWithPasswordDTO.customer.last_name,
-                customerWithPasswordDTO.customer.email,
-                customerWithPasswordDTO.customer.dob!!,
-                customerWithPasswordDTO.password,
-                customerWithPasswordDTO.customer.address,
-                customerWithPasswordDTO.customer.phone_number))
+    override fun insertCustomer(customerDTO: CustomerDTO) {
+        if (repository.findByEmail(customerDTO.email) != null)
+            throw DuplicatedEmailException("${customerDTO.email.lowercase()} is already used")
+        repository.save(
+            Customer()
+                .create(
+                    customerDTO.first_name,
+                    customerDTO.last_name,
+                    customerDTO.email,
+                    customerDTO.dob!!,
+                    customerDTO.address,
+                    customerDTO.phone_number
+                )
+        )
     }
+}
 
 
-    //the body of the request must contain all the fields
-    override fun updateCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO, email: String) {
-        println(repository.findByEmail(email)?.password)
-            if (repository.findByEmail(email.lowercase()) != null) {
-                if (customerWithPasswordDTO.password == repository.findByEmail(email)?.password) {
-                if (repository.findByEmail(customerWithPasswordDTO.customer.email.lowercase()) == null) {
-                    val profileToUpdate: Customer? = repository
-                        .findByEmail(email)
-                        ?.also {
-                            it.email = customerWithPasswordDTO.customer.email
-                            it.first_name = customerWithPasswordDTO.customer.first_name
-                            it.last_name = customerWithPasswordDTO.customer.last_name
-                            it.phone_number = customerWithPasswordDTO.customer.phone_number
-                            it.address = customerWithPasswordDTO.customer.address
-                            it.dob = customerWithPasswordDTO.customer.dob
-                        }
-                    repository.save(profileToUpdate!!)
-                } else {
-                    throw DuplicatedEmailException("${customerWithPasswordDTO.customer.email.lowercase()} is already used")
-                }} else {
-                    throw PasswordMismatchException("The password is not correct")
-                }} else {
-                throw CustomerNotFoundException("Customer not fount with the following email '${email.lowercase()}'")
-            }
-        }
 
-    }

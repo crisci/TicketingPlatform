@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Service @Transactional
 class TicketServiceImpl(private val ticketRepository: TicketRepository,
@@ -39,7 +40,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketDTO() }.toSet()
     }
 
-    override fun reassignTicket(ticketId: Long, idExpert: Long) {
+    override fun reassignTicket(ticketId: Long, idExpert: UUID) {
         ticketRepository.findById(ticketId).ifPresentOrElse(
             {
                 if (historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().state != TicketStatus.OPEN) {
@@ -61,7 +62,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         ticketRepository.flush()
     }
 
-    override fun closeTicket(ticketId: Long, idExpert: Long) {
+    override fun closeTicket(ticketId: Long, idExpert: UUID) {
         val expert = employeeRepository.findByIdOrNull(idExpert)!!
         ticketRepository.findById(ticketId).ifPresentOrElse(
             { it.addHistory(History().create(TicketStatus.CLOSED, LocalDateTime.now(), it, expert)); ticketRepository.save(it) },
@@ -69,7 +70,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         ticketRepository.flush()
     }
 
-    override fun getMessages(ticketId: Long, idExpert: Long): List<MessageDTO> {
+    override fun getMessages(ticketId: Long, idExpert: UUID): List<MessageDTO> {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         return employeeRepository.findByIdOrNull(idExpert)!!.listOfMessages.stream()
@@ -187,7 +188,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
 
     }
 
-    override fun assignTicket(idTicket: Long, idExpert: Long, priorityLevel: PriorityLevel) {
+    override fun assignTicket(idTicket: Long, idExpert: UUID, priorityLevel: PriorityLevel) {
         val ticket = ticketRepository.findById(idTicket)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val expert = employeeRepository.findByIdAndType(idExpert,EmployeeRole.EXPERT)

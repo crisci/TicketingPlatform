@@ -12,7 +12,7 @@ import java.util.*
 
 @Entity
 @Table(name="employees")
-class Employee: EntityBase<Long>() {
+class Employee: EntityBase<UUID>() {
     @NotNull
     var first_name: String = ""
     @NotNull
@@ -20,7 +20,6 @@ class Employee: EntityBase<Long>() {
     @Column(unique = true)
     @NotNull
     var email: String = ""
-    var password: String = ""
     @Enumerated(EnumType.ORDINAL)
     var type: EmployeeRole = EmployeeRole.EXPERT
     @JsonManagedReference
