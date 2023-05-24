@@ -44,18 +44,18 @@ class ManagerController(
         return managerService.getExperts()
     }
 
-    @PutMapping("/API/manager/tickets/{idTicket}/assign")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @Secured("ROLE_Manager")
-    fun ticketAssign(@PathVariable idTicket: Long, @RequestParam("expert") idExpert: UUID, @RequestParam("priority") priorityLevel: PriorityLevel) {
-        managerService.assignTicket(idTicket, idExpert, priorityLevel)
-    }
-
     @GetMapping("/API/manager/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Manager")
     fun getTicketsWithMessagesByCustomerId(@PathVariable idTicket: Long): List<MessageDTO>? {
         return managerService.getTicketMessages(idTicket)
+    }
+
+    @PutMapping("/API/manager/tickets/{idTicket}/assign")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_Manager")
+    fun ticketAssign(@PathVariable idTicket: Long, @RequestParam("expert") idExpert: UUID, @RequestParam("priority") priorityLevel: PriorityLevel) {
+        managerService.assignTicket(idTicket, idExpert, priorityLevel)
     }
 
 

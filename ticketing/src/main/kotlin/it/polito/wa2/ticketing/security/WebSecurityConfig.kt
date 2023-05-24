@@ -28,7 +28,7 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
             .requestMatchers(HttpMethod.PUT, "/API/messages/*").authenticated()
             .requestMatchers(HttpMethod.GET, "/API/manager/tickets").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/API/manager/customers").hasRole(MANAGER)
-            .requestMatchers(HttpMethod.GET, "/API/manager/experts**").hasRole(MANAGER)
+            .requestMatchers(HttpMethod.GET, "/API/manager/experts","/API/manager/experts/").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/API/manager/tickets/*/messages").hasRole(MANAGER)
             .requestMatchers(HttpMethod.PUT, "/API/manager/tickets/*/assign").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/API/customers/tickets").hasRole(CLIENT)

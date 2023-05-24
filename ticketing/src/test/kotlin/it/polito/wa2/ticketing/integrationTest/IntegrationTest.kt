@@ -103,7 +103,6 @@ class IntegrationTest {
         customer.last_name = "Bertorelle"
         customer.email = "email@gmail.com"
         customer.dob = LocalDate.of(1998,9,13)
-        customer.password = "password"
         customer.address = "Via Rivalta"
         customer.phone_number = "3466088800"
         customerRepository.save(customer)
@@ -116,13 +115,11 @@ class IntegrationTest {
         expert.first_name = "Francesca"
         expert.last_name = "Ferritti"
         expert.email = "myemail@gmail.com"
-        expert.password = "password"
         employeeRepository.save(expert)
 
         admin.first_name = "Giulio"
         admin.last_name = "Rossetti"
         admin.email = "myemail2@gmail.com"
-        admin.password = "password"
         admin.type = EmployeeRole.MANAGER
         employeeRepository.save(admin)
 
@@ -233,7 +230,6 @@ class IntegrationTest {
             first_name = "Luigi"
             last_name = "Crisci"
             email = "xyz@xyz.it"
-            password = "password"
             dob = LocalDate.of(1998,9,13)
             address = "Via Rivalta"
             phone_number = "0000000000"
@@ -258,7 +254,6 @@ class IntegrationTest {
             first_name = "Giorgio"
             last_name = "P"
             email = "giorgio.p@polito.i"
-            password = "password"
             type = EmployeeRole.EXPERT
         }
         employeeRepository.save(expert)
@@ -305,7 +300,6 @@ class IntegrationTest {
             first_name = "Daniel"
             last_name = "Panaite"
             email = "dani@polito.it"
-            password = "password"
             dob = LocalDate.of(1998,9,15)
             address = "Via Po"
             phone_number = "0000000000"
@@ -330,7 +324,6 @@ class IntegrationTest {
             first_name = "Mario"
             last_name = "Antonio"
             email = "mario.anto@polito.it"
-            password = "password"
             type = EmployeeRole.EXPERT
         }
         employeeRepository.save(expert)

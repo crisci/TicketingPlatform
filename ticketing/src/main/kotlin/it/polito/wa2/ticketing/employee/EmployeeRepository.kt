@@ -8,5 +8,6 @@ import java.util.*
 @Repository
 interface EmployeeRepository: JpaRepository<Employee, UUID> {
 
+    fun findByType(type: EmployeeRole): List<Employee>
     fun findByIdAndType(idExpert: UUID, type: EmployeeRole): Optional<Employee>
 }

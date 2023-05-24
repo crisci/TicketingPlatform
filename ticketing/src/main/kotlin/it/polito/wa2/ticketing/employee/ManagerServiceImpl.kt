@@ -51,7 +51,7 @@ class ManagerServiceImpl(
     }
 
     override fun getExperts(): List<EmployeeDTO?>{
-        return employeeRepository.findAll().map { it.toEmployeeDTO() }
+        return employeeRepository.findByType(EmployeeRole.EXPERT).map { it.toEmployeeDTO() }
     }
 
 

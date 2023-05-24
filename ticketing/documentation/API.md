@@ -10,23 +10,6 @@ API
 ## __API Server__
 
 ### __Customers API__
-- GET `/API/customers/id={idCustomer}`
-    - Description: Return the list with all the customer and the information related to the ticket that he/she has opened.
-    - Request body: `none`
-    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
-    - Response body:
-
-          [
-            {
-              "id": 1,
-              "first_name": "Name",
-              "last_name": "Surname",
-              "email": "email@polito.it",
-              "dob": "2000-05-06",
-              "address": "Location",
-              "phone_number": "00000000000",
-              }
-            ]
 
 - GET `/API/customers/{idCustomer}/tickets`
     - Description: Return the list of all tickets related to the customerId.
@@ -140,6 +123,26 @@ API
     - Response status:  `201 Created`, `400 Bad Request`, `503 Internal Server Error`
     - Response body: `none`
 
+
+- POST `/API/customer/{idCustomer}/tickets`
+    - Description: It is used from the customer identified by the customerId to open a ticket.
+    - Request body: 
+    
+            {
+                "dateTime": "2017-05-06T11:08:48",
+                "title": "Title",
+                "description": "Description",
+                "priority": "HIGH",
+                "product": {
+                    "ean": "1",
+                    "name": "iPad",
+                    "brand": "Apple"
+                }
+            }
+
+    - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
+
 - PUT `/API/customers/{email}`
     - Description: It update the customer information if the given password match the previous one
     - Request body: 
@@ -158,6 +161,96 @@ API
 
     - Response status:  `201 Created`, `400 Bad Request`, `503 Internal Server Error`
     - Response body: `none`
+
+
+### __Managers API__
+
+- GET `/API/manager/tickets?status={status}`
+  - Description: Return all the tickets with the given status
+  - Request body: `none`
+  - Response status: `200 Success`, `400 Bad Request`, `500 Internal Server Error`
+  - Response Body: 
+            
+        [
+            {
+                "id": 1,
+                "dateTime": "2017-05-06T11:08:48",
+                "title": "Title",
+                "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "priority": "MEDIUM",
+                "product": {
+                    "ean": "1",
+                    "name": "iPad",
+                    "brand": "Apple"
+                }
+            },
+            ...
+        ]
+
+- GET `/API/manager/customers?id={idCustomer}`
+    - Description: Return the customer with the given id.
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response body:
+
+          
+            {
+              "id": 1,
+              "first_name": "Name",
+              "last_name": "Surname",
+              "email": "email@polito.it",
+              "dob": "2000-05-06",
+              "address": "Location",
+              "phone_number": "00000000000",
+              }
+            
+
+- GET `/API/manager/expert?id={idExpert}`
+    - Description: Return the expert with the given id.
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response body:
+
+          
+             {
+                "id": "28bcc4db-ac83-49be-9cb8-b231b869a1a4",
+                "first_name": "Expert",
+                "last_name": "2",
+                "email": "expert2@ticketing.com",
+                "type": "EXPERT"
+            }
+
+- GET `/API/manager/experts/`
+    - Description: Return the list with all the experts.
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
+    - Response body:
+
+          
+             {
+                "id": "28bcc4db-ac83-49be-9cb8-b231b869a1a4",
+                "first_name": "Expert",
+                "last_name": "2",
+                "email": "expert2@ticketing.com",
+                "type": "EXPERT"
+            }
+
+
+- GET `/API/manager/tickets//{ticketId}/messages`
+    - Description: Return all the messages for the given ticket identified by the ticketId
+    - Request body: `none`
+    - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
+    - Response body:
+
+             [
+                {
+                    "id": 1,
+                    "body": "Text",
+                    "date": "2023-05-07T20:53:23",
+                    "expert": "28bcc4db-ac83-49be-9cb8-b231b869a1a4"
+                },
+                ...
+            ]
 
 
 ### __Products API__
@@ -287,35 +380,13 @@ API
             
         
 
-- GET `/API/tickets/{ticketId}/status`
+- GET `/API/tickets/{idExpert}/{ticketId}/status`
     - Description: Return the current status of the ticket identified by the ticketId
     - Request body: `none`
     - Response status: `200 Success`, `404 Not Found`, `500 Internal Server Error`
     - Response body:
         
                 "IN_PROGESS"
-
-- GET `/API/tickets/status={status}`
-  - Description: Return all the tickets with the given status
-  - Request body: `none`
-  - Response status: `200 Success`, `400 Bad Request`, `500 Internal Server Error`
-  - Response Body: 
-            
-        [
-            {
-                "id": 1,
-                "dateTime": "2017-05-06T11:08:48",
-                "title": "Title",
-                "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-                "priority": "MEDIUM",
-                "product": {
-                    "ean": "1",
-                    "name": "iPad",
-                    "brand": "Apple"
-                }
-            },
-            ...
-        ]
 
 
 - POST `/API/tickets/{idTicket}/messages`
@@ -334,25 +405,6 @@ API
                 "date": "2023-05-07T20:53:23.000000",
                 "listOfAttachment": [],
                 "expert": 1
-            }
-
-    - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
-    - Response body: `none`
-
-- POST `/API/tickets/{idCustomer}`
-    - Description: It is used from the customer identified by the customerId to open a ticket.
-    - Request body: 
-    
-            {
-                "dateTime": "2017-05-06T11:08:48",
-                "title": "Title",
-                "description": "Description",
-                "priority": "HIGH",
-                "product": {
-                    "ean": "1",
-                    "name": "iPad",
-                    "brand": "Apple"
-                }
             }
 
     - Response status: `201 Created`, `404 Not Found`, `503 Internal Server Error`
@@ -380,12 +432,6 @@ API
     - Description: It is used by the expert identified by idExpert to close the ticket
     - Request body: `none`
     - Response status: `204 No Content`, 
-    - Response body: `none`
-
-- PUT `/API/tickets/{idTicket}/assign?expert={idExpert}&priority={priorityLevel}`
-    - Description: It is used by the expert identified by idExpert to close the ticket
-    - Request body: `none`
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
 
