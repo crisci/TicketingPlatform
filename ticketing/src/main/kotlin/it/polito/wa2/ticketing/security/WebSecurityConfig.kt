@@ -16,7 +16,10 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
     @Bean
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.authorizeHttpRequests()
+        http.csrf().disable()
+	    .authorizeHttpRequests()
+            .requestMatchers(HttpMethod.GET, "/API/login").permitAll()
+            .requestMatchers(HttpMethod.POST, "/API/login").permitAll()
             .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**","/API/customers").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/API/customers/email=*","/API/customers").hasAnyRole(MANAGER,EXPERT)
             .requestMatchers(HttpMethod.PUT, "/API/tickets/*/*/stop").hasAnyRole(MANAGER,EXPERT)
