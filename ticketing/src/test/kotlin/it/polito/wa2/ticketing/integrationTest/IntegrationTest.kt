@@ -202,14 +202,14 @@ class IntegrationTest {
         assert(employeeRepository.findByIdOrNull(expertId) == expert)
         assert(employeeRepository.findByIdOrNull(adminId) == admin)
 
-        val tIt = ticketService.getMessages(ticketId,expertId).iterator()
+        ticketService.getMessages(ticketId,expertId).iterator()
         assertThrows<TicketNotFoundException> {
             ticketService.getMessages(ticketId.inc(),expertId)
         }
 
-        assert(ticketService.getStatus(ticketId,expertId) == TicketStatus.IN_PROGRESS)
+        assert(ticketService.getStatus(ticketId) == TicketStatus.IN_PROGRESS)
         assertThrows<TicketNotFoundException> {
-            ticketService.getStatus(ticketId.inc(),expertId)
+            ticketService.getStatus(ticketId.inc())
         }
 
         assertThrows<TicketNotFoundException> {
