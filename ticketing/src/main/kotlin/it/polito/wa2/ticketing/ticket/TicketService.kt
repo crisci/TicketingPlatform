@@ -8,9 +8,8 @@ import java.util.UUID
 
 interface TicketService {
     fun getTicketsWithMessagesByCustomerId(customerId: UUID): Set<TicketWithMessagesDTO>?
-    fun reassignTicket(ticketId: Long, idExpert: UUID)
-    fun closeTicket(ticketId: Long, idExpert: UUID)
-    fun getMessages(ticketId: Long, idExpert: UUID): List<MessageDTO>
+    fun closeTicket(ticketId: Long)
+    fun getMessages(ticketId: Long): List<MessageDTO>
     fun getStatus(ticketId: Long): TicketStatus
     fun resolveTicket(ticketId: Long)
     fun reopenTicket(ticketId: Long)

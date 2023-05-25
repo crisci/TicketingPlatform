@@ -22,32 +22,21 @@ class TicketController(val ticketService: TicketService) {
         return ticketService.getTicketsWithMessagesByCustomerId(idCustomer)
     }
 
-    @PutMapping("/API/tickets/{idExpert}/{ticketId}/stop")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketMakeReassignable(@PathVariable("idExpert") idExpert: UUID, @PathVariable("ticketId") ticketId: Long) {
-        //ToDo("check the idExpert")
-        return ticketService.reassignTicket(ticketId, idExpert)
-    }
-
-    @PutMapping("/API/tickets/{idExpert}/{ticketId}/close")
+    @PutMapping("/API/tickets/{ticketId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    //shared user and expert
-    fun ticketClosing(@PathVariable("idExpert") idExpert: UUID, @PathVariable("ticketId") ticketId: Long) {
-        return ticketService.closeTicket(ticketId, idExpert)
+    fun ticketClosing(@PathVariable("ticketId") ticketId: Long) {
+        return ticketService.closeTicket(ticketId)
     }
 
-    @GetMapping("/API/tickets/{idExpert}/{ticketId}/messages")
+    @GetMapping("/API/tickets/{ticketId}/messages")
     @ResponseStatus(HttpStatus.OK)
-    //shared user and expert
-    fun getMessages(@PathVariable("idExpert") idExpert : UUID, @PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
-        return ticketService.getMessages(ticketId, idExpert)
+    fun getMessages(@PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
+        return ticketService.getMessages(ticketId)
     }
 
     @GetMapping("/API/tickets/{ticketId}/status")
     @ResponseStatus(HttpStatus.OK)
-    //shared user and expert
     fun getStatus(@PathVariable("ticketId") ticketId: Long): TicketStatus {
-        //ToDo("check the idExpert")
         return ticketService.getStatus(ticketId)
     }
 

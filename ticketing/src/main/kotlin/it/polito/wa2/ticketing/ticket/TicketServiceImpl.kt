@@ -9,6 +9,7 @@ import it.polito.wa2.ticketing.employee.ExpertNotFoundException
 import it.polito.wa2.ticketing.history.*
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageDTO
+import it.polito.wa2.ticketing.message.MessageRepository
 import it.polito.wa2.ticketing.message.toDTO
 import it.polito.wa2.ticketing.product.ProductNotFoundException
 import it.polito.wa2.ticketing.product.ProductRepository
@@ -26,7 +27,8 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
                         private val employeeRepository: EmployeeRepository,
                         private val historyRepository: HistoryRepository,
                         private val customerRepository: CustomerRepository,
-                        private val productRepository: ProductRepository
+                        private val productRepository: ProductRepository,
+                        private val messageRepository: MessageRepository
 ): TicketService {
     override fun getTicketsWithMessagesByCustomerId(customerId: UUID): Set<TicketWithMessagesDTO> {
         if(!customerRepository.existsById(customerId))
@@ -34,41 +36,17 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketWithMessagesDTO() }.toSet()
     }
 
-    override fun reassignTicket(ticketId: Long, idExpert: UUID) {
-        ticketRepository.findById(ticketId).ifPresentOrElse(
-            {
-                if (historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().state != TicketStatus.OPEN) {
-
-                    var admin: Employee? = null
-                    for (h: History in it.history.sorted()) {
-                        if (h.employee == null || h.employee?.type == EmployeeRole.MANAGER) {
-                            admin = h.employee
-                            break
-                        }
-                    }
-                    it.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), it, admin))
-                    ticketRepository.save(it)
-                } else {
-                    throw OperationNotPermittedException("The ticket is still open!")
-                }
-            },
-            { throw TicketNotFoundException("The specified ticket has not been found!") })
-        ticketRepository.flush()
-    }
-
-    override fun closeTicket(ticketId: Long, idExpert: UUID) {
-        val expert = employeeRepository.findByIdOrNull(idExpert)!!
+    override fun closeTicket(ticketId: Long) {
+        val expert = historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().employee
         ticketRepository.findById(ticketId).ifPresentOrElse(
             { it.addHistory(History().create(TicketStatus.CLOSED, LocalDateTime.now(), it, expert)); ticketRepository.save(it) },
             { throw TicketNotFoundException("The specified ticket has not been found!") })
         ticketRepository.flush()
     }
 
-    override fun getMessages(ticketId: Long, idExpert: UUID): List<MessageDTO> {
-        val ticket = ticketRepository.findById(ticketId)
-            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
-        return employeeRepository.findByIdOrNull(idExpert)!!.listOfMessages.stream()
-            .filter { it.ticket == ticket }.sorted().map {
+    override fun getMessages(ticketId: Long): List<MessageDTO> {
+        return messageRepository.findMessagesByTicketId(ticketId).stream()
+            .sorted().map {
                 it.toDTO()
             }.toList()
     }
