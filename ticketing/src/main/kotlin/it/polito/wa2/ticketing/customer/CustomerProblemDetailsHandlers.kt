@@ -39,6 +39,11 @@ class CustomerProblemDetailHandlers: ResponseEntityExceptionHandler() {
     fun handlePasswordTooShort(e: PasswordTooShortException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
 
+    @ExceptionHandler(LoginErrorException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleLoginError(e: LoginErrorException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
 }
 
 class CustomerNotFoundException(override val message:String?) : RuntimeException()
@@ -47,3 +52,4 @@ class InvalidEmailFormatException(override val message: String?) : RuntimeExcept
 class BlankFieldsException(override val message: String?) : RuntimeException()
 class PasswordMismatchException(override val message: String?) : RuntimeException()
 class PasswordTooShortException(override val message: String?) : RuntimeException()
+class LoginErrorException(override val message: String?) : RuntimeException()

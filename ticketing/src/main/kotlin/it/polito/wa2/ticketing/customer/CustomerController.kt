@@ -34,11 +34,13 @@ class CustomerController(val customerService: CustomerService) {
         requestBody.add("client_id", "authN")
         requestBody.add("username", credentials["username"])
         requestBody.add("password", credentials["password"])
-
-        val requestEntity = HttpEntity(requestBody, headers)
-        val responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
-
-        return responseEntity.body ?: "Error occurred during login."
+        try {
+            val requestEntity = HttpEntity(requestBody, headers)
+            val responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
+            return responseEntity.body.toString()
+        } catch (e: Exception) {
+            throw LoginErrorException("Error during login")
+        }
     }
 
     @GetMapping("/API/customers/email={email}")
