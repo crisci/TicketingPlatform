@@ -20,7 +20,7 @@ class ProductController(private val productService: ProductService) {
         return productService.getTickets(productId)
     }
 
-    @GetMapping("/API/products/")
+    @GetMapping("/API/products")
     @ResponseStatus(HttpStatus.OK)
     fun getAllProducts() : List<ProductDTO> {
         return productService.getAllProducts()

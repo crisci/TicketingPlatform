@@ -18,4 +18,8 @@ interface CustomerService {
     fun insertCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO)
 
     fun updateCustomer(customerWithPasswordDTO: CustomerWithPasswordDTO, email: String)
+
+    fun resolveTicket(ticketId: Long)
+
+    fun reopenTicket(ticketId: Long)
 }

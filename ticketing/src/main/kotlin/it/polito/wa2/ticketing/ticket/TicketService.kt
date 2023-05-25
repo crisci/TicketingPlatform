@@ -1,6 +1,5 @@
 package it.polito.wa2.ticketing.ticket
 
-import it.polito.wa2.ticketing.history.HistoryDTO
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
@@ -14,8 +13,6 @@ interface TicketService {
     fun getStatus(ticketId: Long): TicketStatus
     fun addMessage(idTicket: Long, message: MessageDTO)
     fun addTicket(ticket: TicketDTO, idCustomer: Long)
-    fun resolveTicket(ticketId: Long)
-    fun reopenTicket(ticketId: Long)
     fun assignTicket(idTicket: Long, idExpert: Long, priorityLevel: PriorityLevel)
     fun getTicketsByStatus(status: TicketStatus?): Set<TicketDTO?>
 
