@@ -155,7 +155,45 @@ API
     - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
+### __Experts API__
 
+- GET `/API/expert/tickets`
+    - Description: Return all the tickets associated to the idExpert
+    - Request body:
+
+          {
+              "expert": "expertUUID"
+          }
+
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
+    - Response body:
+
+            [
+                  {
+                      "id": 1,
+                      "dateTime": "2017-05-06T11:08:48",
+                      "title": "Title",
+                      "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                      "priority": "MEDIUM",
+                      "product": {
+                          "ean": "1",
+                          "name": "iPad",
+                          "brand": "Apple"
+                      }
+                  },
+                  ...
+            ]
+
+- PUT `/API/expert/{ticketId}/stop`
+    - Description: It is used by the expert to change the ticket status to stopped given the ticketId
+    - Request body:
+
+          {
+              "expert": "expertUUID"
+          }
+
+    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+    - Response body: `none`
 
 ### __Managers API__
 
@@ -230,7 +268,7 @@ API
             }
 
 
-- GET `/API/manager/tickets//{ticketId}/messages`
+- GET `/API/manager/tickets/{ticketId}/messages`
     - Description: Return all the messages for the given ticket identified by the ticketId
     - Request body: `none`
     - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`,`404 Not Found`, `500 Internal Server Error`
@@ -304,7 +342,7 @@ API
                 ...
             ]
 
-- POST /API/products
+- POST `/API/products`
     - Description: Adds a product
     - Request body: 
 
@@ -314,10 +352,10 @@ API
                 "brand": "Apple"
             }
 
-    - Response status: 201 Created, 401 Unathorized, 403 Forbidden,404 Not Found, 503 Internal Server Error
-    - Response body: none
+    - Response status: `201 Created`, `401 Unathorized`, `403 Forbidden`,`404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
 
-- PUT /API/products/{productId}
+- PUT `/API/products/{productId}`
     - Description: Updates a product given its fields
     - Request body: 
 
@@ -327,14 +365,14 @@ API
                 "brand": "Apple"
             }
 
-    - Response status: 202 Accepted, 401 Unathorized, 403 Forbidden, 404 Not Found, 503 Internal Server Error
-    - Response body: none
+    - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
 
-- DELETE /API/products/{productId}
+- DELETE `/API/products/{productId}`
     - Description: Deletes a product
-    - Request body: none
-    - Response status: 204 No Content, 401 Unathorized, 403 Forbidden, 404 Not Found, 503 Internal Server Error
-    - Response body: none
+    - Request body: `none`
+    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
 
 ### __Tickets API__
 - GET `/API/tickets/{idCustomer}/messages`
