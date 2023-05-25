@@ -163,10 +163,25 @@ class CustomerServiceImpl(
     }
 
     override fun closeTicket(ticketId: Long) {
-        ticketRepository.findById(ticketId).ifPresentOrElse(
-            { it.addHistory(History().create(TicketStatus.CLOSED, LocalDateTime.now(), it, null)); ticketRepository.save(it) },
-            { throw TicketNotFoundException("The specified ticket has not been found!") })
-        ticketRepository.flush()
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+        val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
+        if (lastTicketHistory.isNotEmpty()) {
+            if (lastTicketHistory.first().state != TicketStatus.CLOSED) {
+                ticket.addHistory(
+                    History().create(
+                        TicketStatus.CLOSED,
+                        LocalDateTime.now(),
+                        ticket,
+                        null
+                    )
+                )
+            } else {
+                throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
+            }
+        } else {
+            throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+        }
     }
 
 }
