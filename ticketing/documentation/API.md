@@ -304,6 +304,37 @@ API
                 ...
             ]
 
+- POST /API/products
+    - Description: Adds a product
+    - Request body: 
+
+            {
+                "ean": "1",
+                "name": "iPad",
+                "brand": "Apple"
+            }
+
+    - Response status: 201 Created, 401 Unathorized, 403 Forbidden,404 Not Found, 503 Internal Server Error
+    - Response body: none
+
+- PUT /API/products/{productId}
+    - Description: Updates a product given its fields
+    - Request body: 
+
+            {
+                "ean": "1",
+                "name": "iPad",
+                "brand": "Apple"
+            }
+
+    - Response status: 202 Accepted, 401 Unathorized, 403 Forbidden, 404 Not Found, 503 Internal Server Error
+    - Response body: none
+
+- DELETE /API/products/{productId}
+    - Description: Deletes a product
+    - Request body: none
+    - Response status: 204 No Content, 401 Unathorized, 403 Forbidden, 404 Not Found, 503 Internal Server Error
+    - Response body: none
 
 ### __Tickets API__
 - GET `/API/tickets/{idCustomer}`
