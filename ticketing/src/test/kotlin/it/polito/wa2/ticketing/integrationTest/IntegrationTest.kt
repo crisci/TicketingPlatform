@@ -6,6 +6,7 @@ import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
+import it.polito.wa2.ticketing.employee.ExpertService
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryRepository
 import it.polito.wa2.ticketing.history.OperationNotPermittedException
@@ -70,6 +71,8 @@ class IntegrationTest {
     lateinit var ticketService: TicketService
     @Autowired
     lateinit var messageService: MessageService
+    @Autowired
+    lateinit var expertService: ExpertService
 
     var customer: Customer = Customer()
     var product: Product = Product()
@@ -199,9 +202,9 @@ class IntegrationTest {
         assert(employeeRepository.findByIdOrNull(expertId) == expert)
         assert(employeeRepository.findByIdOrNull(adminId) == admin)
 
-        ticketService.getMessages(ticketId,expertId).iterator()
+        ticketService.getMessages(ticketId).iterator()
         assertThrows<TicketNotFoundException> {
-            ticketService.getMessages(ticketId.inc(),expertId)
+            ticketService.getMessages(ticketId.inc())
         }
 
         assert(ticketService.getStatus(ticketId) == TicketStatus.IN_PROGRESS)
@@ -210,17 +213,17 @@ class IntegrationTest {
         }
 
         assertThrows<TicketNotFoundException> {
-            ticketService.reassignTicket(ticketId.inc(),expertId)
+            expertService.reassignTicket(ticketId.inc(),expertId)
         }
-        ticketService.reassignTicket(ticketId,expertId)
+        expertService.reassignTicket(ticketId,expertId)
         assertThrows<OperationNotPermittedException> {
-            ticketService.reassignTicket(ticketId,expertId)
+            expertService.reassignTicket(ticketId,expertId)
         }
 
         assertThrows<TicketNotFoundException> {
-            ticketService.closeTicket(ticketId.inc(),expertId)
+            ticketService.closeTicket(ticketId.inc())
         }
-        ticketService.closeTicket(ticketId,expertId)
+        ticketService.closeTicket(ticketId)
     }
 
     @Test

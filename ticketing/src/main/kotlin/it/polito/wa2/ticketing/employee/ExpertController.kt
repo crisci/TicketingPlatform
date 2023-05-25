@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.employee
 
+import it.polito.wa2.ticketing.ticket.TicketDTO
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
@@ -10,7 +11,7 @@ class ExpertController(val expertService: ExpertService) {
     @GetMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Secured("ROLE_Expert")
-    fun getAssignedTickets(@RequestParam("expert") idExpert: UUID){
+    fun getAssignedTickets(@RequestParam("expert") idExpert: UUID) : List<TicketDTO>{
         return expertService.getTickets(idExpert)
     }
     @PutMapping("/API/expert/{ticketId}/stop")
