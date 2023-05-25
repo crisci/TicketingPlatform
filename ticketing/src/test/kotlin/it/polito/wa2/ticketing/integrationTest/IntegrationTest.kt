@@ -4,6 +4,7 @@ import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentRepository
 import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.customer.CustomerRepository
+import it.polito.wa2.ticketing.customer.CustomerService
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import it.polito.wa2.ticketing.employee.ExpertService
@@ -73,6 +74,9 @@ class IntegrationTest {
     lateinit var messageService: MessageService
     @Autowired
     lateinit var expertService: ExpertService
+    @Autowired
+    lateinit var customerService: CustomerService
+
 
     var customer: Customer = Customer()
     var product: Product = Product()
@@ -283,7 +287,7 @@ class IntegrationTest {
         historyRepository.save(history1)
 
         assertThrows<OperationNotPermittedException> {
-            ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+            customerService.resolveTicket(ticket.toTicketDTO().id!!)
         }
 
         history1.apply {
@@ -291,7 +295,7 @@ class IntegrationTest {
         }
         historyRepository.save(history1)
         assertThrows<OperationNotPermittedException> {
-            ticketService.resolveTicket(ticket.toTicketDTO().id!!)
+            customerService.resolveTicket(ticket.toTicketDTO().id!!)
         }
 
         customerRepository.flush()
