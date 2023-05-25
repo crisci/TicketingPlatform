@@ -103,4 +103,11 @@ class CustomerController(val customerService: CustomerService) {
         customerService.reopenTicket(idTicket)
     }
 
+    @PutMapping("/API/customers/tickets/{idTicket}/close")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_Customer")
+    fun ticketClose(@PathVariable idTicket: Long) {
+        customerService.reopenTicket(idTicket)
+    }
+
 }

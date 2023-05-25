@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="65487852-32e2-4262-abaf-4cbc52040b31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/documentation/API.md" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/documentation/API.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerServiceImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/security/WebSecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/security/WebSecurityConfig.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

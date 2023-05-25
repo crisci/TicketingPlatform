@@ -22,4 +22,6 @@ interface CustomerService {
     fun resolveTicket(ticketId: Long)
 
     fun reopenTicket(ticketId: Long)
+
+    fun closeTicket(ticketId: Long)
 }

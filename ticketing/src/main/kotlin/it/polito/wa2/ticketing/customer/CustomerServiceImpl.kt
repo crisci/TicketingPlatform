@@ -162,4 +162,11 @@ class CustomerServiceImpl(
         }
     }
 
+    override fun closeTicket(ticketId: Long) {
+        ticketRepository.findById(ticketId).ifPresentOrElse(
+            { it.addHistory(History().create(TicketStatus.CLOSED, LocalDateTime.now(), it, null)); ticketRepository.save(it) },
+            { throw TicketNotFoundException("The specified ticket has not been found!") })
+        ticketRepository.flush()
+    }
+
 }
