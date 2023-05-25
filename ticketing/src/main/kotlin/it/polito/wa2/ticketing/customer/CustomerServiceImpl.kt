@@ -131,7 +131,6 @@ class CustomerServiceImpl(
                     val newTicket = Ticket()
                         .create(ticket.title, ticket.description, PriorityLevel.NOT_ASSIGNED, it, product) // Priority level assigned by the admin
                     newTicket.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), newTicket, null))
-                    //TODO: Setted by the admin -> newTicket.addHistory(History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), newTicket, null))
                     it.addTicket(newTicket)
                 },
                 { throw CustomerNotFoundException("The specified customer has not been found!") }

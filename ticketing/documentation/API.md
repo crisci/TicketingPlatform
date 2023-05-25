@@ -155,45 +155,12 @@ API
     - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
-### __Experts API__
-
-- GET `/API/expert/tickets`
-    - Description: Return all the tickets associated to the idExpert
-    - Request body:
-
-          {
-              "expert": "expertUUID"
-          }
-
-    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
-    - Response body:
-
-            [
-                  {
-                      "id": 1,
-                      "dateTime": "2017-05-06T11:08:48",
-                      "title": "Title",
-                      "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-                      "priority": "MEDIUM",
-                      "product": {
-                          "ean": "1",
-                          "name": "iPad",
-                          "brand": "Apple"
-                      }
-                  },
-                  ...
-            ]
-
-- PUT `/API/expert/{ticketId}/stop`
-    - Description: It is used by the expert to change the ticket status to stopped given the ticketId
-    - Request body:
-
-          {
-              "expert": "expertUUID"
-          }
-
-    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+- PUT `/API/customers/tickets//{ticketId}/close` 
+    - Description: It is used by the customer to close the ticket
+    - Request body: `none`
+    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
+
 
 ### __Managers API__
 
@@ -243,7 +210,8 @@ API
     - Response status: `200 Success`, `401 Unathorized`, `401 Unathorized`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
     - Response body:
 
-            {
+          
+             {
                 "id": "28bcc4db-ac83-49be-9cb8-b231b869a1a4",
                 "first_name": "Expert",
                 "last_name": "2",
@@ -257,7 +225,8 @@ API
     - Response status: `200 Success`, `401 Unathorized`,`401 Unathorized`, `404 Not Found` ,`503 Internal Server Error` (generic server error).
     - Response body:
 
-            {
+          
+             {
                 "id": "28bcc4db-ac83-49be-9cb8-b231b869a1a4",
                 "first_name": "Expert",
                 "last_name": "2",
@@ -266,7 +235,7 @@ API
             }
 
 
-- GET `/API/manager/tickets/{ticketId}/messages`
+- GET `/API/manager/tickets//{ticketId}/messages`
     - Description: Return all the messages for the given ticket identified by the ticketId
     - Request body: `none`
     - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`,`404 Not Found`, `500 Internal Server Error`
@@ -369,14 +338,14 @@ API
 - DELETE `/API/products/{productId}`
     - Description: Deletes a product
     - Request body: none
-    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found, 503 Internal Server Error`
+    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
     - Response body: none
 
 ### __Tickets API__
 - GET `/API/tickets/{idCustomer}`
     - Description: It returns all the tickets related to the idCustomer provided
     - Request body: `none`
-    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
     - Response body:
 
             [
@@ -428,31 +397,9 @@ API
                 },
                 ...
             ]
+        
 
-- PUT `/API/tickets/{ticketId}/close`
-    - Description: It is used to close the ticket
-    - Request body: `none`
-    - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
-    - Response body: `none`
-
-- GET `/API/tickets/{ticketId}/messages`
-    - Description: Return all the messages associated to the ticketId
-    - Request body: `none`
-    - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
-    - Response body:
-
-          [
-              {
-                  "id": 1,
-                  "body": "Text",
-                  "date": "2023-05-07T20:53:23",
-                  "listOfAttachment": [],
-                  "expert": 1,
-              },
-              ...
-          ]
-
-- GET `/API/tickets/{ticketId}/status`
+- GET `/API/tickets/{idExpert}/{ticketId}/status`
     - Description: Return the current status of the ticket identified by the ticketId
     - Request body: `none`
     - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
@@ -494,14 +441,14 @@ API
     - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
-- PUT `/API/tickets/{idExpert}/{idTicket}/stop`
+- PUT `/API/tickets/{idTicket}/stop`
     - Description: It is used by the expert identified by idExpert to stop the ticket and make it opened again and reassignable to another expert.
     - Request body: `none`
     - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
-- PUT `/API/tickets/{idExpert}/{ticketId}/close` 
-    - Description: It is used by the expert identified by idExpert to close the ticket
+- PUT `/API/tickets//{ticketId}/close` 
+    - Description: It is used close the ticket
     - Request body: `none`
     - Response status: `204 No Content`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
