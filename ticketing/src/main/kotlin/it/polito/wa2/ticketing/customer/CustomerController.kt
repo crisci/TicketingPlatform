@@ -57,25 +57,6 @@ class CustomerController(val customerService: CustomerService) {
         }
     }
 
-    @PostMapping("/API/customers")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun postCustomer(@RequestBody customerDTO: CustomerDTO) {
-        if(customerDTO.email.isNotBlank() && customerDTO.first_name.isNotBlank() && customerDTO.last_name.isNotBlank()) {
-            if (emailValidator.checkEmail(customerDTO.email)) {
-                    customerService.insertCustomer(customerDTO)
-                } else {
-                throw InvalidEmailFormatException("Invalid email format")
-            }} else {
-            throw BlankFieldsException("Fields must not be blank")
-        }
-    }
-
-    @PostMapping("/API/customers/tickets/{idTicket}/messages")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
-        customerService.addMessage(idTicket, message)
-    }
-
     @GetMapping("/API/customers/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Customer")
@@ -100,15 +81,24 @@ class CustomerController(val customerService: CustomerService) {
         customerService.addTicket(ticket, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
+    @PostMapping("/API/customers/tickets/{idTicket}/messages")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_Customer")
+    fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
+        customerService.addMessage(idTicket, message)
+    }
+
 
     @PutMapping("/API/customers/tickets/{idTicket}/resolved")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_Customer")
     fun ticketResolved(@PathVariable idTicket: Long) {
         customerService.resolveTicket(idTicket)
     }
 
     @PutMapping("/API/customers/tickets/{idTicket}/reopen")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_Customer")
     fun ticketReopen(@PathVariable idTicket: Long) {
         customerService.reopenTicket(idTicket)
     }

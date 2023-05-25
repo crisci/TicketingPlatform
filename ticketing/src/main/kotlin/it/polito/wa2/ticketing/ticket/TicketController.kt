@@ -3,6 +3,7 @@ package it.polito.wa2.ticketing.ticket
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,6 +16,7 @@ class TicketController(val ticketService: TicketService) {
 
     @GetMapping("/API/tickets/{idCustomer}/messages")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Manager")
     fun getTicketsWithMessagesByCustomerId(@PathVariable idCustomer: UUID): Set<TicketWithMessagesDTO>? {
         return ticketService.getTicketsWithMessagesByCustomerId(idCustomer)
     }

@@ -11,7 +11,7 @@ API
 
 ### __Customers API__
 
-- GET `/API/customers/{idCustomer}/tickets`
+- GET `/API/customers/tickets`
     - Description: Return the list of all tickets related to the customerId.
     - Request body: `none`
     - Response status: `200 Success`, `400 Bad Request`,`401 Unathorized`, `403 Forbidden`,`404 Not Found` ,`503 Internal Server Error` (generic server error).
@@ -35,7 +35,7 @@ API
                     
 
 
-- GET `/API/customers/{idCustomer}/tickets/{idTicket}/messages`
+- GET `/API/customers/tickets/{idTicket}/messages`
     - Description: Return the list of all the messages related to the ticketId opened by the customer with customerId
     - Request body: `none`
     - Response status: `200 Success`, `400 Bad Request`,`401 Unathorized`, `403 Forbidden`,, `404 Not Found` ,`503 Internal Server Error`
@@ -69,26 +69,6 @@ API
             ]
 
 
-- GET `/API/customers/`
-    - Description: Return the list of all the customers
-    - Request body: `none`
-    - Response status:  `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
-    - Response body:
-
-                [
-                    {
-                        "id": 1,
-                        "first_name": "Name",
-                        "last_name": "Surname",
-                        "email": "email@polito.it",
-                        "dob": "2000-05-06",
-                        "address": "Location",
-                        "phone_number": "00000000000"
-                    },
-                    ...
-                ]
-
-
 - GET `/API/customers/email={email}`
     - Description: Return the customer that has the email passed
     - Request body: none
@@ -105,7 +85,7 @@ API
                "phone_number": "00000000000"
             }              
 
-- GET `/API/customer/tickets`
+- GET `/API/customers/tickets`
     - Description: It is used from the customer identified by the customerId to open a ticket.
     - Request body: `none`
     - Response status: `201 Created`, `404 Not Found`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
@@ -126,26 +106,8 @@ API
                 ...
             ]
 
-- POST `/API/customers`
-    - Description: Used to register a new customer inside the system
-    - Request body: 
 
-            {
-                "customer": {
-                    "first_name": "Name",
-                    "last_name": "Surname",
-                    "email": "aa@polito.it",
-                    "dob": "2000-05-06",
-                    "address": "Location",
-                    "phone_number": "00000000000"
-                },
-                "password": "12345678"
-            }
-    - Response status:  `201 Created`, `400 Bad Request`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
-    - Response body: `none`
-
-
-- POST `/API/customer/tickets`
+- POST `/API/customers/tickets`
     - Description: It is used from the customer identified by the customerId to open a ticket.
     - Request body: 
     
@@ -162,6 +124,35 @@ API
             }
 
     - Response status: `201 Created`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
+
+
+- POST `/API/customers/tickets/{idTicket}/messages`
+    - Description: It is used to send the message for the given ticket identified by idTicket
+    - Request body: 
+
+            {
+                "body": "Text body",
+                "date": "2023-05-07T20:53:23.000000",
+                "listOfAttachment": [],
+                "expert": null
+            }
+    
+    - Response status: `201 Created`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
+
+
+- PUT `/API/customers/tickets/{idTicket}/resolved`
+    - Description: It set the status of the ticket to resolved.
+    - Request body: `none`
+    - Response status: `202 Accepted`, `403 Forbidden`, `401 Unathorized`, `404 Not Found`, `503 Internal Server Error`
+    - Response body: `none`
+
+
+- PUT `/API/customers/tickets/{idTicket}/reopen`
+    - Description: It set the status of the ticket to reopen.
+    - Request body: `none`
+    - Response status: `202 Accepted`, `401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
     - Response body: `none`
 
 
@@ -255,6 +246,13 @@ API
                 ...
             ]
 
+- PUT `/API/tickets/{idTicket}/assign?expert={idExpert}&priority={priorityLevel}`
+    - Description: It is used by the manager to assign the ticket to an expert
+    - Request body: `none`
+    - Response status: `202 Accepted`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
+    - Response body: `none`
+
+
 
 ### __Products API__
  
@@ -284,7 +282,7 @@ API
                 "brand": "Apple"
             }
 
-- GET `/API/products/{productId}/tickets`
+- GET `/API/products/{productId}/tickets/`
     - Description: return all the tickets related to the product that has the productId provided
     - Request body: `none`
     - Response status: `200 Success`, `401 Unathorized`, `403 Forbidden`, `503 Internal Server Error`
@@ -363,24 +361,6 @@ API
                 },
                 ...
             ]
-            
-
-- GET `/API/tickets/{idExpert}/{ticketId}/messages`
-    - Description: Return all the messages sent by the given expert identified by the idExpert for the given ticket identified by the ticketId
-    - Request body: `none`
-    - Response status: `200 Success`,`401 Unathorized`, `403 Forbidden`, `404 Not Found`, `500 Internal Server Error`
-    - Response body:
-
-             [
-                {
-                    "id": 1,
-                    "body": "Text",
-                    "date": "2023-05-07T20:53:23",
-                    "expert": 1
-                },
-                ...
-            ]
-            
         
 
 - GET `/API/tickets/{idExpert}/{ticketId}/status`

@@ -8,8 +8,11 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/documentation/API.md" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/documentation/API.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerProblemDetailsHandlers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerProblemDetailsHandlers.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/ProductController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/ProductController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/security/WebSecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/security/WebSecurityConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/ticket/TicketController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/ticket/TicketController.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +99,7 @@
       <recent name="$PROJECT_DIR$/ticketing/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.TicketingApplicationTests">
+  <component name="RunManager" selected="Spring Boot.app">
     <configuration name="GetCustomerById" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
