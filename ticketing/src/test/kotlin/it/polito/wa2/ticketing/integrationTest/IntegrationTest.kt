@@ -189,6 +189,7 @@ class IntegrationTest {
     @Test
     fun expertOperatingOnTicketsTest(){
         myInit1()
+
         val ticketId =  ticket.getId()!!
         assert(ticketRepository.findByIdOrNull(ticketId) == ticket)
         val hs = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
@@ -201,6 +202,9 @@ class IntegrationTest {
         val adminId = admin.getId()!!
         assert(employeeRepository.findByIdOrNull(expertId) == expert)
         assert(employeeRepository.findByIdOrNull(adminId) == admin)
+
+        val tickets = expertService.getTickets(expertId)
+        assert(tickets.size == 1)
 
         ticketService.getMessages(ticketId).iterator()
         assertThrows<TicketNotFoundException> {

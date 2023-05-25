@@ -25,18 +25,21 @@ class TicketController(val ticketService: TicketService) {
     @PutMapping("/API/tickets/{ticketId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun ticketClosing(@PathVariable("ticketId") ticketId: Long) {
+        //ToDo("check if the client or the expert that are trying to do this are the right ones")
         return ticketService.closeTicket(ticketId)
     }
 
     @GetMapping("/API/tickets/{ticketId}/messages")
     @ResponseStatus(HttpStatus.OK)
     fun getMessages(@PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
+        //ToDo("check if the client or the expert that are trying to do this are the right ones")
         return ticketService.getMessages(ticketId)
     }
 
     @GetMapping("/API/tickets/{ticketId}/status")
     @ResponseStatus(HttpStatus.OK)
     fun getStatus(@PathVariable("ticketId") ticketId: Long): TicketStatus {
+        //ToDo("check if the client or the expert that are trying to do this are the right ones")
         return ticketService.getStatus(ticketId)
     }
 

@@ -8,7 +8,7 @@ import java.util.*
 
 @RestController
 class ExpertController(val expertService: ExpertService) {
-    @GetMapping
+    @GetMapping("/API/expert/tickets")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Secured("ROLE_Expert")
     fun getAssignedTickets(@RequestParam("expert") idExpert: UUID) : List<TicketDTO>{
