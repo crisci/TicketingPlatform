@@ -19,4 +19,7 @@ interface CustomerService {
     fun addMessage(idTicket: Long, message: MessageDTO)
     fun addTicket(ticket: TicketDTO, idCustomer: UUID)
 
+    fun resolveTicket(ticketId: Long)
+
+    fun reopenTicket(ticketId: Long)
 }

@@ -1,8 +1,6 @@
 package it.polito.wa2.ticketing.ticket
 
-import it.polito.wa2.ticketing.history.HistoryDTO
 import it.polito.wa2.ticketing.message.MessageDTO
-import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
 
 @RestController
@@ -50,20 +47,6 @@ class TicketController(val ticketService: TicketService) {
         //ToDo("check the idExpert")
         return ticketService.getStatus(ticketId)
     }
-
-
-    @PutMapping("/API/tickets/{idTicket}/resolved")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketResolved(@PathVariable idTicket: Long) {
-        ticketService.resolveTicket(idTicket)
-    }
-
-    @PutMapping("/API/tickets/{idTicket}/reopen")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketReopen(@PathVariable idTicket: Long) {
-        ticketService.reopenTicket(idTicket)
-    }
-
 
 
 }

@@ -1,20 +1,16 @@
 package it.polito.wa2.ticketing.customer
 
 import it.polito.wa2.ticketing.message.MessageDTO
-import it.polito.wa2.ticketing.security.JwtAuthConverter
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.utils.EmailValidationUtil
-import jakarta.transaction.Transactional
 import org.springframework.http.*
 import org.springframework.security.access.annotation.Secured
-import org.springframework.security.access.prepost.PreFilter
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
-import java.security.Principal
 import java.util.UUID
 
 
@@ -103,7 +99,16 @@ class CustomerController(val customerService: CustomerService) {
     }
 
 
+    @PutMapping("/API/customers/tickets/{idTicket}/resolved")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun ticketResolved(@PathVariable idTicket: Long) {
+        customerService.resolveTicket(idTicket)
+    }
 
-
+    @PutMapping("/API/customers/tickets/{idTicket}/reopen")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun ticketReopen(@PathVariable idTicket: Long) {
+        customerService.reopenTicket(idTicket)
+    }
 
 }

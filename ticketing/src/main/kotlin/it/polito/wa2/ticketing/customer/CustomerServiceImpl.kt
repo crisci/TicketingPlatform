@@ -1,8 +1,6 @@
 package it.polito.wa2.ticketing.customer
 
 import it.polito.wa2.ticketing.attachment.Attachment
-import it.polito.wa2.ticketing.employee.Employee
-import it.polito.wa2.ticketing.employee.ExpertNotFoundException
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryNotFoundException
 import it.polito.wa2.ticketing.history.HistoryRepository
@@ -17,7 +15,6 @@ import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 
 import jakarta.transaction.Transactional
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -87,9 +84,11 @@ class CustomerServiceImpl(
                             null //if not expert it remains null otherwise it is set
                         )
 
-                        message.listOfAttachments?.map { a -> Attachment().create(
-                            a.attachment, newMessage
-                        ) }?.toMutableSet()?.forEach { a -> newMessage.addAttachment(a) }
+                        message.listOfAttachments?.map { a ->
+                            Attachment().create(
+                                a.attachment, newMessage
+                            )
+                        }?.toMutableSet()?.forEach { a -> newMessage.addAttachment(a) }
 
                         it.addMessage(
                             newMessage
@@ -98,6 +97,28 @@ class CustomerServiceImpl(
                         throw OperationNotPermittedException("The ticket is not in progress!")
                 },
                 { throw TicketNotFoundException("The specified ticket has not been found!") })
+    }
+    override fun resolveTicket(ticketId: Long) {
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+        val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
+        if (lastTicketHistory.isNotEmpty()) {
+            val expert = lastTicketHistory.first().employee
+            if (lastTicketHistory.first().state != TicketStatus.CLOSED && lastTicketHistory.first().state != TicketStatus.RESOLVED) {
+                ticket.addHistory(
+                    History().create(
+                        TicketStatus.RESOLVED,
+                        LocalDateTime.now(),
+                        ticket,
+                        expert //If null than the ticket is closed before than an expert is assigned
+                    )
+                )
+            } else {
+                throw OperationNotPermittedException("This operation is not permitted because the ticket is closed!")
+            }
+        } else {
+            throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+        }
     }
 
 
@@ -117,4 +138,28 @@ class CustomerServiceImpl(
             )
 
     }
+
+    override fun reopenTicket(ticketId: Long) {
+        //Check the last history state related to the ticketId
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+        val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
+        if (lastTicketHistory.isNotEmpty()) {
+            if (lastTicketHistory.first().state == TicketStatus.CLOSED || lastTicketHistory.first().state == TicketStatus.RESOLVED) {
+                ticket.addHistory(
+                    History().create(
+                        TicketStatus.OPEN,
+                        LocalDateTime.now(),
+                        ticket,
+                        null
+                    )
+                )
+            } else {
+                throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
+            }
+        } else {
+            throw HistoryNotFoundException("The history associated to the specified ticket has not been found!")
+        }
+    }
+
 }

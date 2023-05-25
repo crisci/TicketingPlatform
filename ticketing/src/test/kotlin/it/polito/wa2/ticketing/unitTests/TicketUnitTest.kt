@@ -591,7 +591,7 @@ class TicketUnitTest {
             ticketRepository.save(ticket)
             historyRepository.save(history)
 
-            val response = restTemplate.exchange("/API/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, HistoryNotFoundException::class.java)
+            val response = restTemplate.exchange("/API/customers/tickets/${ticket.getId()}/reopen", HttpMethod.PUT, null, HistoryNotFoundException::class.java)
             assert(response.statusCode == HttpStatus.ACCEPTED)
 
             ticketRepository.deleteAll()
