@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
-import it.polito.wa2.ticketing.attachment.AttachmentRepository
-import it.polito.wa2.ticketing.utils.ImageUtil
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 
@@ -23,12 +21,6 @@ class MessageController(val messageService: MessageService) {
     @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>{
         return messageService.getMessageAttachments(messageId)
-    }
-    @PostMapping("/API/messages/{messageId}/attachments")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Expert", "ROLE_Client")
-    fun addAttachments(@PathVariable messageId: Long, @RequestBody attachment: Array<MultipartFile>){
-        messageService.addAttachment(messageId, attachment)
     }
     @GetMapping("/API/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)

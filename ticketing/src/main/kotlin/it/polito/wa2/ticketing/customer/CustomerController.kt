@@ -24,7 +24,7 @@ class CustomerController(val customerService: CustomerService) {
     fun login(@RequestBody credentials: Map<String, String>): String {
         val restTemplate = RestTemplate()
 
-        val url = "http://localhost:8080/realms/ticketing/protocol/openid-connect/token"
+        val url = "http://172.17.0.1:8080/realms/ticketing/protocol/openid-connect/token"
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED

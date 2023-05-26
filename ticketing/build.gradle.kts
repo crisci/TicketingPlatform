@@ -9,6 +9,18 @@ plugins {
 	id("com.google.cloud.tools.jib") version "3.3.1"
 }
 
+jib {
+	from {
+		image = "amazoncorretto:17-alpine"
+	}
+	to {
+		image = "ticketing-spring-api"
+	}
+	container {
+		ports = listOf("8081")
+	}
+}
+
 group = "it.polito.wa2"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -52,16 +64,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-jib {
-	from {
-		image = "amazoncorretto:17-alpine"
-	}
-	to {
-		image = "ticketing-spring-api"
-	}
-	container {
-		ports = listOf("8081")
-	}
 }
