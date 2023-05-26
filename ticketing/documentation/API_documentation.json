@@ -1278,10 +1278,10 @@
             "type": "string",
             "format": "uuid"
           },
-          "first_name": {
+          "firstName": {
             "type": "string"
           },
-          "last_name": {
+          "lastName": {
             "type": "string"
           },
           "email": {
@@ -1295,7 +1295,7 @@
           "address": {
             "type": "string"
           },
-          "phone_number": {
+          "phoneNumber": {
             "type": "string"
           }
         }
@@ -1373,11 +1373,11 @@
             "format": "uuid",
             "description": "The ID of the employee (optional)"
           },
-          "first_name": {
+          "firstName": {
             "type": "string",
             "description": "The first name of the employee"
           },
-          "last_name": {
+          "lastName": {
             "type": "string",
             "description": "The last name of the employee"
           },

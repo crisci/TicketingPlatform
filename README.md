@@ -1,7 +1,8 @@
 ## DOCUMENTATION:
-    - can be found in "WA-G16.ticketing.documentation":
-        - API.md
-        - Data Layer Design.mdj
+Can be found in "WA-G16.ticketing.documentation":
+   
+    API_documentation.json
+    Data Layer Design.mdj
 ## RUN THE SERVER
 Start a valid Postgress container with: 
 - url = jdbc:postgresql://localhost:5432/postgres

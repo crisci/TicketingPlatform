@@ -44,13 +44,6 @@ class MessageController(val messageService: MessageService) {
         return messageService.getMessagesByIdTickets(idTicket)
     }
 
-    @PostMapping("/API/messages/{messageId}/attachments")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Expert", "ROLE_Client")
-    fun addAttachments(@PathVariable messageId: Long, @RequestBody attachment: Array<MultipartFile>){
-        messageService.addAttachment(messageId, attachment)
-    }
-
     @PutMapping("/API/messages/{messageId}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Expert", "ROLE_Client")

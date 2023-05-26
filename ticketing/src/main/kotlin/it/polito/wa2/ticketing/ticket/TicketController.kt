@@ -31,6 +31,7 @@ class TicketController(val ticketService: TicketService) {
 
     @GetMapping("/API/tickets/{ticketId}/messages")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Client", "ROLE_Manager", "ROLE_Expert")
     fun getMessages(@PathVariable("ticketId") ticketId : Long): List<MessageDTO> {
         //ToDo("check if the client or the expert that are trying to do this are the right ones")
         return ticketService.getMessages(ticketId)
@@ -38,6 +39,7 @@ class TicketController(val ticketService: TicketService) {
 
     @GetMapping("/API/tickets/{ticketId}/status")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Client", "ROLE_Manager", "ROLE_Expert")
     fun getStatus(@PathVariable("ticketId") ticketId: Long): TicketStatus {
         //ToDo("check if the client or the expert that are trying to do this are the right ones")
         return ticketService.getStatus(ticketId)

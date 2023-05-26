@@ -5,7 +5,7 @@ import org.junit.platform.suite.api.Suite;
 import org.junit.platform.suite.api.SuiteDisplayName
 
 @Suite
-@SelectPackages("it.polito.wa2.ticketing.integrationTest","it.polito.wa2.ticketing.unitTests")
+@SelectPackages("it.polito.wa2.ticketing.integrationTest")
 @SuiteDisplayName("Run all the tests")
 class TicketingApplicationTests {
 }

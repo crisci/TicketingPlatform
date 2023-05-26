@@ -6,13 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="65487852-32e2-4262-abaf-4cbc52040b31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/0e3dfa78-6486-4961-9d5e-41e2517fb276.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0e3dfa78-6486-4961-9d5e-41e2517fb276.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0e3dfa78-6486-4961-9d5e-41e2517fb276/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0e3dfa78-6486-4961-9d5e-41e2517fb276/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerDTO.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerDTO.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerServiceImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/EmployeeDTO.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/EmployeeDTO.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/resources/customers.csv" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/resources/customers.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/resources/employees.csv" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/resources/employees.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/documentation/API_documentation.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/documentation/API_documentation.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/message/MessageController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/message/MessageController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/ticket/TicketController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/ticket/TicketController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/TicketingApplicationTests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/TicketingApplicationTests.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/integrationTest/IntegrationTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/integrationTest/IntegrationTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/unitTests/CustomerUnitTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/unitTests/TicketUnitTest.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +77,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/crisci/Projects/WA2-G16/ticketing/src/main/resources/employees.csv",
+    "last_opened_file_path": "/home/crisci/Desktop/WA2-G16",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -100,7 +102,7 @@
       <recent name="$PROJECT_DIR$/ticketing/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.app">
+  <component name="RunManager" selected="Gradle.TicketingApplicationTests">
     <configuration name="IntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -228,13 +230,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="SwaggerCodegen">
+      <option name="activeConfigurationType" value="FILE" />
+      <option name="configurationPath" value="" />
+      <option name="customJreEnabled" value="false" />
+      <option name="customTemplatesPath" value="" />
+      <option name="enableDebugLogging" value="false" />
+      <option name="generateToPath" value="$PROJECT_DIR$/gen" />
+      <option name="generationParameters">
+        <list />
+      </option>
+      <option name="generatorPath" value="https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.0.0/openapi-generator-cli-5.0.0.jar" />
+      <option name="jdkPath" value="" />
+      <option name="language" value="java" />
+      <option name="specificationPath" value="$PROJECT_DIR$/ticketing/documentation/API_documentation.json" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.IntegrationTest.expertOperatingOnTicketsTest" />
+        <item itemvalue="Gradle.TicketingApplicationTests" />
         <item itemvalue="Gradle.IntegrationTest" />
+        <item itemvalue="Gradle.IntegrationTest.expertOperatingOnTicketsTest" />
         <item itemvalue="Gradle.IntegrationTest.messageSendedCorrectly" />
         <item itemvalue="Gradle.IntegrationTest.ticketAssignedCorrectly" />
-        <item itemvalue="Gradle.TicketingApplicationTests" />
       </list>
     </recent_temporary>
   </component>
@@ -255,22 +273,12 @@
       <workItem from="1684785032019" duration="3217000" />
       <workItem from="1685033878938" duration="2213000" />
       <workItem from="1685044489255" duration="315000" />
+      <workItem from="1685089365764" duration="649000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/integrationTest/IntegrationTest.kt</url>
-          <line>209</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

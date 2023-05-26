@@ -91,6 +91,7 @@ class IntegrationTest {
     var message2: Message = Message()
     var attachment: Attachment = Attachment()
 
+
     fun myInit1() {
         customerRepository.deleteAll()
         productRepository.deleteAll()
@@ -300,11 +301,11 @@ class IntegrationTest {
             customerService.resolveTicket(ticket.toTicketDTO().id!!)
         }
 
-        customerRepository.flush()
-        productRepository.flush()
-        ticketRepository.flush()
-        historyRepository.flush()
-        employeeRepository.flush()
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        ticketRepository.deleteAll()
+        historyRepository.deleteAll()
+        employeeRepository.deleteAll()
     }
 
     @Test
@@ -392,11 +393,11 @@ class IntegrationTest {
             messageService.addAttachment(message2.getId()!!.inc(), arrayOf(MockMultipartFile("attachment", "Meow".toByteArray())))
         }
 
-        customerRepository.flush()
-        productRepository.flush()
-        ticketRepository.flush()
-        historyRepository.flush()
-        employeeRepository.flush()
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        ticketRepository.deleteAll()
+        historyRepository.deleteAll()
+        employeeRepository.deleteAll()
     }
 
     @Test
