@@ -65,6 +65,13 @@ class CustomerController(val customerService: CustomerService) {
         return customerService.getTicketsWithMessagesByCustomerId(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), idTicket)
     }
 
+    @PostMapping("/API/customers/tickets/{idTicket}/messages")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_Customer")
+    fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
+        customerService.addMessage(idTicket, message)
+    }
+
     @GetMapping("/API/customers/tickets")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Customer")
@@ -80,14 +87,6 @@ class CustomerController(val customerService: CustomerService) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.addTicket(ticket, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
-
-    @PostMapping("/API/customers/tickets/{idTicket}/messages")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Customer")
-    fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
-        customerService.addMessage(idTicket, message)
-    }
-
 
     @PutMapping("/API/customers/tickets/{idTicket}/resolved")
     @ResponseStatus(HttpStatus.ACCEPTED)
