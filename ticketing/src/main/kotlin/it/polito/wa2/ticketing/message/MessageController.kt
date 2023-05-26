@@ -39,8 +39,6 @@ class MessageController(val messageService: MessageService) {
         return messageService.getMessagesByIdTickets(idTicket)
     }
 
-
-
     @PostMapping("/API/messages/{messageId}/attachments")
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_Expert", "ROLE_Client")

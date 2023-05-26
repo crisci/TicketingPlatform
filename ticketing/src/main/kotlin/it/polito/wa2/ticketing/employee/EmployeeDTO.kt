@@ -13,7 +13,6 @@ data class EmployeeDTO(
     val type: EmployeeRole? = null,
 )
 
-
 fun Employee.toEmployeeDTO(): EmployeeDTO {
     return EmployeeDTO(getId(),first_name,last_name,email,type)
 }

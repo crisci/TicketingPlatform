@@ -23,6 +23,7 @@ class TicketController(val ticketService: TicketService) {
 
     @PutMapping("/API/tickets/{ticketId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_Client", "ROLE_Manager")
     fun ticketClosing(@PathVariable("ticketId") ticketId: Long) {
         //ToDo("check if the client or the expert that are trying to do this are the right ones")
         return ticketService.closeTicket(ticketId)
