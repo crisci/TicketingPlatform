@@ -24,7 +24,12 @@ class MessageController(val messageService: MessageService) {
     fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>{
         return messageService.getMessageAttachments(messageId)
     }
-
+    @PostMapping("/API/messages/{messageId}/attachments")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_Expert", "ROLE_Client")
+    fun addAttachments(@PathVariable messageId: Long, @RequestBody attachment: Array<MultipartFile>){
+        messageService.addAttachment(messageId, attachment)
+    }
     @GetMapping("/API/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
@@ -37,15 +42,6 @@ class MessageController(val messageService: MessageService) {
     @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     fun getMessagesByIdTickets(@RequestParam("ticket") idTicket: Long): List<MessageDTO?> {
         return messageService.getMessagesByIdTickets(idTicket)
-    }
-
-
-
-    @PostMapping("/API/messages/{messageId}/attachments")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Expert", "ROLE_Client")
-    fun addAttachments(@PathVariable messageId: Long, @RequestBody attachment: Array<MultipartFile>){
-        messageService.addAttachment(messageId, attachment)
     }
 
     @PutMapping("/API/messages/{messageId}")
