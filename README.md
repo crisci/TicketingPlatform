@@ -10,15 +10,21 @@ Start a valid Postgress container with:
 - password = postgres
 - port = 5432
 
+When creating the docker container with jib the ip of docker must be provided instead of localhost
+#### NOTE: ip in the application.properties and in the login API must be modified according to the ip of the docker container
+
 Server (named:ticketing) run on port: 8081, commands to run:
 - enter in the folder: .../WA-G16/ticketing
 - build:
  
       on linux: ./gradlew
             [on windows: gradlew.bat]
-            docker run -d --name ticketing-spring-api -p 8081:8081 ticketing-spring-api
-      run:
-          docket start ticketing-spring-api
+- build server docker image with jib: 
+      
+      ./gradlew jibDockerBuild
+- run the container:
+
+      docker run -d --name ticketing-spring-api -p 8081:8081 ticketing-spring-api
 
 ## RUN THE TEST
 Enter in the folder: .../WA-G16/ticketing
