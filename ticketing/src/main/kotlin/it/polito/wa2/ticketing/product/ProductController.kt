@@ -16,30 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 class ProductController(private val productService: ProductService) {
 
 
-    @GetMapping("/API/products/")
+    @GetMapping("/API/products")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Manager")
     fun getAllProducts() : List<ProductDTO> {
         return productService.getAllProducts()
     }
-
-    @GetMapping("/API/products/{productId}")
-    @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Manager")
-    fun getProductById(@PathVariable("productId") productId:String) : ProductDTO {
-        if(productService.getProduct(productId)!=null)
-            return productService.getProduct(productId)!!
-        else
-            throw ProductNotFoundException("No element found with specified id!")
-    }
-
-    @GetMapping("/API/products/{productId}/tickets/")
-    @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Manager")
-    fun findTicketsByProductId(@PathVariable productId: Long): List<TicketDTO>? {
-        return productService.getTickets(productId)
-    }
-
     @PostMapping("/API/products")
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_Manager")
@@ -51,7 +33,15 @@ class ProductController(private val productService: ProductService) {
             throw BlankFieldsException("Fields cannot be black")
         }
     }
-
+    @GetMapping("/API/products/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Manager")
+    fun getProductById(@PathVariable("productId") productId:String) : ProductDTO {
+        if(productService.getProduct(productId)!=null)
+            return productService.getProduct(productId)!!
+        else
+            throw ProductNotFoundException("No element found with specified id!")
+    }
     @PutMapping("/API/products/{productId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Secured("ROLE_Manager")
@@ -67,7 +57,6 @@ class ProductController(private val productService: ProductService) {
             throw BlankFieldsException("Fields cannot be black")
         }
     }
-
     @DeleteMapping("/API/products/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_Manager")
@@ -78,5 +67,10 @@ class ProductController(private val productService: ProductService) {
             throw ProductNotFoundException("No element found with specified id!")
         }
     }
-
+    @GetMapping("/API/products/{productId}/tickets")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Manager")
+    fun findTicketsByProductId(@PathVariable productId: Long): List<TicketDTO>? {
+        return productService.getTickets(productId)
+    }
 }
