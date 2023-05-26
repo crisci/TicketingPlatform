@@ -121,6 +121,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -216,6 +219,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -688,6 +694,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -734,8 +743,14 @@
           "201": {
             "description": "Attachments added successfully"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -863,6 +878,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -1081,6 +1099,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -1153,6 +1174,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
@@ -1232,6 +1256,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         },
         "security": [
