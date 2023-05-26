@@ -3,16 +3,14 @@ package it.polito.wa2.ticketing.integrationTest
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import it.polito.wa2.ticketing.attachment.AttachmentRepository
-import it.polito.wa2.ticketing.customer.Customer
-import it.polito.wa2.ticketing.customer.CustomerRepository
-import it.polito.wa2.ticketing.customer.CustomerService
+import it.polito.wa2.ticketing.customer.*
 import it.polito.wa2.ticketing.employee.*
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryRepository
 import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.*
-import it.polito.wa2.ticketing.product.Product
-import it.polito.wa2.ticketing.product.ProductRepository
+import it.polito.wa2.ticketing.product.*
+import it.polito.wa2.ticketing.product.BlankFieldsException
 import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
@@ -78,6 +76,8 @@ class IntegrationTest {
     lateinit var customerService: CustomerService
     @Autowired
     lateinit var managerService: ManagerService
+    @Autowired
+    lateinit var productService: ProductService
 
 
     var customer: Customer = Customer()
@@ -90,152 +90,6 @@ class IntegrationTest {
     var message1: Message = Message()
     var message2: Message = Message()
     var attachment: Attachment = Attachment()
-
-
-    fun myInit1() {
-        customerRepository.deleteAll()
-        productRepository.deleteAll()
-        ticketRepository.deleteAll()
-        historyRepository.deleteAll()
-        employeeRepository.deleteAll()
-        messageRepository.deleteAll()
-        attachmentRepository.deleteAll()
-
-        customerRepository.flush()
-        productRepository.flush()
-        ticketRepository.flush()
-        historyRepository.flush()
-        employeeRepository.flush()
-        messageRepository.flush()
-        attachmentRepository.flush()
-
-        customer.first_name = "Pietro"
-        customer.last_name = "Bertorelle"
-        customer.email = "email@gmail.com"
-        customer.dob = LocalDate.of(1998,9,13)
-        customer.address = "Via Rivalta"
-        customer.phone_number = "3466088800"
-        customerRepository.save(customer)
-
-        product.ean = "4935531465706"
-        product.name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
-        product.brand = "JMT"
-        productRepository.save(product)
-
-        expert.first_name = "Francesca"
-        expert.last_name = "Ferritti"
-        expert.email = "myemail@gmail.com"
-        employeeRepository.save(expert)
-
-        admin.first_name = "Giulio"
-        admin.last_name = "Rossetti"
-        admin.email = "myemail2@gmail.com"
-        admin.type = EmployeeRole.MANAGER
-        employeeRepository.save(admin)
-
-        ticket.title = "Can't use the product"
-        ticket.description = "How should i assemble the product?"
-        ticket.priority = PriorityLevel.MEDIUM
-        ticketRepository.save(ticket)
-
-        message1.body = "Try sending a picture"
-        messageRepository.save(message1)
-
-        message2.body = "The picture is in the attachment!"
-        messageRepository.save(message2)
-
-        history1.date = LocalDateTime.now().minusDays(1)
-        historyRepository.save(history1)
-
-        history2.state = TicketStatus.IN_PROGRESS
-        historyRepository.save(history2)
-
-        attachment.attachment = "Attachment Test".toByteArray()
-        attachmentRepository.save(attachment)
-
-        //the customer open the ticket
-        customer.addTicket(ticket)
-        //on a product
-        product.addTicket(ticket)
-        //the admin get the ticket as open
-        admin.addHistory(history1)
-        ticket.addHistory(history1)
-        //the admin assign the ticket to the expert
-        expert.addHistory(history2)
-        ticket.addHistory(history2)
-        //the expert send a message
-        expert.addMessage(message1)
-        ticket.addMessage(message1)
-        //the customer prepare the message
-        //message2.addAttachment(attachment)
-        //the customer send the message
-        expert.addMessage(message2)
-        ticket.addMessage(message2)
-
-        //save all
-        customerRepository.save(customer)
-        productRepository.save(product)
-        ticketRepository.save(ticket)
-        historyRepository.save(history1)
-        historyRepository.save(history2)
-        employeeRepository.save(expert)
-        employeeRepository.save(admin)
-        messageRepository.save(message1)
-        messageRepository.save(message2)
-        //attachmentRepository.save(attachment)
-        //flush all
-        customerRepository.flush()
-        productRepository.flush()
-        ticketRepository.flush()
-        historyRepository.flush()
-        employeeRepository.flush()
-        messageRepository.flush()
-        //attachmentRepository.flush()
-    }
-    @Transactional
-    @Test
-    fun expertOperatingOnTicketsTest(){
-        myInit1()
-
-        val ticketId =  ticket.getId()!!
-        assert(ticketRepository.findByIdOrNull(ticketId) == ticket)
-        val hs = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
-        val i = hs.iterator()
-        assert(i.next() == history2)
-        assert(i.next() == history1)
-        assert(!i.hasNext())
-
-        val expertId = expert.getId()!!
-        val adminId = admin.getId()!!
-        assert(employeeRepository.findByIdOrNull(expertId) == expert)
-        assert(employeeRepository.findByIdOrNull(adminId) == admin)
-
-        val tickets = expertService.getTickets(expertId)
-        assert(tickets.size == 1)
-
-        ticketService.getMessages(ticketId).iterator()
-        assertThrows<TicketNotFoundException> {
-            ticketService.getMessages(ticketId.inc())
-        }
-
-        assert(ticketService.getStatus(ticketId) == TicketStatus.IN_PROGRESS)
-        assertThrows<TicketNotFoundException> {
-            ticketService.getStatus(ticketId.inc())
-        }
-
-        assertThrows<TicketNotFoundException> {
-            expertService.reassignTicket(ticketId.inc(),expertId)
-        }
-        expertService.reassignTicket(ticketId,expertId)
-        assertThrows<OperationNotPermittedException> {
-            expertService.reassignTicket(ticketId,expertId)
-        }
-
-        assertThrows<TicketNotFoundException> {
-            ticketService.closeTicket(ticketId.inc())
-        }
-        ticketService.closeTicket(ticketId)
-    }
 
     @Test
     fun operationNotPermitted() {
@@ -477,7 +331,7 @@ class IntegrationTest {
     }
 
     @Test
-    fun messageSendedCorrectly() {
+    fun messageSentCorrectly() {
         customer.apply {
             first_name = "Luigi"
             last_name = "Crisci"
@@ -559,5 +413,127 @@ class IntegrationTest {
         employeeRepository.deleteAll()
 
     }
+
+    @Test
+    fun productAddedCorrectly() {
+        customer.apply {
+            first_name = "Daniel"
+            last_name = "Panaite"
+            email = "dani@polito.it"
+            dob = LocalDate.of(1998,9,15)
+            address = "Via Po"
+            phone_number = "0000000000"
+        }
+        customerRepository.save(customer)
+
+        product.apply {
+            ean = "4935531465706"
+            name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+            brand = "JMT"
+        }
+        productRepository.save(product)
+
+        product.apply {
+            ean = "89126408921321"
+            name = "PearPods"
+            brand = "Pear"
+        }
+        productRepository.save(product)
+
+        expert.apply {
+            first_name = "Mario"
+            last_name = "Antonio"
+            email = "mario.anto@polito.it"
+            type = EmployeeRole.MANAGER
+        }
+        employeeRepository.save(expert)
+
+        assertThrows<ProductNotFoundException> {
+            productService.getProduct("123123123")
+        }
+
+        assertThrows<ProductNotFoundException> {
+            productService.updateProduct("123123123", ProductDTO("123123123", "PearPods", "Pear"))
+        }
+
+        assertThrows<ProductNotFoundException> {
+            productService.deleteProduct("123123123")
+        }
+
+        assertThrows<BlankFieldsException> {
+            productService.updateProduct("4935531465706", ProductDTO("","PearPods", "Pear"))
+        }
+
+        assert(productRepository.findProductByEan("89126408921321")?.name == "PearPods")
+
+        productService.updateProduct("89126408921321", ProductDTO("89126408921321", "FruitPods", "Pear"))
+        assert(productRepository.findProductByEan("89126408921321")?.name == "FruitPods")
+
+        assert(productService.getAllProducts().size == 2 )
+
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        employeeRepository.deleteAll()
+
+    }
+
+    @Test
+    fun customerTests() {
+        customer.apply {
+            first_name = "Daniel"
+            last_name = "Panaite"
+            email = "dani@polito.it"
+            dob = LocalDate.of(1998,9,15)
+            address = "Via Po"
+            phone_number = "0000000000"
+        }
+        customerRepository.save(customer)
+
+        product.apply {
+            ean = "89126408921321"
+            name = "PearPods"
+            brand = "Pear"
+        }
+        productRepository.save(product)
+
+        message1.apply {
+            body = "Ciao"
+        }
+        messageRepository.save(message1)
+
+        ticket.apply {
+            title = "Can't use the product"
+            description = "How should i assemble the product?"
+            priority = PriorityLevel.HIGH
+        }
+        ticketRepository.save(ticket)
+
+        history1.apply {
+            state = TicketStatus.OPEN
+            date = LocalDateTime.now()
+        }
+        historyRepository.save(history1)
+
+        assertThrows<CustomerNotFoundException> {
+            customerService.getCustomerByEmail("meow@polito.it")
+        }
+
+        assertThrows<DuplicatedEmailException> {
+            customerService.insertCustomer(customer.toDTO())
+        }
+
+        assertThrows<OperationNotPermittedException> {
+            customerService.addMessage(ticket.getId()!!, message1.toDTO())
+        }
+
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        employeeRepository.deleteAll()
+        messageRepository.deleteAll()
+        historyRepository.deleteAll()
+
+    }
+
+
 
 }

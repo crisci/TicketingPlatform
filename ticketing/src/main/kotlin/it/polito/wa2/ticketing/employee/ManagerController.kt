@@ -36,14 +36,14 @@ class ManagerController(
     fun getExpert(@RequestParam("id") idExpert: UUID): EmployeeDTO? {
         return managerService.getExpert(idExpert)
     }
-    /*
-        @GetMapping("/API/manager/experts/")
-        @ResponseStatus(HttpStatus.OK)
-        @Secured("ROLE_Manager")
-        fun getExperts(): List<EmployeeDTO?> {
-            return managerService.getExperts()
-        }
-    */
+
+    @GetMapping("/API/manager/experts/")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Manager")
+    fun getExperts(): List<EmployeeDTO?> {
+        return managerService.getExperts()
+    }
+
     @GetMapping("/API/manager/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Manager")
