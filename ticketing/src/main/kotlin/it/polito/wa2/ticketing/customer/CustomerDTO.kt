@@ -1,16 +1,18 @@
 package it.polito.wa2.ticketing.customer
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.time.LocalDate
 import java.util.UUID
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class CustomerDTO(
     val id: UUID?,
-    val first_name: String,
-    val last_name: String,
+    val firstName: String,
+    val lastName: String,
     val email: String,
     val dob: LocalDate?,
     val address: String,
-    val phone_number: String,
+    val phoneNumber: String,
 )
 
 fun Customer.toDTO(): CustomerDTO {

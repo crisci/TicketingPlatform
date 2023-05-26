@@ -51,12 +51,12 @@ class CustomerServiceImpl(
         customerRepository.save(
             Customer()
                 .create(
-                    customerDTO.first_name,
-                    customerDTO.last_name,
+                    customerDTO.firstName,
+                    customerDTO.lastName,
                     customerDTO.email,
                     customerDTO.dob!!,
                     customerDTO.address,
-                    customerDTO.phone_number
+                    customerDTO.phoneNumber
                 )
         )
     }
