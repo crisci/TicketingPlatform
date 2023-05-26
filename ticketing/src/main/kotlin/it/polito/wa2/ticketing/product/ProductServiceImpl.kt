@@ -25,12 +25,18 @@ class ProductServiceImpl(private val repository: ProductRepository) : ProductSer
     }
 
     override fun updateProduct(productId: String, product: ProductDTO) {
-        val p = repository.findProductByEan(productId)
-        if(p != null){
-            p.ean = product.ean
-            p.name = product.name
-            p.brand = product.brand
-            repository.save(p)
+        if(productId != "" && product.name != "" && product.brand != "" && product.ean != ""){
+            val p = repository.findProductByEan(productId)
+            if(p != null){
+                p.ean = product.ean
+                p.name = product.name
+                p.brand = product.brand
+                repository.save(p)
+            }else{
+                throw ProductNotFoundException("No product found with specified id!")
+            }
+        }else{
+            throw BlankFieldsException("All product fields must be filled")
         }
     }
 
@@ -38,6 +44,8 @@ class ProductServiceImpl(private val repository: ProductRepository) : ProductSer
         val p = repository.findProductByEan(productId)
         if(p != null){
             repository.delete(p)
+        }else{
+            throw ProductNotFoundException("No product found with specified id!")
         }
     }
 

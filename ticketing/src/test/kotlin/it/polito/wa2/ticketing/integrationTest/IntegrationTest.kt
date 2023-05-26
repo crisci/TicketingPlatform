@@ -3,16 +3,14 @@ package it.polito.wa2.ticketing.integrationTest
 import it.polito.wa2.ticketing.attachment.Attachment
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import it.polito.wa2.ticketing.attachment.AttachmentRepository
-import it.polito.wa2.ticketing.customer.Customer
-import it.polito.wa2.ticketing.customer.CustomerRepository
-import it.polito.wa2.ticketing.customer.CustomerService
+import it.polito.wa2.ticketing.customer.*
 import it.polito.wa2.ticketing.employee.*
 import it.polito.wa2.ticketing.history.History
 import it.polito.wa2.ticketing.history.HistoryRepository
 import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.*
-import it.polito.wa2.ticketing.product.Product
-import it.polito.wa2.ticketing.product.ProductRepository
+import it.polito.wa2.ticketing.product.*
+import it.polito.wa2.ticketing.product.BlankFieldsException
 import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
@@ -78,6 +76,8 @@ class IntegrationTest {
     lateinit var customerService: CustomerService
     @Autowired
     lateinit var managerService: ManagerService
+    @Autowired
+    lateinit var productService: ProductService
 
 
     var customer: Customer = Customer()
@@ -558,5 +558,127 @@ class IntegrationTest {
         employeeRepository.deleteAll()
 
     }
+
+    @Test
+    fun productAddedCorrectly() {
+        customer.apply {
+            first_name = "Daniel"
+            last_name = "Panaite"
+            email = "dani@polito.it"
+            dob = LocalDate.of(1998,9,15)
+            address = "Via Po"
+            phone_number = "0000000000"
+        }
+        customerRepository.save(customer)
+
+        product.apply {
+            ean = "4935531465706"
+            name = "JMT X-ring 530x2 Gold 104 Open Chain With Rivet Link for Kawasaki KH 400 a 1976"
+            brand = "JMT"
+        }
+        productRepository.save(product)
+
+        product.apply {
+            ean = "89126408921321"
+            name = "PearPods"
+            brand = "Pear"
+        }
+        productRepository.save(product)
+
+        expert.apply {
+            first_name = "Mario"
+            last_name = "Antonio"
+            email = "mario.anto@polito.it"
+            type = EmployeeRole.MANAGER
+        }
+        employeeRepository.save(expert)
+
+        assertThrows<ProductNotFoundException> {
+            productService.getProduct("123123123")
+        }
+
+        assertThrows<ProductNotFoundException> {
+            productService.updateProduct("123123123", ProductDTO("123123123", "PearPods", "Pear"))
+        }
+
+        assertThrows<ProductNotFoundException> {
+            productService.deleteProduct("123123123")
+        }
+
+        assertThrows<BlankFieldsException> {
+            productService.updateProduct("4935531465706", ProductDTO("","PearPods", "Pear"))
+        }
+
+        assert(productRepository.findProductByEan("89126408921321")?.name == "PearPods")
+
+        productService.updateProduct("89126408921321", ProductDTO("89126408921321", "FruitPods", "Pear"))
+        assert(productRepository.findProductByEan("89126408921321")?.name == "FruitPods")
+
+        assert(productService.getAllProducts().size == 2 )
+
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        employeeRepository.deleteAll()
+
+    }
+
+    @Test
+    fun customerTests() {
+        customer.apply {
+            first_name = "Daniel"
+            last_name = "Panaite"
+            email = "dani@polito.it"
+            dob = LocalDate.of(1998,9,15)
+            address = "Via Po"
+            phone_number = "0000000000"
+        }
+        customerRepository.save(customer)
+
+        product.apply {
+            ean = "89126408921321"
+            name = "PearPods"
+            brand = "Pear"
+        }
+        productRepository.save(product)
+
+        message1.apply {
+            body = "Ciao"
+        }
+        messageRepository.save(message1)
+
+        ticket.apply {
+            title = "Can't use the product"
+            description = "How should i assemble the product?"
+            priority = PriorityLevel.HIGH
+        }
+        ticketRepository.save(ticket)
+
+        history1.apply {
+            state = TicketStatus.OPEN
+            date = LocalDateTime.now()
+        }
+        historyRepository.save(history1)
+
+        assertThrows<CustomerNotFoundException> {
+            customerService.getCustomerByEmail("meow@polito.it")
+        }
+
+        assertThrows<DuplicatedEmailException> {
+            customerService.insertCustomer(customer.toDTO())
+        }
+
+        assertThrows<OperationNotPermittedException> {
+            customerService.addMessage(1, message1.toDTO())
+        }
+
+        customerRepository.deleteAll()
+        productRepository.deleteAll()
+        employeeRepository.deleteAll()
+        messageRepository.deleteAll()
+        historyRepository.deleteAll()
+
+    }
+
+
 
 }
