@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="65487852-32e2-4262-abaf-4cbc52040b31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/ManagerController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/ManagerController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/ProductServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/ProductServiceImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/integrationTest/IntegrationTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/integrationTest/IntegrationTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -275,7 +270,8 @@
       <workItem from="1685089365764" duration="1770000" />
       <workItem from="1685096455165" duration="1222000" />
       <workItem from="1685098077636" duration="8105000" />
-      <workItem from="1685106464790" duration="950000" />
+      <workItem from="1685106464790" duration="1277000" />
+      <workItem from="1685107766695" duration="134000" />
     </task>
     <servers />
   </component>
