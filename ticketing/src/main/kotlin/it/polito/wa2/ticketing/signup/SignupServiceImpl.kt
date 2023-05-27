@@ -72,7 +72,7 @@ class SignupServiceImpl(
 
             } catch (e: Exception) {
                 keycloak.realm("ticketing").users().delete(userId)
-                println(e.stackTraceToString())
+                customerRepository.deleteById(UUID.fromString(userId))
                 throw SignupError("Error creating user")
             } finally {
                 keycloak.close()
