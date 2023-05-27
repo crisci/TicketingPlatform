@@ -16,5 +16,5 @@ data class CustomerDTO(
 )
 
 fun Customer.toDTO(): CustomerDTO {
-    return CustomerDTO(getId(),first_name,last_name,email,dob,address,phone_number)
+    return CustomerDTO(id,first_name,last_name,email,dob,address,phone_number)
 }

@@ -45,23 +45,6 @@ class CustomerServiceImpl(
         return customerRepository.findAll().map { it.toDTO() }
     }
 
-    override fun insertCustomer(customerDTO: CustomerDTO) {
-        if (customerRepository.findByEmail(customerDTO.email) != null)
-            throw DuplicatedEmailException("${customerDTO.email.lowercase()} is already used")
-        customerRepository.save(
-            Customer()
-                .create(
-                    customerDTO.firstName,
-                    customerDTO.lastName,
-                    customerDTO.email,
-                    customerDTO.dob!!,
-                    customerDTO.address,
-                    customerDTO.phoneNumber
-                )
-        )
-    }
-
-
     override fun getTicketsByCustomerId(customerId: UUID): List<TicketDTO> {
         if(!customerRepository.existsById(customerId))
             throw CustomerNotFoundException("No customer found with specified id!")

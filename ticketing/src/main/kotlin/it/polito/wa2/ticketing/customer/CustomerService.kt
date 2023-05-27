@@ -12,8 +12,6 @@ interface CustomerService {
 
     fun getCustomers() : List<CustomerDTO>
 
-    fun insertCustomer(customerDTO: CustomerDTO)
-
     fun getTicketsByCustomerId(customerId: UUID): List<TicketDTO>?
 
     fun addMessage(idTicket: Long, message: MessageDTO)

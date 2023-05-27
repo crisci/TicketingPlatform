@@ -10,7 +10,10 @@ import java.util.UUID
 
 @Entity
 @Table(name = "customers")
-class Customer: EntityBase<UUID>() {
+class Customer {
+    @Id
+    @NotNull
+    var id: UUID = UUID.randomUUID()
     @NotNull
     var first_name: String = ""
     @NotNull
@@ -28,8 +31,9 @@ class Customer: EntityBase<UUID>() {
     @JsonIgnore
     var listOfTicket: MutableSet<Ticket> = mutableSetOf()
 
-    fun create(first_name: String, last_name: String, email: String, dob: LocalDate, address: String, phone_number: String): Customer {
+    fun create(id: UUID, first_name: String, last_name: String, email: String, dob: LocalDate, address: String, phone_number: String): Customer {
         val c = Customer()
+        c.id = id
         c.first_name = first_name
         c.last_name = last_name
         c.email = email
