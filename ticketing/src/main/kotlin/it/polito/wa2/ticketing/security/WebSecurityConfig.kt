@@ -21,6 +21,7 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
             .requestMatchers(HttpMethod.GET, "/API/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/API/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/API/signup").permitAll()
+            .requestMatchers(HttpMethod.POST, "/API/createExpert").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**","/API/customers").hasRole(MANAGER)
             .requestMatchers(HttpMethod.GET, "/API/customers/email=*","/API/customers").hasAnyRole(MANAGER,EXPERT)
             .requestMatchers(HttpMethod.GET, "/API/messages", "/API/attachments").authenticated()

@@ -6,5 +6,6 @@ import it.polito.wa2.ticketing.customer.CustomerDTO
 interface SignupService {
 
     fun signupCustomer(credentials: Map<String, String>)
+    fun createExpert(credentials: Map<String, String>)
 
 }

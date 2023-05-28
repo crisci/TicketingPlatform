@@ -8,6 +8,7 @@ import org.keycloak.representations.idm.ClientRepresentation
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -23,5 +24,12 @@ class SignupController (private val signupService: SignupService)
     @ResponseStatus(HttpStatus.CREATED)
     fun signup(@RequestBody credentials: Map<String, String>) {
         signupService.signupCustomer(credentials)
+    }
+
+    @PostMapping("/API/createExpert")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_Manager")
+    fun createExpert(@RequestBody credentials: Map<String, String>) {
+        signupService.createExpert(credentials)
     }
 }

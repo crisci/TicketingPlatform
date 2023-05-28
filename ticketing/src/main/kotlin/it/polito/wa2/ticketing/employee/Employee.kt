@@ -12,7 +12,10 @@ import java.util.*
 
 @Entity
 @Table(name="employees")
-class Employee: EntityBase<UUID>() {
+class Employee {
+    @Id
+    @NotNull
+    var id: UUID = UUID.randomUUID()
     @NotNull
     var first_name: String = ""
     @NotNull
@@ -28,6 +31,16 @@ class Employee: EntityBase<UUID>() {
     @JsonManagedReference
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfMessages: MutableSet<Message> = mutableSetOf()
+
+    fun createExpert(id:UUID, firstName: String, last_name: String, email: String): Employee {
+        return Employee().apply {
+            this.id = id
+            this.first_name = firstName
+            this.last_name = last_name
+            this.email = email
+            this.type = EmployeeRole.EXPERT
+        }
+    }
 
     fun addMessage(m: Message){
         m.expert = this
