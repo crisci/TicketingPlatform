@@ -1,0 +1,36 @@
+services:
+  postgres:
+    container_name: wa2Postgres
+    image: "postgres:latest"
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    networks:
+      - local-keycloak
+    ports:
+      - "5432:5432"
+  keycloak:
+    depends_on:
+      - postgres
+    container_name: wa2Keycloak
+    environment:
+      DB_VENDOR: postgres
+      DB_URL: jdbc:postgresql://localhost:5432/${POSTGRESQL_DB}
+      DB_DATABASE: ${POSTGRESQL_DB}
+      DB_USER: ${POSTGRESQL_USER}
+      DB_PASSWORD: ${POSTGRESQL_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    image: quay.io/keycloak/keycloak:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - local-keycloak
+    volumes:
+      - ./imports:/opt/keycloak/data/import
+    command:
+      - "start-dev --import-realm"
+
+networks:
+  local-keycloak:
