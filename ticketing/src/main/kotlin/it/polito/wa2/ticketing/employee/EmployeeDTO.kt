@@ -14,5 +14,5 @@ data class EmployeeDTO(
 )
 
 fun Employee.toEmployeeDTO(): EmployeeDTO {
-    return EmployeeDTO(getId(),first_name,last_name,email,type)
+    return EmployeeDTO(this.id,first_name,last_name,email,type)
 }
