@@ -13,12 +13,9 @@ import it.polito.wa2.ticketing.ticket.toTicketDTO
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.streams.toList
 
 @Service
 @Transactional
