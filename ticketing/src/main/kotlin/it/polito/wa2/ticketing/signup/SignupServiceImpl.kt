@@ -7,6 +7,7 @@ import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import org.keycloak.OAuth2Constants
 import org.keycloak.admin.client.CreatedResponseUtil
+import org.keycloak.admin.client.Keycloak
 import org.keycloak.admin.client.KeycloakBuilder
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
@@ -31,14 +32,19 @@ class SignupServiceImpl(
         .clientSecret("eca6Wae8SYXHJYSxxAeh5Gs38HZP3tPg")
         .build()
 
-    override fun signupCustomer(credentials: Map<String, String>) {
-        val keycloak = KeycloakBuilder.builder()
-            .serverUrl(authUrl)
-            .realm(realm)
+    private fun open(): Keycloak {
+        return KeycloakBuilder.builder()
+            .serverUrl("http://localhost:8080/")
+            .realm("ticketing")
             .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
             .clientId("admin-cli")
             .clientSecret("eca6Wae8SYXHJYSxxAeh5Gs38HZP3tPg")
             .build()
+    }
+
+    override fun signupCustomer(credentials: Map<String, String>) {
+
+        val keycloak = open()
         var userId: String = UUID.randomUUID().toString()
 
             try {
@@ -87,10 +93,10 @@ class SignupServiceImpl(
             } finally {
                 keycloak.close()
             }
-        keycloak.close()
     }
 
     override fun createExpert(credentials: Map<String, String>) {
+        val keycloak = open()
         var userId: String = UUID.randomUUID().toString()
 
         try {
@@ -136,12 +142,5 @@ class SignupServiceImpl(
         } finally {
             keycloak.close()
         }
-        keycloak.close()
     }
-
-
-
-
-
-
 }
