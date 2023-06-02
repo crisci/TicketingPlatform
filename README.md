@@ -4,16 +4,24 @@ Can be found in "WA-G16.ticketing.documentation":
     API_documentation.json
     Data Layer Design.mdj
 ## RUN THE SERVER
-Start a valid Postgress container with: 
-- url = jdbc:postgresql://localhost:5432/postgres
-- username = postgres
-- password = postgres
-- port = 5432
+Docker: postgress runs on port: 5432, keycloak on port: 8080
+- Open a terminal in the folder "WA-G16.ticketing.docker" and execute the command:
 
-When creating the docker container with jib the ip of docker must be provided instead of localhost
+      docker compose up
+      
+- wait untill the process ends.
+- default configuration (setted in file: WA-G16\ticketing\docker\.env):
 
-    !NOTE: ip in the application.properties and in the login API must be modified according to the ip of the docker container
-    If keycloak refuse the connection also the Valid redirect URIs of the authN client must be modified according to the ip of the docker container 
+      POSTGRESQL_DB=postgres
+      POSTGRESQL_USER=postgres
+      POSTGRESQL_PASSWORD=postgres
+
+      KEYCLOAK_ADMIN=admin
+      KEYCLOAK_ADMIN_PASSWORD=admin
+
+- in the file "WA-G16\ticketing\src\main\resources\application.properties" set:
+
+      spring.jpa.hibernate.ddl-auto=create
 
 Server (named:ticketing) run on port: 8081, commands to run:
 - enter in the folder: .../WA-G16/ticketing
@@ -43,7 +51,8 @@ Can be found "WA-G16.ticketing.src.main.resources":
 - products.csv
 
 ### Keycloak users:
-
+- auto-imported realm name: ticketing
+- users are imported automatically
 
 | username  | password |
 |-----------|----------|
