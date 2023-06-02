@@ -1,19 +1,19 @@
 services:
   postgres:
-    container_name: wa2Postgres
     image: "postgres:latest"
     environment:
       POSTGRES_DB: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
     networks:
-      - local-keycloak
+      - wa2-app
     ports:
       - "5432:5432"
   keycloak:
     depends_on:
       - postgres
-    container_name: wa2Keycloak
     environment:
       DB_VENDOR: postgres
       DB_URL: jdbc:postgresql://localhost:5432/${POSTGRESQL_DB}
@@ -26,11 +26,72 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - local-keycloak
+      - wa2-app
     volumes:
       - ./imports:/opt/keycloak/data/import
     command:
       - "start-dev --import-realm"
+  spring:
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      - spring.datasource.url=${SPRING_URL}
+      - spring.jpa.hibernate.ddl-auto=${SPRING_DDLAUTO}
+    image: ticketing-spring-api
+    ports:
+      - "8081:8081"
+    networks:
+      - wa2-app
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./volumes/loki:/loki
+    environment:
+      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    networks:
+      - wa2-app
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - ./loki/promtail-config.yaml:/etc/promtail/config.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers
+    networks:
+      - wa2-app
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./volumes/grafana:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    networks:
+      - wa2-app
+  tempo:
+    image: grafana/tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+      - ./volumes/tempo:/tmp/tempo
+    ports:
+      - "14268:14268"  # jaeger ingest
+      - "9411:9411" # zipkin
+  prometheus:
+    image: prom/prometheus
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
 
 networks:
-  local-keycloak:
+  wa2-app:
