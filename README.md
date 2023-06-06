@@ -3,14 +3,34 @@ Can be found in the folder "WA-G16.ticketing.documentation":
    
     API_documentation.json
     Data Layer Design.mdj
+
 ## RUN THE SERVER
-Docker: postgress runs on port: 5432, keycloak on port: 8080
+- [in the file "WA-G16\ticketing\src\main\resources\application.properties" set:]
+
+      spring.jpa.hibernate.ddl-auto=create
+
+Build the docker image for spring:
+- enter in the folder: .../WA-G16/ticketing
+- build:
+
+      on linux: ./gradlew
+            [on windows: gradlew.bat]
+- build server docker image with jib:
+
+      ./gradlew jibDockerBuild
+    
+
+Docker: postgress runs on port: 5432, keycloak on port: 8080, Server (named:ticketing) run on port: 8081, commands to run:
+- [ensure to be logged in Docker:]
+
+      docker login
+
 - Open a terminal in the folder "WA-G16.ticketing.docker" and execute the command:
 
       docker compose up
       
 - wait untill the process ends.
-- default configuration (setted in file: WA-G16\ticketing\docker\.env):
+- [default configuration (setted in file: WA-G16\ticketing\docker\.env):]
 
       POSTGRESQL_DB=postgres
       POSTGRESQL_USER=postgres
@@ -18,23 +38,6 @@ Docker: postgress runs on port: 5432, keycloak on port: 8080
 
       KEYCLOAK_ADMIN=admin
       KEYCLOAK_ADMIN_PASSWORD=admin
-
-- in the file "WA-G16\ticketing\src\main\resources\application.properties" set:
-
-      spring.jpa.hibernate.ddl-auto=create
-
-Server (named:ticketing) run on port: 8081, commands to run:
-- enter in the folder: .../WA-G16/ticketing
-- build:
- 
-      on linux: ./gradlew
-            [on windows: gradlew.bat]
-- build server docker image with jib: 
-      
-      ./gradlew jibDockerBuild
-- run the container:
-
-      docker run -d --name ticketing-spring-api -p 8081:8081 ticketing-spring-api
 
 ## RUN THE TEST
 Enter in the folder: .../WA-G16/ticketing
