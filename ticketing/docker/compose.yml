@@ -44,7 +44,7 @@ services:
     networks:
       - wa2-app
   loki:
-    image: grafana/loki
+    image: grafana/loki:latest
     ports:
       - "3100:3100"
     volumes:
@@ -54,10 +54,11 @@ services:
       - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
       - JAEGER_SAMPLER_TYPE=const
       - JAEGER_SAMPLER_PARAM=1
+    user: "root:root"
     networks:
       - wa2-app
   promtail:
-    image: grafana/promtail
+    image: grafana/promtail:latest
     volumes:
       - ./loki/promtail-config.yaml:/etc/promtail/config.yml
       - /var/run/docker.sock:/var/run/docker.sock
@@ -65,17 +66,22 @@ services:
     networks:
       - wa2-app
   grafana:
-    image: grafana/grafana-oss
+    image: grafana/grafana-oss:latest
     ports:
       - "3000:3000"
     volumes:
       - ./volumes/grafana:/var/lib/grafana
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    user: "root:root"
     networks:
       - wa2-app
   tempo:
-    image: grafana/tempo
+    image: grafana/tempo:latest
     command: [ "-config.file=/etc/tempo.yaml" ]
     volumes:
       - ./tempo/tempo-local.yaml:/etc/tempo.yaml:ro
@@ -84,7 +90,7 @@ services:
       - "14268:14268"  # jaeger ingest
       - "9411:9411" # zipkin
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:latest
     command:
       - --enable-feature=exemplar-storage
       - --config.file=/etc/prometheus/prometheus.yml

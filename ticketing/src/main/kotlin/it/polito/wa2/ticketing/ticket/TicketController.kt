@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.ticket
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.utils.TicketStatus
 import org.springframework.http.HttpStatus
