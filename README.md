@@ -27,7 +27,6 @@ Docker: postgress runs on port: 5432, keycloak on port: 8080, Server (named:tick
 
 - Open a terminal in the folder "WA-G16.ticketing.docker" and execute the command:
 
-      .\configscript.sh [on windows: .\configscript.bat]
       docker compose up
       
 - wait untill the process ends.

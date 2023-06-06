@@ -67,7 +67,7 @@ dependencies {
 	// we could setting by management.zipkin.tracing.endpoint
 	implementation("io.zipkin.reporter2:zipkin-reporter-brave")
 	// send logs by log Appender through URL
-	implementation("com.github.loki4j:loki-logback-appender")
+	implementation("com.github.loki4j:loki-logback-appender:1.4.0-rc2")
 	//not sure it's necessary
 	//implementation("ch.qos.logback:logback-classic")
 }
