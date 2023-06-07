@@ -5,12 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65487852-32e2-4262-abaf-4cbc52040b31" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d03eb8f7-3bd8-43a3-8763-2ed7318be463.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d03eb8f7-3bd8-43a3-8763-2ed7318be463.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d03eb8f7-3bd8-43a3-8763-2ed7318be463/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d03eb8f7-3bd8-43a3-8763-2ed7318be463/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/EmployeeDTO.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/EmployeeDTO.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/ExpertServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/ExpertServiceImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/message/MessageDTO.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/message/MessageDTO.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/Customer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/Customer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerServiceImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/Product.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/Product.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/ProductProblemDetailsHandlers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/product/ProductProblemDetailsHandlers.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/security/WebSecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/security/WebSecurityConfig.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/signup/SignupServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/signup/SignupServiceImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/resources/realm-export.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/resources/ticketing-realm.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +80,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/crisci/Projects/WA2-G16/ticketing/src/main/resources/static",
+    "last_opened_file_path": "/home/crisci/Projects/WA2-G16/ticketing/src/main/resources/customers.csv",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -285,11 +292,23 @@
       <workItem from="1685200138373" duration="630000" />
       <workItem from="1685388948838" duration="10000" />
       <workItem from="1685548364379" duration="1918000" />
+      <workItem from="1686154967186" duration="7055000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

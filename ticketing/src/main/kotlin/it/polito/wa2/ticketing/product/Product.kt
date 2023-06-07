@@ -1,6 +1,7 @@
 package it.polito.wa2.ticketing.product
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import it.polito.wa2.ticketing.customer.Customer
 import it.polito.wa2.ticketing.ticket.Ticket
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
@@ -17,6 +18,8 @@ class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfTicket: MutableSet<Ticket> = mutableSetOf()
+    @ManyToMany(mappedBy = "products")
+    val customers: MutableSet<Customer> = mutableSetOf()
 
     fun create(ean: String, name: String, brand: String): Product {
         val p = Product()

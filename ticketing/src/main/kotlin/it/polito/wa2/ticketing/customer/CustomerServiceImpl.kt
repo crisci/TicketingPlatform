@@ -8,8 +8,7 @@ import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.message.toDTO
-import it.polito.wa2.ticketing.product.ProductNotFoundException
-import it.polito.wa2.ticketing.product.ProductRepository
+import it.polito.wa2.ticketing.product.*
 import it.polito.wa2.ticketing.ticket.*
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
@@ -106,19 +105,16 @@ class CustomerServiceImpl(
 
 
     override fun addTicket(ticket: TicketDTO, idCustomer: UUID) {
-        customerRepository.findById(idCustomer)
-            .ifPresentOrElse(
-                {
-                    val product = productRepository.findProductByEan(ticket.product?.ean!!)
-                        ?: throw ProductNotFoundException("The specified product has not been found!")
-                    val newTicket = Ticket()
-                        .create(ticket.title, ticket.description, PriorityLevel.NOT_ASSIGNED, it, product) // Priority level assigned by the admin
-                    newTicket.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), newTicket, null))
-                    it.addTicket(newTicket)
-                },
-                { throw CustomerNotFoundException("The specified customer has not been found!") }
-            )
-
+        val customer = customerRepository.findById(idCustomer)
+            .orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
+        val product = productRepository.findProductByEan(ticket.product?.ean!!) ?: throw ProductNotFoundException("The specified product has not been found!")
+        val products = customer.products
+        if (!products.contains(product))
+            throw ProductNotRegistered("The specified product is not registered to the customer!")
+        val newTicket = Ticket()
+            .create(ticket.title, ticket.description, PriorityLevel.NOT_ASSIGNED, customer, product) // Priority level assigned by the admin
+        newTicket.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), newTicket, null))
+        customer.addTicket(newTicket)
     }
 
     override fun reopenTicket(ticketId: Long) {
@@ -166,4 +162,19 @@ class CustomerServiceImpl(
         }
     }
 
+    override fun productRegistration(customerId: UUID, ean: String) {
+        val product = productRepository.findProductByEan(ean) ?: throw ProductNotFoundException("The specified product has not been found!")
+        val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
+        val customProducts = customer.products
+        if (customProducts.contains(product)) {
+            throw ProductAlreadyRegisteredException("The specified product is already registered!")
+        } else {
+            customer.addProduct(product)
+        }
+    }
+
+    override fun getRegisteredProducts(customerId: UUID): List<ProductDTO>? {
+        val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
+        return customer.products.map { it.toDTO() }
+    }
 }

@@ -1,6 +1,7 @@
 package it.polito.wa2.ticketing.customer
 
 import it.polito.wa2.ticketing.message.MessageDTO
+import it.polito.wa2.ticketing.product.ProductDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.utils.EmailValidationUtil
 import org.springframework.http.*
@@ -21,7 +22,7 @@ class CustomerController(val customerService: CustomerService) {
 
     @PostMapping("/API/login")
     @ResponseStatus(HttpStatus.OK)
-    fun login(@RequestBody credentials: Map<String, String>): String {
+    fun login(@RequestBody credentials: Map<String, String>): ResponseEntity<String> {
         val restTemplate = RestTemplate()
 
         val url = "http://172.17.0.1:8080/realms/ticketing/protocol/openid-connect/token"
@@ -36,8 +37,7 @@ class CustomerController(val customerService: CustomerService) {
         requestBody.add("password", credentials["password"])
         try {
             val requestEntity = HttpEntity(requestBody, headers)
-            val responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
-            return responseEntity.body.toString()
+            return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
         } catch (e: Exception) {
             throw LoginErrorException("Error during login")
         }
@@ -80,12 +80,27 @@ class CustomerController(val customerService: CustomerService) {
         return customerService.getTicketsByCustomerId(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
+    @GetMapping("/API/customers/products")
+    @ResponseStatus(HttpStatus.OK)
+    fun getRegisteredProducts(): List<ProductDTO>? {
+        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
+        return customerService.getRegisteredProducts(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
+    }
+
     @PostMapping("/API/customers/tickets")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Secured("ROLE_Customer")
     fun addTicket(@RequestBody ticket: TicketDTO) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.addTicket(ticket, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
+    }
+
+    @PostMapping("/API/customers/product")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Secured("ROLE_Customer")
+    fun productRegistration(@RequestBody ean: String) {
+        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
+        customerService.productRegistration(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), ean)
     }
 
     @PutMapping("/API/customers/tickets/{idTicket}/resolved")
@@ -108,5 +123,7 @@ class CustomerController(val customerService: CustomerService) {
     fun ticketClose(@PathVariable idTicket: Long) {
         customerService.reopenTicket(idTicket)
     }
+
+
 
 }

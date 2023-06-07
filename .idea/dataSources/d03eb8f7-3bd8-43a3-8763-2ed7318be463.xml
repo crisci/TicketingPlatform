@@ -3,9 +3,9 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.48">
     <root id="1">
       <DateStyle>mdy</DateStyle>
-      <IntrospectionStateNumber>759</IntrospectionStateNumber>
+      <IntrospectionStateNumber>858</IntrospectionStateNumber>
       <ServerVersion>15.2</ServerVersion>
-      <StartupTime>1685174659</StartupTime>
+      <StartupTime>1686162950</StartupTime>
       <TimeZones>true ACDT
 true ACSST
 false ACST
@@ -1397,18 +1397,18 @@ true posixrules
 13186||10|C|G
 13186||-9223372036854775808|U|G
 13186||10|U|G</Grants>
-      <IntrospectionStateNumber>759</IntrospectionStateNumber>
+      <IntrospectionStateNumber>858</IntrospectionStateNumber>
       <ObjectId>5</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
-    <role id="3" parent="1" name="pg_database_owner">
+    <role id="3" parent="1" name="pg_checkpoint">
+      <ObjectId>4544</ObjectId>
+    </role>
+    <role id="4" parent="1" name="pg_database_owner">
       <ObjectId>6171</ObjectId>
     </role>
-    <role id="4" parent="1" name="pg_read_all_data">
-      <ObjectId>6181</ObjectId>
-    </role>
-    <role id="5" parent="1" name="pg_write_all_data">
-      <ObjectId>6182</ObjectId>
+    <role id="5" parent="1" name="pg_execute_server_program">
+      <ObjectId>4571</ObjectId>
     </role>
     <role id="6" parent="1" name="pg_monitor">
       <ObjectId>3373</ObjectId>
@@ -1416,29 +1416,29 @@ true posixrules
 3375
 3377</RoleGrants>
     </role>
-    <role id="7" parent="1" name="pg_read_all_settings">
+    <role id="7" parent="1" name="pg_read_all_data">
+      <ObjectId>6181</ObjectId>
+    </role>
+    <role id="8" parent="1" name="pg_read_all_settings">
       <ObjectId>3374</ObjectId>
     </role>
-    <role id="8" parent="1" name="pg_read_all_stats">
+    <role id="9" parent="1" name="pg_read_all_stats">
       <ObjectId>3375</ObjectId>
-    </role>
-    <role id="9" parent="1" name="pg_stat_scan_tables">
-      <ObjectId>3377</ObjectId>
     </role>
     <role id="10" parent="1" name="pg_read_server_files">
       <ObjectId>4569</ObjectId>
     </role>
-    <role id="11" parent="1" name="pg_write_server_files">
-      <ObjectId>4570</ObjectId>
-    </role>
-    <role id="12" parent="1" name="pg_execute_server_program">
-      <ObjectId>4571</ObjectId>
-    </role>
-    <role id="13" parent="1" name="pg_signal_backend">
+    <role id="11" parent="1" name="pg_signal_backend">
       <ObjectId>4200</ObjectId>
     </role>
-    <role id="14" parent="1" name="pg_checkpoint">
-      <ObjectId>4544</ObjectId>
+    <role id="12" parent="1" name="pg_stat_scan_tables">
+      <ObjectId>3377</ObjectId>
+    </role>
+    <role id="13" parent="1" name="pg_write_all_data">
+      <ObjectId>6182</ObjectId>
+    </role>
+    <role id="14" parent="1" name="pg_write_server_files">
+      <ObjectId>4570</ObjectId>
     </role>
     <role id="15" parent="1" name="postgres">
       <BypassRls>1</BypassRls>
@@ -4810,510 +4810,573 @@ true posixrules
     <schema id="261" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>759</IntrospectionStateNumber>
+      <IntrospectionStateNumber>858</IntrospectionStateNumber>
       <ObjectId>2200</ObjectId>
       <StateNumber>518</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
     <sequence id="262" parent="261" name="attachment_seq">
       <DasType>bigint|0s</DasType>
-      <ObjectId>16384</ObjectId>
+      <ObjectId>16565</ObjectId>
       <SequenceIdentity>1(1)+50</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>725</StateNumber>
+      <StateNumber>824</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="263" parent="261" name="histories_seq">
       <DasType>bigint|0s</DasType>
-      <ObjectId>16385</ObjectId>
+      <ObjectId>16566</ObjectId>
       <SequenceIdentity>1(1)+50</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>726</StateNumber>
+      <StateNumber>825</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="264" parent="261" name="messages_seq">
       <DasType>bigint|0s</DasType>
-      <ObjectId>16386</ObjectId>
+      <ObjectId>16567</ObjectId>
       <SequenceIdentity>1(1)+50</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>727</StateNumber>
+      <StateNumber>826</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="265" parent="261" name="tickets_seq">
       <DasType>bigint|0s</DasType>
-      <ObjectId>16387</ObjectId>
+      <ObjectId>16568</ObjectId>
       <SequenceIdentity>1(1)+50</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>728</StateNumber>
+      <StateNumber>827</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <table id="266" parent="261" name="attachment">
-      <ObjectId>16388</ObjectId>
-      <StateNumber>738</StateNumber>
+      <ObjectId>16569</ObjectId>
+      <StateNumber>838</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="267" parent="261" name="customers">
-      <ObjectId>16395</ObjectId>
-      <StateNumber>743</StateNumber>
+    <table id="267" parent="261" name="customer_product">
+      <ObjectId>16576</ObjectId>
+      <StateNumber>839</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="268" parent="261" name="employees">
-      <ObjectId>16402</ObjectId>
-      <StateNumber>739</StateNumber>
+    <table id="268" parent="261" name="customers">
+      <ObjectId>16581</ObjectId>
+      <StateNumber>840</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="269" parent="261" name="histories">
-      <ObjectId>16409</ObjectId>
-      <StateNumber>739</StateNumber>
+    <table id="269" parent="261" name="employees">
+      <ObjectId>16588</ObjectId>
+      <StateNumber>841</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="270" parent="261" name="messages">
-      <ObjectId>16414</ObjectId>
-      <StateNumber>738</StateNumber>
+    <table id="270" parent="261" name="histories">
+      <ObjectId>16595</ObjectId>
+      <StateNumber>841</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="271" parent="261" name="products">
-      <ObjectId>16419</ObjectId>
-      <StateNumber>744</StateNumber>
+    <table id="271" parent="261" name="messages">
+      <ObjectId>16600</ObjectId>
+      <StateNumber>838</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="272" parent="261" name="tickets">
-      <ObjectId>16426</ObjectId>
-      <StateNumber>740</StateNumber>
+    <table id="272" parent="261" name="products">
+      <ObjectId>16605</ObjectId>
+      <StateNumber>839</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="273" parent="266" name="id">
+    <table id="273" parent="261" name="tickets">
+      <ObjectId>16612</ObjectId>
+      <StateNumber>842</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <column id="274" parent="266" name="id">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>729</StateNumber>
+      <StateNumber>828</StateNumber>
       <TypeId>20</TypeId>
     </column>
-    <column id="274" parent="266" name="attachment">
+    <column id="275" parent="266" name="attachment">
       <DasType>bytea|0s</DasType>
       <Position>2</Position>
-      <StateNumber>729</StateNumber>
+      <StateNumber>828</StateNumber>
       <TypeId>17</TypeId>
     </column>
-    <column id="275" parent="266" name="message_id">
+    <column id="276" parent="266" name="message_id">
       <DasType>bigint|0s</DasType>
       <Position>3</Position>
-      <StateNumber>729</StateNumber>
+      <StateNumber>828</StateNumber>
       <TypeId>20</TypeId>
     </column>
-    <foreign-key id="276" parent="266" name="fk77oale5wje41f0a3mthvoxi7c">
+    <foreign-key id="277" parent="266" name="fk77oale5wje41f0a3mthvoxi7c">
       <ColNames>message_id</ColNames>
-      <ObjectId>16437</ObjectId>
+      <ObjectId>16623</ObjectId>
       <RefColNames>id</RefColNames>
       <RefColPositions>1</RefColPositions>
-      <StateNumber>738</StateNumber>
-      <RefTableId>16414</RefTableId>
+      <StateNumber>838</StateNumber>
+      <RefTableId>16600</RefTableId>
       <RefTableName>messages</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
-    <index id="277" parent="266" name="attachment_pkey">
+    <index id="278" parent="266" name="attachment_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16393</ObjectId>
+      <ObjectId>16574</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>729</StateNumber>
+      <StateNumber>828</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="278" parent="266" name="attachment_pkey">
+    <key id="279" parent="266" name="attachment_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16394</ObjectId>
+      <ObjectId>16575</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>729</StateNumber>
-      <UnderlyingIndexId>16393</UnderlyingIndexId>
+      <StateNumber>828</StateNumber>
+      <UnderlyingIndexId>16574</UnderlyingIndexId>
     </key>
-    <column id="279" parent="267" name="id">
+    <column id="280" parent="267" name="customer_id">
       <DasType>uuid|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>730</StateNumber>
+      <StateNumber>829</StateNumber>
       <TypeId>2950</TypeId>
     </column>
-    <column id="280" parent="267" name="address">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>2</Position>
-      <StateNumber>730</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="281" parent="267" name="dob">
-      <DasType>date|0s</DasType>
-      <Position>3</Position>
-      <StateNumber>730</StateNumber>
-      <TypeId>1082</TypeId>
-    </column>
-    <column id="282" parent="267" name="email">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>4</Position>
-      <StateNumber>730</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="283" parent="267" name="first_name">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>5</Position>
-      <StateNumber>730</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="284" parent="267" name="last_name">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>6</Position>
-      <StateNumber>730</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="285" parent="267" name="phone_number">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>7</Position>
-      <StateNumber>730</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <index id="286" parent="267" name="customers_pkey">
-      <ColNames>id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16400</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>730</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-    </index>
-    <index id="287" parent="267" name="uk_rfbvkrffamfql7cjmen8v976v">
-      <ColNames>email</ColNames>
-      <ObjectId>16433</ObjectId>
-      <StateNumber>736</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-      <CollationNames>default</CollationNames>
-      <CollationIds>100</CollationIds>
-      <CollationParentNames>pg_catalog</CollationParentNames>
-    </index>
-    <key id="288" parent="267" name="customers_pkey">
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16401</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>730</StateNumber>
-      <UnderlyingIndexId>16400</UnderlyingIndexId>
-    </key>
-    <key id="289" parent="267" name="uk_rfbvkrffamfql7cjmen8v976v">
-      <ObjectId>16434</ObjectId>
-      <StateNumber>736</StateNumber>
-      <UnderlyingIndexId>16433</UnderlyingIndexId>
-    </key>
-    <column id="290" parent="268" name="id">
-      <DasType>uuid|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StateNumber>731</StateNumber>
-      <TypeId>2950</TypeId>
-    </column>
-    <column id="291" parent="268" name="email">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>2</Position>
-      <StateNumber>731</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="292" parent="268" name="first_name">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>3</Position>
-      <StateNumber>731</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="293" parent="268" name="last_name">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>4</Position>
-      <StateNumber>731</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="294" parent="268" name="type">
-      <DasType>smallint|0s</DasType>
-      <Position>5</Position>
-      <StateNumber>731</StateNumber>
-      <TypeId>21</TypeId>
-    </column>
-    <index id="295" parent="268" name="employees_pkey">
-      <ColNames>id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16407</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>731</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-    </index>
-    <index id="296" parent="268" name="uk_j9xgmd0ya5jmus09o0b8pqrpb">
-      <ColNames>email</ColNames>
-      <ObjectId>16435</ObjectId>
-      <StateNumber>737</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-      <CollationNames>default</CollationNames>
-      <CollationIds>100</CollationIds>
-      <CollationParentNames>pg_catalog</CollationParentNames>
-    </index>
-    <key id="297" parent="268" name="employees_pkey">
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16408</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>731</StateNumber>
-      <UnderlyingIndexId>16407</UnderlyingIndexId>
-    </key>
-    <key id="298" parent="268" name="uk_j9xgmd0ya5jmus09o0b8pqrpb">
-      <ObjectId>16436</ObjectId>
-      <StateNumber>737</StateNumber>
-      <UnderlyingIndexId>16435</UnderlyingIndexId>
-    </key>
-    <column id="299" parent="269" name="id">
-      <DasType>bigint|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StateNumber>732</StateNumber>
-      <TypeId>20</TypeId>
-    </column>
-    <column id="300" parent="269" name="date">
-      <DasType>timestamp(6)|0s</DasType>
-      <Position>2</Position>
-      <StateNumber>732</StateNumber>
-      <TypeId>1114</TypeId>
-    </column>
-    <column id="301" parent="269" name="state">
-      <DasType>smallint|0s</DasType>
-      <Position>3</Position>
-      <StateNumber>732</StateNumber>
-      <TypeId>21</TypeId>
-    </column>
-    <column id="302" parent="269" name="employee_id">
-      <DasType>uuid|0s</DasType>
-      <Position>4</Position>
-      <StateNumber>732</StateNumber>
-      <TypeId>2950</TypeId>
-    </column>
-    <column id="303" parent="269" name="ticket_id">
-      <DasType>bigint|0s</DasType>
-      <Position>5</Position>
-      <StateNumber>732</StateNumber>
-      <TypeId>20</TypeId>
-    </column>
-    <foreign-key id="304" parent="269" name="fkfqlkwrrktk99n8iuguhasgdee">
-      <ColNames>employee_id</ColNames>
-      <ObjectId>16442</ObjectId>
-      <RefColNames>id</RefColNames>
-      <RefColPositions>1</RefColPositions>
-      <StateNumber>739</StateNumber>
-      <RefTableId>16402</RefTableId>
-      <RefTableName>employees</RefTableName>
-      <RefTableKind>table</RefTableKind>
-    </foreign-key>
-    <foreign-key id="305" parent="269" name="fksimdb3ffgdg34hcxghif1axub">
-      <ColNames>ticket_id</ColNames>
-      <ObjectId>16447</ObjectId>
-      <RefColNames>id</RefColNames>
-      <RefColPositions>1</RefColPositions>
-      <StateNumber>740</StateNumber>
-      <RefTableId>16426</RefTableId>
-      <RefTableName>tickets</RefTableName>
-      <RefTableKind>table</RefTableKind>
-    </foreign-key>
-    <index id="306" parent="269" name="histories_pkey">
-      <ColNames>id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16412</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>732</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-    </index>
-    <key id="307" parent="269" name="histories_pkey">
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16413</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>732</StateNumber>
-      <UnderlyingIndexId>16412</UnderlyingIndexId>
-    </key>
-    <column id="308" parent="270" name="id">
-      <DasType>bigint|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StateNumber>733</StateNumber>
-      <TypeId>20</TypeId>
-    </column>
-    <column id="309" parent="270" name="body">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>2</Position>
-      <StateNumber>733</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="310" parent="270" name="date">
-      <DasType>timestamp(6)|0s</DasType>
-      <Position>3</Position>
-      <StateNumber>733</StateNumber>
-      <TypeId>1114</TypeId>
-    </column>
-    <column id="311" parent="270" name="expert_id">
-      <DasType>uuid|0s</DasType>
-      <Position>4</Position>
-      <StateNumber>733</StateNumber>
-      <TypeId>2950</TypeId>
-    </column>
-    <column id="312" parent="270" name="ticket_id">
-      <DasType>bigint|0s</DasType>
-      <Position>5</Position>
-      <StateNumber>733</StateNumber>
-      <TypeId>20</TypeId>
-    </column>
-    <foreign-key id="313" parent="270" name="fk4jmfgferjm3b52u14pq7g3jhg">
-      <ColNames>expert_id</ColNames>
-      <ObjectId>16452</ObjectId>
-      <RefColNames>id</RefColNames>
-      <RefColPositions>1</RefColPositions>
-      <StateNumber>741</StateNumber>
-      <RefTableId>16402</RefTableId>
-      <RefTableName>employees</RefTableName>
-      <RefTableKind>table</RefTableKind>
-    </foreign-key>
-    <foreign-key id="314" parent="270" name="fk6iv985o3ybdk63srj731en4ba">
-      <ColNames>ticket_id</ColNames>
-      <ObjectId>16457</ObjectId>
-      <RefColNames>id</RefColNames>
-      <RefColPositions>1</RefColPositions>
-      <StateNumber>742</StateNumber>
-      <RefTableId>16426</RefTableId>
-      <RefTableName>tickets</RefTableName>
-      <RefTableKind>table</RefTableKind>
-    </foreign-key>
-    <index id="315" parent="270" name="messages_pkey">
-      <ColNames>id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16417</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>733</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-    </index>
-    <key id="316" parent="270" name="messages_pkey">
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16418</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>733</StateNumber>
-      <UnderlyingIndexId>16417</UnderlyingIndexId>
-    </key>
-    <column id="317" parent="271" name="ean">
+    <column id="281" parent="267" name="product_id">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StateNumber>734</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="318" parent="271" name="brand">
-      <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
-      <StateNumber>734</StateNumber>
+      <StateNumber>829</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="319" parent="271" name="name">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>3</Position>
-      <StateNumber>734</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <index id="320" parent="271" name="products_pkey">
-      <ColNames>ean</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16424</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>734</StateNumber>
-      <Unique>1</Unique>
-      <AccessMethodId>403</AccessMethodId>
-      <CollationNames>default</CollationNames>
-      <CollationIds>100</CollationIds>
-      <CollationParentNames>pg_catalog</CollationParentNames>
-    </index>
-    <key id="321" parent="271" name="products_pkey">
-      <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16425</ObjectId>
-      <Primary>1</Primary>
-      <StateNumber>734</StateNumber>
-      <UnderlyingIndexId>16424</UnderlyingIndexId>
-    </key>
-    <column id="322" parent="272" name="id">
-      <DasType>bigint|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StateNumber>735</StateNumber>
-      <TypeId>20</TypeId>
-    </column>
-    <column id="323" parent="272" name="description">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>2</Position>
-      <StateNumber>735</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="324" parent="272" name="priority">
-      <DasType>smallint|0s</DasType>
-      <Position>3</Position>
-      <StateNumber>735</StateNumber>
-      <TypeId>21</TypeId>
-    </column>
-    <column id="325" parent="272" name="title">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>4</Position>
-      <StateNumber>735</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="326" parent="272" name="customer_id">
-      <DasType>uuid|0s</DasType>
-      <Position>5</Position>
-      <StateNumber>735</StateNumber>
-      <TypeId>2950</TypeId>
-    </column>
-    <column id="327" parent="272" name="product_ean">
-      <DasType>varchar(255)|0s</DasType>
-      <Position>6</Position>
-      <StateNumber>735</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <foreign-key id="328" parent="272" name="fki81xre2n3j3as1sp24j440kq1">
+    <foreign-key id="282" parent="267" name="fkk1iv7jvt9xfpfiy72j8422vv7">
       <ColNames>customer_id</ColNames>
-      <ObjectId>16462</ObjectId>
+      <ObjectId>16633</ObjectId>
       <RefColNames>id</RefColNames>
       <RefColPositions>1</RefColPositions>
-      <StateNumber>743</StateNumber>
-      <RefTableId>16395</RefTableId>
+      <StateNumber>840</StateNumber>
+      <RefTableId>16581</RefTableId>
       <RefTableName>customers</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
-    <foreign-key id="329" parent="272" name="fk9m28r3wh8pt856v8w9r7we969">
-      <ColNames>product_ean</ColNames>
-      <ObjectId>16467</ObjectId>
+    <foreign-key id="283" parent="267" name="fk32b9pljo1co74d8bpwh2a15e1">
+      <ColNames>product_id</ColNames>
+      <ObjectId>16628</ObjectId>
       <RefColNames>ean</RefColNames>
       <RefColPositions>1</RefColPositions>
-      <StateNumber>744</StateNumber>
-      <RefTableId>16419</RefTableId>
+      <StateNumber>839</StateNumber>
+      <RefTableId>16605</RefTableId>
       <RefTableName>products</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
-    <index id="330" parent="272" name="tickets_pkey">
+    <index id="284" parent="267" name="customer_product_pkey">
+      <ColNames>customer_id
+product_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16579</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>829</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>
+100</CollationIds>
+      <CollationParentNames>
+pg_catalog</CollationParentNames>
+      <CollationNames>
+default</CollationNames>
+    </index>
+    <key id="285" parent="267" name="customer_product_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16580</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>829</StateNumber>
+      <UnderlyingIndexId>16579</UnderlyingIndexId>
+    </key>
+    <column id="286" parent="268" name="id">
+      <DasType>uuid|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="287" parent="268" name="address">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="288" parent="268" name="dob">
+      <DasType>date|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>1082</TypeId>
+    </column>
+    <column id="289" parent="268" name="email">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="290" parent="268" name="first_name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>5</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="291" parent="268" name="last_name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>6</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="292" parent="268" name="phone_number">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>7</Position>
+      <StateNumber>830</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="293" parent="268" name="customers_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16431</ObjectId>
+      <ObjectId>16586</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>735</StateNumber>
+      <StateNumber>830</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="331" parent="272" name="tickets_pkey">
+    <index id="294" parent="268" name="uk_rfbvkrffamfql7cjmen8v976v">
+      <ColNames>email</ColNames>
+      <ObjectId>16619</ObjectId>
+      <StateNumber>836</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="295" parent="268" name="customers_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16432</ObjectId>
+      <ObjectId>16587</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>735</StateNumber>
-      <UnderlyingIndexId>16431</UnderlyingIndexId>
+      <StateNumber>830</StateNumber>
+      <UnderlyingIndexId>16586</UnderlyingIndexId>
+    </key>
+    <key id="296" parent="268" name="uk_rfbvkrffamfql7cjmen8v976v">
+      <ObjectId>16620</ObjectId>
+      <StateNumber>836</StateNumber>
+      <UnderlyingIndexId>16619</UnderlyingIndexId>
+    </key>
+    <column id="297" parent="269" name="id">
+      <DasType>uuid|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>831</StateNumber>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="298" parent="269" name="email">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>831</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="299" parent="269" name="first_name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>831</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="300" parent="269" name="last_name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>831</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="301" parent="269" name="type">
+      <DasType>smallint|0s</DasType>
+      <Position>5</Position>
+      <StateNumber>831</StateNumber>
+      <TypeId>21</TypeId>
+    </column>
+    <index id="302" parent="269" name="employees_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16593</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>831</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <index id="303" parent="269" name="uk_j9xgmd0ya5jmus09o0b8pqrpb">
+      <ColNames>email</ColNames>
+      <ObjectId>16621</ObjectId>
+      <StateNumber>837</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="304" parent="269" name="employees_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16594</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>831</StateNumber>
+      <UnderlyingIndexId>16593</UnderlyingIndexId>
+    </key>
+    <key id="305" parent="269" name="uk_j9xgmd0ya5jmus09o0b8pqrpb">
+      <ObjectId>16622</ObjectId>
+      <StateNumber>837</StateNumber>
+      <UnderlyingIndexId>16621</UnderlyingIndexId>
+    </key>
+    <column id="306" parent="270" name="id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>832</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="307" parent="270" name="date">
+      <DasType>timestamp(6)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>832</StateNumber>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="308" parent="270" name="state">
+      <DasType>smallint|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>832</StateNumber>
+      <TypeId>21</TypeId>
+    </column>
+    <column id="309" parent="270" name="employee_id">
+      <DasType>uuid|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>832</StateNumber>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="310" parent="270" name="ticket_id">
+      <DasType>bigint|0s</DasType>
+      <Position>5</Position>
+      <StateNumber>832</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <foreign-key id="311" parent="270" name="fkfqlkwrrktk99n8iuguhasgdee">
+      <ColNames>employee_id</ColNames>
+      <ObjectId>16638</ObjectId>
+      <RefColNames>id</RefColNames>
+      <RefColPositions>1</RefColPositions>
+      <StateNumber>841</StateNumber>
+      <RefTableId>16588</RefTableId>
+      <RefTableName>employees</RefTableName>
+      <RefTableKind>table</RefTableKind>
+    </foreign-key>
+    <foreign-key id="312" parent="270" name="fksimdb3ffgdg34hcxghif1axub">
+      <ColNames>ticket_id</ColNames>
+      <ObjectId>16643</ObjectId>
+      <RefColNames>id</RefColNames>
+      <RefColPositions>1</RefColPositions>
+      <StateNumber>842</StateNumber>
+      <RefTableId>16612</RefTableId>
+      <RefTableName>tickets</RefTableName>
+      <RefTableKind>table</RefTableKind>
+    </foreign-key>
+    <index id="313" parent="270" name="histories_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16598</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>832</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="314" parent="270" name="histories_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16599</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>832</StateNumber>
+      <UnderlyingIndexId>16598</UnderlyingIndexId>
+    </key>
+    <column id="315" parent="271" name="id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>833</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="316" parent="271" name="body">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>833</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="317" parent="271" name="date">
+      <DasType>timestamp(6)|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>833</StateNumber>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="318" parent="271" name="expert_id">
+      <DasType>uuid|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>833</StateNumber>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="319" parent="271" name="ticket_id">
+      <DasType>bigint|0s</DasType>
+      <Position>5</Position>
+      <StateNumber>833</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <foreign-key id="320" parent="271" name="fk4jmfgferjm3b52u14pq7g3jhg">
+      <ColNames>expert_id</ColNames>
+      <ObjectId>16648</ObjectId>
+      <RefColNames>id</RefColNames>
+      <RefColPositions>1</RefColPositions>
+      <StateNumber>843</StateNumber>
+      <RefTableId>16588</RefTableId>
+      <RefTableName>employees</RefTableName>
+      <RefTableKind>table</RefTableKind>
+    </foreign-key>
+    <foreign-key id="321" parent="271" name="fk6iv985o3ybdk63srj731en4ba">
+      <ColNames>ticket_id</ColNames>
+      <ObjectId>16653</ObjectId>
+      <RefColNames>id</RefColNames>
+      <RefColPositions>1</RefColPositions>
+      <StateNumber>844</StateNumber>
+      <RefTableId>16612</RefTableId>
+      <RefTableName>tickets</RefTableName>
+      <RefTableKind>table</RefTableKind>
+    </foreign-key>
+    <index id="322" parent="271" name="messages_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16603</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>833</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="323" parent="271" name="messages_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16604</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>833</StateNumber>
+      <UnderlyingIndexId>16603</UnderlyingIndexId>
+    </key>
+    <column id="324" parent="272" name="ean">
+      <DasType>varchar(255)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>834</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="325" parent="272" name="brand">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>834</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="326" parent="272" name="name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>834</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="327" parent="272" name="products_pkey">
+      <ColNames>ean</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16610</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>834</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="328" parent="272" name="products_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16611</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>834</StateNumber>
+      <UnderlyingIndexId>16610</UnderlyingIndexId>
+    </key>
+    <column id="329" parent="273" name="id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>835</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="330" parent="273" name="description">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>835</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="331" parent="273" name="priority">
+      <DasType>smallint|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>835</StateNumber>
+      <TypeId>21</TypeId>
+    </column>
+    <column id="332" parent="273" name="title">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>835</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="333" parent="273" name="customer_id">
+      <DasType>uuid|0s</DasType>
+      <Position>5</Position>
+      <StateNumber>835</StateNumber>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="334" parent="273" name="product_ean">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>6</Position>
+      <StateNumber>835</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <foreign-key id="335" parent="273" name="fki81xre2n3j3as1sp24j440kq1">
+      <ColNames>customer_id</ColNames>
+      <ObjectId>16658</ObjectId>
+      <RefColNames>id</RefColNames>
+      <RefColPositions>1</RefColPositions>
+      <StateNumber>845</StateNumber>
+      <RefTableId>16581</RefTableId>
+      <RefTableName>customers</RefTableName>
+      <RefTableKind>table</RefTableKind>
+    </foreign-key>
+    <foreign-key id="336" parent="273" name="fk9m28r3wh8pt856v8w9r7we969">
+      <ColNames>product_ean</ColNames>
+      <ObjectId>16663</ObjectId>
+      <RefColNames>ean</RefColNames>
+      <RefColPositions>1</RefColPositions>
+      <StateNumber>846</StateNumber>
+      <RefTableId>16605</RefTableId>
+      <RefTableName>products</RefTableName>
+      <RefTableKind>table</RefTableKind>
+    </foreign-key>
+    <index id="337" parent="273" name="tickets_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16617</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>835</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="338" parent="273" name="tickets_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16618</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>835</StateNumber>
+      <UnderlyingIndexId>16617</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>
