@@ -4,6 +4,9 @@ import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.product.ProductDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
 import it.polito.wa2.ticketing.utils.EmailValidationUtil
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder
+import org.keycloak.admin.client.Keycloak
+import org.keycloak.admin.client.KeycloakBuilder
 import org.springframework.http.*
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.core.context.SecurityContextHolder
@@ -19,13 +22,24 @@ import java.util.UUID
 class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()
+    private data class CredentialRapresentation(
+        val role: String,
+        val password: String
+    )
+    private data class UserRapresentation(
+        val username: String,
+        val email:String,
+        val firstName:String,
+        val lastName:String,
+        val credentials: CredentialRapresentation
+        )
 
     @PostMapping("/API/login")
     @ResponseStatus(HttpStatus.OK)
     fun login(@RequestBody credentials: Map<String, String>): ResponseEntity<String> {
         val restTemplate = RestTemplate()
 
-        val url = "http://172.17.0.1:8080/realms/ticketing/protocol/openid-connect/token"
+        val url = "http://localhost:8080/realms/ticketing/clients-registrations/openid-connect"
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -38,6 +52,41 @@ class CustomerController(val customerService: CustomerService) {
         try {
             val requestEntity = HttpEntity(requestBody, headers)
             return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
+        } catch (e: Exception) {
+            throw LoginErrorException("Error during login")
+        }
+    }
+    @PostMapping("/API/customer/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun signUp(@RequestBody userInfo: Map<String, String>): String {
+        val restTemplate = RestTemplate()
+        val credential = CredentialRapresentation(userInfo["role"]!!,userInfo["password"]!!)
+        val user = UserRapresentation(userInfo["username"]!!,userInfo["email"]!!,userInfo["firstname"]!!,userInfo["lastname"]!!,credential)
+
+        val url = "http://localhost:8080/admin"
+
+        val kc = KeycloakBuilder.builder()
+            .serverUrl(url)
+            .realm("ticketing")
+            .clientId("authN")
+            .username(userInfo["username"]!!)
+            .password(userInfo["password"]!!)
+            .grantType("Client")
+            .build()
+        val token = kc.tokenManager().accessTokenString
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+
+        val requestBody: MultiValueMap<String, String> = LinkedMultiValueMap()
+        requestBody.add("grant_type", "password")
+        requestBody.add("client_id", "authN")
+        requestBody.add("username", userInfo["username"])
+        requestBody.add("password", userInfo["password"])
+        try {
+            val requestEntity = HttpEntity(requestBody, headers)
+            val responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
+            return responseEntity.body.toString()
         } catch (e: Exception) {
             throw LoginErrorException("Error during login")
         }

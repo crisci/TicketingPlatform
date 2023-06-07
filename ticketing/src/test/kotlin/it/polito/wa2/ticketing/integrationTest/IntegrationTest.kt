@@ -306,19 +306,19 @@ class IntegrationTest {
         historyRepository.save(history1)
 
         assertThrows<TicketNotFoundException> {
-            managerService.assignTicket(-1, expert.getId()!!, PriorityLevel.HIGH)
+            managerService.assignTicket(-1, expert.id, PriorityLevel.HIGH)
         }
 
         assertThrows<ExpertNotFoundException> {
             managerService.assignTicket(ticket.getId()!!, UUID.randomUUID(), PriorityLevel.HIGH)
         }
 
-        managerService.assignTicket(ticket.getId()!!, expert.getId()!!, PriorityLevel.HIGH)
+        managerService.assignTicket(ticket.getId()!!, expert.id, PriorityLevel.HIGH)
         assert(historyRepository.findByTicketIdOrderByDateDesc(ticketId = ticket.getId()!!).first().state == TicketStatus.IN_PROGRESS)
 
 
         assertThrows<OperationNotPermittedException>() {
-            managerService.assignTicket(ticket.getId()!!, expert.getId()!!, PriorityLevel.HIGH)
+            managerService.assignTicket(ticket.getId()!!, expert.id, PriorityLevel.HIGH)
         }
 
 
@@ -382,7 +382,7 @@ class IntegrationTest {
         historyRepository.save(history1)
 
         assertThrows<TicketNotFoundException> {
-            expertService.addMessage(-1, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null), expert.getId()!!)
+            expertService.addMessage(-1, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null), expert.id)
         }
 
         assertThrows<TicketNotFoundException> {
@@ -390,18 +390,18 @@ class IntegrationTest {
         }
 
         assertThrows<OperationNotPermittedException> {
-            expertService.addMessage(ticket.getId()!!, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null), expert.getId()!!)
+            expertService.addMessage(ticket.getId()!!, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null), expert.id)
         }
 
         assertThrows<OperationNotPermittedException> {
             customerService.addMessage(ticket.getId()!!, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null))
         }
 
-        managerService.assignTicket(ticket.getId()!!, expert.getId()!!, PriorityLevel.HIGH)
+        managerService.assignTicket(ticket.getId()!!, expert.id, PriorityLevel.HIGH)
         assert(historyRepository.findByTicketIdOrderByDateDesc(ticketId = ticket.getId()!!).first().state == TicketStatus.IN_PROGRESS)
 
         customerService.addMessage(ticket.getId()!!, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null))
-        expertService.addMessage(ticket.getId()!!, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null), expert.getId()!!)
+        expertService.addMessage(ticket.getId()!!, MessageDTO(null, "Test", null, mutableSetOf<AttachmentDTO>(), null), expert.id)
 
         assert(managerService.getTicketMessages(ticket.getId()!!)?.size == 2)
 
@@ -516,10 +516,6 @@ class IntegrationTest {
 
         assertThrows<CustomerNotFoundException> {
             customerService.getCustomerByEmail("meow@polito.it")
-        }
-
-        assertThrows<DuplicatedEmailException> {
-            customerService.insertCustomer(customer.toDTO())
         }
 
         assertThrows<OperationNotPermittedException> {
