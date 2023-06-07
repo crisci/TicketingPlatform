@@ -19,7 +19,19 @@ class ProductProblemDetailHandlers: ResponseEntityExceptionHandler() {
     fun handleBlankFields(e: BlankFieldsException) = ProblemDetail
         .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
 
+    @ExceptionHandler(ProductAlreadyRegisteredException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleProductAlreadyRegistered(e: ProductAlreadyRegisteredException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.CONFLICT, e.message!! )
+
+    @ExceptionHandler(ProductNotRegistered::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleProductNotRegistered(e: ProductNotRegistered) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
+
 }
 
 class ProductNotFoundException(override val message:String?) : RuntimeException()
 class BlankFieldsException(override val message: String?) : RuntimeException()
+class ProductAlreadyRegisteredException(override val message: String?) : RuntimeException()
+class ProductNotRegistered(override val message: String?) : RuntimeException()

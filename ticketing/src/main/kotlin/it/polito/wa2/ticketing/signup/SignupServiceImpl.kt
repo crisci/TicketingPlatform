@@ -21,21 +21,13 @@ class SignupServiceImpl(
     private val employeeRepository: EmployeeRepository
 ): SignupService {
 
-
     private val authUrl = "http://localhost:8080/"
     private val realm = "ticketing"
-    private val keycloak = KeycloakBuilder.builder()
-        .serverUrl(authUrl)
-        .realm(realm)
-        .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-        .clientId("admin-cli")
-        .clientSecret("eca6Wae8SYXHJYSxxAeh5Gs38HZP3tPg")
-        .build()
 
     private fun open(): Keycloak {
         return KeycloakBuilder.builder()
-            .serverUrl("http://localhost:8080/")
-            .realm("ticketing")
+            .serverUrl(authUrl)
+            .realm(realm)
             .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
             .clientId("admin-cli")
             .clientSecret("eca6Wae8SYXHJYSxxAeh5Gs38HZP3tPg")
