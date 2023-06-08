@@ -15,12 +15,12 @@ import java.util.UUID
 @RestController
 class TicketController(val ticketService: TicketService) {
 
-    @GetMapping("/API/tickets/{idCustomer}/messages")
+    /*@GetMapping("/API/tickets/{idCustomer}/messages")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Manager")
     fun getTicketsWithMessagesByCustomerId(@PathVariable idCustomer: UUID): Set<TicketWithMessagesDTO>? {
         return ticketService.getTicketsWithMessagesByCustomerId(idCustomer)
-    }
+    }*/
 
     @PutMapping("/API/tickets/{ticketId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)

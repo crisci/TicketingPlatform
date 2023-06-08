@@ -11,7 +11,7 @@ Can be found in the folder "WA-G16.ticketing.documentation":
 
 Build the docker image for spring:
 - enter in the folder: .../WA-G16/ticketing
-- build:
+- [build:]
 
       on linux: ./gradlew
             [on windows: gradlew.bat]
