@@ -21,7 +21,7 @@ class SignupServiceImpl(
     private val employeeRepository: EmployeeRepository
 ): SignupService {
 
-    private val authUrl = "http://localhost:8080/"
+    private val authUrl = "http://keycloak:8080/"
     private val realm = "ticketing"
 
     private fun open(): Keycloak {
