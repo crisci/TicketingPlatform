@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.signup
 
+import io.micrometer.observation.annotation.Observed
 import org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS
 import org.keycloak.admin.client.CreatedResponseUtil
 import org.keycloak.admin.client.KeycloakBuilder
@@ -17,6 +18,7 @@ import java.util.*
 
 
 @RestController
+@Observed
 class SignupController (private val signupService: SignupService)
 {
 
