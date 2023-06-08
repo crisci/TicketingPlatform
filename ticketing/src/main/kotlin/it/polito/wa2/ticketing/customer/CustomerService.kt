@@ -18,4 +18,6 @@ interface CustomerService {
     fun closeTicket(ticketId: Long)
     fun productRegistration(customerId: UUID, ean: String)
     fun getRegisteredProducts(customerId: UUID): List<ProductDTO>?
+
 }
+

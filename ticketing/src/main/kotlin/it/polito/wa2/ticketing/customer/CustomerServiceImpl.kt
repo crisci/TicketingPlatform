@@ -177,4 +177,6 @@ class CustomerServiceImpl(
         val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
         return customer.products.map { it.toDTO() }
     }
+
 }
+
