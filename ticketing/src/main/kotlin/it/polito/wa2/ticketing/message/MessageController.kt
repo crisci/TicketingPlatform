@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.message
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.ticketing.attachment.AttachmentDTO
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,6 +15,7 @@ import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Observed
 class MessageController(val messageService: MessageService) {
 
     @GetMapping("/API/messages/{messageId}/attachments", produces = ["image/jpeg", "image/png"])

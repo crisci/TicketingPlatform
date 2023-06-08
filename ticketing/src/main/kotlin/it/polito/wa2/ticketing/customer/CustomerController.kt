@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.customer
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.product.ProductDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
@@ -19,6 +20,7 @@ import java.util.UUID
 
 
 @RestController
+@Observed
 class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()

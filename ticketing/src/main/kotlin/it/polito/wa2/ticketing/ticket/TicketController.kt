@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
+@Observed
 class TicketController(val ticketService: TicketService) {
 
     /*@GetMapping("/API/tickets/{idCustomer}/messages")
