@@ -24,6 +24,7 @@ import java.util.UUID
 class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()
+
     private data class CredentialRapresentation(
         val role: String,
         val password: String
