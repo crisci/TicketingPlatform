@@ -231,6 +231,71 @@
         ]
       }
     },
+    "/API/customers/products": {
+      "get": {
+        "summary": "Get Registered Products",
+        "operationId": "getRegisteredProducts",
+        "tags": ["Customers"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductDTO"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/API/customers/product": {
+      "post": {
+        "summary": "Product Registration",
+        "operationId": "productRegistration",
+        "tags": ["Customers"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ean": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
     "/API/customers/tickets/{idTicket}/resolved": {
       "put": {
         "summary": "Resolve a ticket",

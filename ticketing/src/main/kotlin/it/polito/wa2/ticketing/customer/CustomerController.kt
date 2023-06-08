@@ -56,42 +56,6 @@ class CustomerController(val customerService: CustomerService) {
             throw LoginErrorException("Error during login")
         }
     }
-    @PostMapping("/API/customer/signup")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun signUp(@RequestBody userInfo: Map<String, String>): String {
-        val restTemplate = RestTemplate()
-        val credential = CredentialRapresentation(userInfo["role"]!!,userInfo["password"]!!)
-        val user = UserRapresentation(userInfo["username"]!!,userInfo["email"]!!,userInfo["firstname"]!!,userInfo["lastname"]!!,credential)
-
-        val url = "http://localhost:8080/admin"
-
-        val kc = KeycloakBuilder.builder()
-            .serverUrl(url)
-            .realm("ticketing")
-            .clientId("authN")
-            .username(userInfo["username"]!!)
-            .password(userInfo["password"]!!)
-            .grantType("Client")
-            .build()
-        val token = kc.tokenManager().accessTokenString
-
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-
-        val requestBody: MultiValueMap<String, String> = LinkedMultiValueMap()
-        requestBody.add("grant_type", "password")
-        requestBody.add("client_id", "authN")
-        requestBody.add("username", userInfo["username"])
-        requestBody.add("password", userInfo["password"])
-        try {
-            val requestEntity = HttpEntity(requestBody, headers)
-            val responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String::class.java)
-            return responseEntity.body.toString()
-        } catch (e: Exception) {
-            throw LoginErrorException("Error during login")
-        }
-    }
-
     @GetMapping("/API/customers/email={email}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_Expert", "ROLE_Manager")
@@ -129,12 +93,7 @@ class CustomerController(val customerService: CustomerService) {
         return customerService.getTicketsByCustomerId(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
-    @GetMapping("/API/customers/products")
-    @ResponseStatus(HttpStatus.OK)
-    fun getRegisteredProducts(): List<ProductDTO>? {
-        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
-        return customerService.getRegisteredProducts(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
-    }
+
 
     @PostMapping("/API/customers/tickets")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -143,7 +102,12 @@ class CustomerController(val customerService: CustomerService) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.addTicket(ticket, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
-
+    @GetMapping("/API/customers/products")
+    @ResponseStatus(HttpStatus.OK)
+    fun getRegisteredProducts(): List<ProductDTO>? {
+        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
+        return customerService.getRegisteredProducts(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
+    }
     @PostMapping("/API/customers/product")
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_Customer")
