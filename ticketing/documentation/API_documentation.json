@@ -6,6 +6,68 @@
     "description": "API endpoints for managing the ticketing service"
   },
   "paths": {
+    "/API/signup": {
+      "post": {
+        "summary": "Signup",
+        "operationId": "signup",
+        "tags": ["Signup"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/API/createExpert": {
+      "post": {
+        "summary": "Create Expert",
+        "operationId": "createExpert",
+        "tags": ["Signup"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "credentials": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
     "/API/login": {
       "post": {
         "summary": "User login",
@@ -250,6 +312,9 @@
               }
             }
           },
+          "401": {
+            "description": "Invalid credentials"
+          },
           "404": {
             "description": "Customer not found"
           }
@@ -284,6 +349,9 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Invalid credentials"
           },
           "404": {
             "description": "Customer not found"

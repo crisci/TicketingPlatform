@@ -20,6 +20,7 @@ import java.util.UUID
 
 
 @RestController
+@Observed
 class CustomerController(val customerService: CustomerService) {
 
     private val emailValidator = EmailValidationUtil()

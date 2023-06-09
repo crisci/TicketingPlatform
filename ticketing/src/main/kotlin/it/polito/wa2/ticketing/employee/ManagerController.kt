@@ -1,5 +1,6 @@
 package it.polito.wa2.ticketing.employee
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.ticketing.customer.CustomerDTO
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
+@Observed
 class ManagerController(
     private val managerService: ManagerService) {
 
