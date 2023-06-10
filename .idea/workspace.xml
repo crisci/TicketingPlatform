@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65487852-32e2-4262-abaf-4cbc52040b31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ticketing/docker/grafana/dashboards/dashboard.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ticketing/docker/grafana/dashboards/dashboards.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/7.6.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/docker/compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/docker/compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/documentation/API_documentation.json" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/documentation/API_documentation.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/customer/CustomerController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/ManagerController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/kotlin/it/polito/wa2/ticketing/employee/ManagerController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ticketing/src/main/resources/application-observe.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/main/resources/application-observe.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/TicketingApplicationTests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ticketing/src/test/kotlin/it/polito/wa2/ticketing/TicketingApplicationTests.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,36 +66,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/crisci/Projects/WA2-G16/ticketing/docker/grafana/provisioning/dashboards",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "spring.boot",
-    "spring.configuration.checksum": "f00f16b96da272a5f1e0bbda1cc87e9d",
-    "two.files.diff.last.used.file": "/home/crisci/Projects/WA2-G16/ticketing/documentation/API.md",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/crisci/Downloads/Lab5-Group16&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;spring.boot&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;f00f16b96da272a5f1e0bbda1cc87e9d&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;/home/crisci/Projects/WA2-G16/ticketing/documentation/API.md&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/ticketing/docker/grafana/provisioning/dashboards" />
@@ -116,7 +111,7 @@
       <recent name="it.polito.wa2.ticketing.signup" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.app">
+  <component name="RunManager" selected="Gradle.TicketingApplicationTests">
     <configuration name="IntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -165,7 +160,7 @@
       <ForceTestExec>true</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="IntegrationTest.expertOperatingOnTicketsTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="IntegrationTest.ticketAssignedCorrectly" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/ticketing" />
@@ -178,7 +173,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;it.polito.wa2.ticketing.integrationTest.IntegrationTest.expertOperatingOnTicketsTest&quot;" />
+            <option value="&quot;it.polito.wa2.ticketing.integrationTest.IntegrationTest.ticketAssignedCorrectly&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -253,10 +248,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.TicketingApplicationTests" />
-        <item itemvalue="Docker.docker: Compose Deployment" />
         <item itemvalue="Gradle.IntegrationTest" />
+        <item itemvalue="Gradle.IntegrationTest.ticketAssignedCorrectly" />
+        <item itemvalue="Docker.docker: Compose Deployment" />
         <item itemvalue="Gradle.IntegrationTest.customerTests" />
-        <item itemvalue="Gradle.IntegrationTest.expertOperatingOnTicketsTest" />
       </list>
     </recent_temporary>
   </component>
@@ -298,7 +293,11 @@
       <workItem from="1685548364379" duration="1918000" />
       <workItem from="1686154967186" duration="7428000" />
       <workItem from="1686211145232" duration="22213000" />
-      <workItem from="1686298647729" duration="530000" />
+      <workItem from="1686298647729" duration="1378000" />
+      <workItem from="1686300043884" duration="14000" />
+      <workItem from="1686301822305" duration="632000" />
+      <workItem from="1686302591644" duration="2851000" />
+      <workItem from="1686305924434" duration="7000" />
     </task>
     <servers />
   </component>
