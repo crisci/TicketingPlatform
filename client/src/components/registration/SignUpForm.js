@@ -4,7 +4,7 @@ import { Container, Form, Col, Row, Button, Alert } from "react-bootstrap";
 
 function SignUpForm(props) {
 
-    const [username, setUsername] = useState('full@polito.it');
+    const [username, setUsername] = useState('client1');
     const [password, setPassword] = useState('password');
     const [errorMessage, setErrorMessage] = useState("");
 

@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/login/LoginForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import API from './API';
 import RegistrationForm from './components/registration/SignUpForm';
 
@@ -25,6 +25,15 @@ function MainApp(props) {
 
   const [user, setUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+      setLoggedIn(true);
+    }
+  }, [])
 
   const doLogIn = async (credentials) => {
     return API.logIn(credentials)

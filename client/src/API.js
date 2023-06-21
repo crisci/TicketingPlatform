@@ -11,14 +11,15 @@ async function logIn(credentials) {
       },
       body: JSON.stringify(credentials)
   }).then(async res => {
-      try {
-        if (res.ok)
-           res.json();
-        throw await res.json();
-      } catch (error) {
-        console.log(error)
-        throw  Error("Please, retry!")
-      }
+        if (res.ok && res !== undefined) {
+            const user = await res.json() 
+            localStorage.setItem('user', JSON.stringify(user))
+            return user
+        } else if(res.ok && res === undefined){
+            throw Error("An error occurred while logging in.")
+        } else {
+            throw Error(await res.json().then(data => data.detail))
+        }
   });
   }
 
@@ -28,7 +29,7 @@ function getAllProfiles() {
         fetch(`${APIURL}/customers/`)
             .then((result) => {
                 if (result.ok) {
-                    resolve(result.json())
+                    resolve(result.json());
                 }  
             }).catch((err) => {
                 resolve({detail: "Unable to communicate with the server"})
