@@ -1,15 +1,12 @@
-import './loginform.css'
+import './signup.css'
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
 import { Container, Form, Col, Row, Button, Alert } from "react-bootstrap";
 
-function LoginForm(props) {
+function SignUpForm(props) {
 
     const [username, setUsername] = useState('full@polito.it');
     const [password, setPassword] = useState('password');
     const [errorMessage, setErrorMessage] = useState("");
-
-    const navigate = useNavigate()
 
     const usernameValidation = (username) => {
         return String(username)
@@ -18,12 +15,6 @@ function LoginForm(props) {
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             );
     };
-
-    const handleRegistration = (event) => {
-        event.preventDefault();
-        setErrorMessage();
-        navigate('/registration')
-    }
 
 
     const handleSubmit = (event) => {
@@ -44,7 +35,7 @@ function LoginForm(props) {
         <Row className="vh-100 m-0 login-background">
             <Col className="m-auto pb-5">
                 <Container className='login-form'>
-                    <h1 className="text-center mb-4">Login</h1>
+                    <h1 className="text-center mb-4">Sign up</h1>
                     {errorMessage
                         ? <Alert variant='danger' onClose={() => setErrorMessage()} dismissible>
                             <Alert.Heading>Something went wrong!</Alert.Heading>
@@ -60,10 +51,7 @@ function LoginForm(props) {
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" value={password} onChange={(event) => { setPassword(event.target.value) }} />
                         </Form.Group>
-                        <Row className='m-auto d-flex justify-content-between'>
-                            <Button type='submit' className='btn-primary mt-3 signin-btn' onClick={handleRegistration}>Sign up</Button>
-                            <Button type='submit' className='btn-primary mt-3 signin-btn' onClick={handleSubmit}>Confirm</Button>
-                        </Row>
+                        <Button type='submit' className='btn-primary mt-3 signup-btn' onClick={handleSubmit}>Sign up</Button>
                     </Form>
                 </Container>
             </Col>
@@ -71,4 +59,4 @@ function LoginForm(props) {
     )
 }
 
-export default LoginForm;
+export default SignUpForm;

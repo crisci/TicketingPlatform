@@ -12,11 +12,9 @@
   background-color: #2196F3;
 }
 
-.signin-btn {
+.signup-btn {
     border-radius: 2rem;
-    width: 40%;
-    margin-left: 0.1rem;
-    margin-right: 0.1rem;
+    width: 100%;
 }
 
 p {

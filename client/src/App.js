@@ -6,6 +6,7 @@ import LandingPage from './components/LandingPage';
 import LoginForm from './components/login/LoginForm';
 import { useState } from 'react';
 import API from './API';
+import RegistrationForm from './components/registration/SignUpForm';
 
 
 function App() {
@@ -38,12 +39,13 @@ function MainApp(props) {
 
   return (
     <Routes>
-      <Route path="/" element={
+     <Route path="/" element={
           !loggedIn 
             ? <Navigate to="/login"/>
             : <LandingPage/>
-        }></Route>
+        }></Route> 
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
+      <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm login={doLogIn}/>}/>
     </Routes>
   );
 }
