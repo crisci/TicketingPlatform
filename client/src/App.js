@@ -7,7 +7,7 @@ import LoginForm from './components/login/LoginForm';
 import { useEffect, useState } from 'react';
 import API from './API';
 import RegistrationForm from './components/registration/SignUpForm';
-
+import jwt from 'jwt-decode'
 
 function App() {
   return (
@@ -26,20 +26,30 @@ function MainApp(props) {
   const [user, setUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false)
 
+
   useEffect(() => {
+    const jwtToUser = (jwt) => {
+      return {
+        email: jwt.email,
+        first_name: jwt.given_name,
+        last_name: jwt.family_name,
+        role: jwt.resource_access["authN"].roles[0]
+      }
+    } 
+
     const loggedInUser = localStorage.getItem("jwt");
     if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      console.log(foundUser)
-      setUser(foundUser);
+      //updated asynchronously
+      setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
     }
   }, [])
 
+  useEffect(() => { console.log(user) }, [user])
+
   const doLogIn = async (credentials) => {
     return API.logIn(credentials)
       .then(user => {
-        console.log(user)
         setLoggedIn(true);
         setUser(user);
         navigate('/');
