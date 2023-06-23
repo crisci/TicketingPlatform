@@ -1,3 +1,4 @@
+@import url('../../colors.css');
 .login-form {
   border-radius: 2rem;
   width: 30%;
@@ -9,7 +10,7 @@
 }
 
 .login-background {
-  background-color: #2196F3;
+  background-color: var(--primary-100);
 }
 
 .signin-btn {

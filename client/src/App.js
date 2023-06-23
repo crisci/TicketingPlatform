@@ -27,9 +27,10 @@ function MainApp(props) {
   const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
+    const loggedInUser = localStorage.getItem("jwt");
     if (loggedInUser) {
       const foundUser = JSON.parse(loggedInUser);
+      console.log(foundUser)
       setUser(foundUser);
       setLoggedIn(true);
     }
@@ -45,13 +46,20 @@ function MainApp(props) {
       })
   }
 
+  const handleLogout = () =>  {
+    setLoggedIn(false)
+    setUser({})
+    localStorage.removeItem("jwt")
+    navigate('/')
+}
+
 
   return (
     <Routes>
      <Route path="/" element={
           !loggedIn 
             ? <Navigate to="/login"/>
-            : <LandingPage/>
+            : <LandingPage user={user} handleLogout={handleLogout}/>
         }></Route> 
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm login={doLogIn}/>}/>

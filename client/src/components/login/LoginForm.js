@@ -1,23 +1,16 @@
 import './loginform.css'
+import '../../colors.css'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { Container, Form, Col, Row, Button, Alert } from "react-bootstrap";
 
 function LoginForm(props) {
 
-    const [username, setUsername] = useState('full@polito.it');
+    const [username, setUsername] = useState('client1');
     const [password, setPassword] = useState('password');
     const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate()
-
-    const usernameValidation = (username) => {
-        return String(username)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
-    };
 
     const handleRegistration = (event) => {
         event.preventDefault();
@@ -51,9 +44,9 @@ function LoginForm(props) {
                             {errorMessage}
                         </Alert>
                         : ''}
-                    <Form noValidate onSubmit={handleSubmit}>
+                    <Form onSubmit={event => {event.preventDefault()}}>
                         <Form.Group className="mb-3" controlId='username'>
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label>Username</Form.Label>
                             <Form.Control type="username" value={username} onChange={(event) => { setUsername(event.target.value) }} />
                         </Form.Group>
                         <Form.Group controlId='password'>
@@ -61,8 +54,8 @@ function LoginForm(props) {
                             <Form.Control type="password" value={password} onChange={(event) => { setPassword(event.target.value) }} />
                         </Form.Group>
                         <Row className='m-auto d-flex justify-content-between'>
-                            <Button type='submit' className='btn-primary mt-3 signin-btn' onClick={handleRegistration}>Sign up</Button>
-                            <Button type='submit' className='btn-primary mt-3 signin-btn' onClick={handleSubmit}>Confirm</Button>
+                            <Button className='btn-primary mt-3 signin-btn' onClick={handleRegistration}>Sign up</Button>
+                            <Button className='btn-primary mt-3 signin-btn' onClick={handleSubmit}>Confirm</Button>
                         </Row>
                     </Form>
                 </Container>

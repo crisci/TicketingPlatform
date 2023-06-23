@@ -8,7 +8,7 @@ function SignUpForm(props) {
     const [password, setPassword] = useState('password');
     const [errorMessage, setErrorMessage] = useState("");
 
-    const usernameValidation = (username) => {
+    const emailValidation = (username) => {
         return String(username)
             .toLowerCase()
             .match(
@@ -20,13 +20,13 @@ function SignUpForm(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         setErrorMessage();
-        //username validation
+        //email validation
         // if (!usernameValidation(username)) {
         //     setErrorMessage("username not valid.");
         /* } else */if (password.trim() === '') {
             setErrorMessage('Password is mandatory.')
         } else {
-            //login
+            //registration api than login asynch await
             props.login({ username, password }).catch(err => {setErrorMessage(err.message)});
         }
     }
@@ -42,16 +42,19 @@ function SignUpForm(props) {
                             {errorMessage}
                         </Alert>
                         : ''}
-                    <Form noValidate onSubmit={handleSubmit}>
+                    <Form onSubmit={event => event.preventDefault()}>
                         <Form.Group className="mb-3" controlId='username'>
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label>Username</Form.Label>
                             <Form.Control type="username" value={username} onChange={(event) => { setUsername(event.target.value) }} />
                         </Form.Group>
                         <Form.Group controlId='password'>
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" value={password} onChange={(event) => { setPassword(event.target.value) }} />
                         </Form.Group>
-                        <Button type='submit' className='btn-primary mt-3 signup-btn' onClick={handleSubmit}>Sign up</Button>
+                        <Row className='m-auto d-flex justify-content-between'>
+                            <Button className='btn-primary mt-3 signup-btn' onClick={handleSubmit}>Sign in</Button>
+                            <Button className='btn-primary mt-3 signup-btn' onClick={handleSubmit}>Sign up</Button>
+                        </Row>
                     </Form>
                 </Container>
             </Col>

@@ -5,12 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './list.css'
 import { ModalProfile } from "./modals/ModalProfile";
-import { CustomNavbar } from "./CustomNavbar";
+import { CustomNavbar } from "./navbar/CustomNavbar";
 import { ProfileCard, ProductCard } from "./cards/Cards";
 
 
 function LandingPage(props) {
-
 
     const [email, setEmail] = useState('');
     const [ean, setEan] = useState('');
@@ -29,7 +28,7 @@ function LandingPage(props) {
     }
 
     function getProducts() {
-        API.getAllProducts().then((products) => {
+        API.getAllProducts(props.user).then((products) => {
             setListOfProducts(products)}).catch(error => {
                 notifyProductError(error.detail)
                 console.error(error.detail)
@@ -133,7 +132,7 @@ function LandingPage(props) {
 
     return(
         <>
-        <CustomNavbar/>
+        <CustomNavbar handleLogout={props.handleLogout}/>
         <Container fluid className="text-center justify-content-center" style={{ paddingTop: "5rem" }}>
             <ModalProfile show={showModalProfile} onHide={handleCloseModalProfile} addProfile={addProfile} updateProfile={updateProfile} add={add} notifyProfileError={notifyProfileError}/>
             <ToastContainer/>

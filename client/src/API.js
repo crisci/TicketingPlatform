@@ -12,13 +12,14 @@ async function logIn(credentials) {
       body: JSON.stringify(credentials)
   }).then(async res => {
         if (res.ok && res !== undefined) {
-            const user = await res.json() 
-            localStorage.setItem('user', JSON.stringify(user))
-            return user
-        } else if(res.ok && res === undefined){
+            const jwt = await res.json()
+            console.log(jwt)
+            localStorage.setItem("jwt", JSON.stringify(jwt)) 
+            return jwt 
+            } else if(res.ok && res === undefined){
             throw Error("An error occurred while logging in.")
         } else {
-            throw Error(await res.json().then(data => data.detail))
+            throw Error("A network error occurred while logging in.")
         }
   });
   }
@@ -39,10 +40,14 @@ function getAllProfiles() {
 }
 
 
-//GET /API/products/
-function getAllProducts() {
+//GET /API/products
+function getAllProducts(user) {
     return new Promise((resolve, reject) => { 
-        fetch(`${APIURL}/products/`)
+        fetch(`${APIURL}/products`, {
+            headers: {
+                'Authorization': 'Bearer ' + user.access_token,
+            }
+        })
             .then(result => {
                 if(result.ok)
                     resolve(result.json())
