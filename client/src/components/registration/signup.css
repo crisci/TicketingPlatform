@@ -1,6 +1,6 @@
 .signup-form {
   border-radius: 2rem;
-  width: 30%;
+  width: 35%;
   background-color: white;
   padding: 2rem;
   box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.31);
@@ -8,8 +8,12 @@
   -moz-box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.31);
 }
 
+
 .signup-background {
   background-color: #2196F3;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
 }
 
 .signup-btn {

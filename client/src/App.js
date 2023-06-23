@@ -31,8 +31,8 @@ function MainApp(props) {
     const jwtToUser = (jwt) => {
       return {
         email: jwt.email,
-        first_name: jwt.given_name,
-        last_name: jwt.family_name,
+        firstName: jwt.given_name,
+        lastName: jwt.family_name,
         role: jwt.resource_access["authN"].roles[0]
       }
     } 
@@ -56,6 +56,13 @@ function MainApp(props) {
       })
   }
 
+  const doSignup = async (credentials) => { 
+    return API.signup(credentials)
+      .then(() => { 
+        doLogIn({username: credentials.username, password: credentials.password})
+      })
+  }
+
   const handleLogout = () =>  {
     setLoggedIn(false)
     setUser({})
@@ -72,7 +79,7 @@ function MainApp(props) {
             : <LandingPage user={user} handleLogout={handleLogout}/>
         }></Route> 
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
-      <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm login={doLogIn}/>}/>
+      <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup}/>}/>
     </Routes>
   );
 }

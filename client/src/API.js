@@ -24,6 +24,24 @@ async function logIn(credentials) {
   });
   }
 
+async function signup(user) {
+    return fetch(`${APIURL}/signup`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user)
+    }).then(async res => {
+        if (res.ok) {
+            return true
+        } else {
+            throw Error("An error occurred while signing up.")
+        }
+    })
+
+}
+
 //GET /API/profiles/
 function getAllProfiles() {
     return new Promise((resolve, reject) => { 
@@ -152,5 +170,5 @@ function updateProfile(profile) {
 }
 
 
-const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn };
+const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup };
 export default API;

@@ -14,7 +14,6 @@ function LoginForm(props) {
 
     const handleRegistration = (event) => {
         event.preventDefault();
-        setErrorMessage();
         navigate('/registration')
     }
 
@@ -22,10 +21,7 @@ function LoginForm(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         setErrorMessage();
-        //username validation
-        // if (!usernameValidation(username)) {
-        //     setErrorMessage("username not valid.");
-        /* } else */if (password.trim() === '') {
+        if (password.trim() === '') {
             setErrorMessage('Password is mandatory.')
         } else {
             //login
