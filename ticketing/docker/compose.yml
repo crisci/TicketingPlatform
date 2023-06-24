@@ -1,0 +1,124 @@
+version: '3.8'
+services:
+  postgres:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 14
+    networks:
+      - wa2-app
+  keycloak:
+    depends_on:
+      - postgres
+    environment:
+      DB_VENDOR: postgres
+      DB_URL: jdbc:postgresql://localhost:5432/${POSTGRESQL_DB}
+      DB_DATABASE: ${POSTGRESQL_DB}
+      DB_USER: ${POSTGRESQL_USER}
+      DB_PASSWORD: ${POSTGRESQL_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    image: quay.io/keycloak/keycloak:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./imports:/opt/keycloak/data/import
+    command:
+      - "start-dev --import-realm"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - wa2-app
+  spring:
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      - spring.datasource.url=${SPRING_URL}
+      - spring.jpa.hibernate.ddl-auto=${SPRING_DDLAUTO}
+    image: ticketing-spring-api
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - wa2-app
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./volumes/loki:/loki
+    environment:
+      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    user: "root:root"
+    networks:
+      - wa2-app
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - ./loki/promtail-config.yaml:/etc/promtail/config.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers
+    networks:
+      - wa2-app
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./volumes/grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/dashboard.yaml
+    user: "root:root"
+    networks:
+      - wa2-app
+  tempo:
+    image: grafana/tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+      - ./volumes/tempo:/tmp/tempo
+    ports:
+      - "14268:14268"  # jaeger ingest
+      - "9411:9411" # zipkin
+    networks:
+      - wa2-app
+  prometheus:
+    image: prom/prometheus
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - wa2-app
+
+networks:
+  wa2-app:
+    driver: bridge

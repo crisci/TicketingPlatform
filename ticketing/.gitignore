@@ -1,6 +1,10 @@
 HELP.md
 .gradle
 build/
+docker/volumes/grafana/
+docker/volumes/loki/
+docker/volumes/postgres/
+docker/volumes/tempo/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

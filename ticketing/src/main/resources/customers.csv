@@ -1,0 +1,4 @@
+id,address,dob,email,firstName,lastName,phoneNumber
+3a4908f2-c70b-4b5f-bea9-c7e809a48145,123 Main St,1990-01-01,johndoe@example.com,Client,1,1234567890
+4b55183d-b01f-4592-9f58-652e97ff5e98,456 Elm St,1985-03-15,janedoe@example.com,Client,2,9876543210
+

@@ -1,0 +1,30 @@
+.signup-form {
+  border-radius: 2rem;
+  width: 35%;
+  background-color: white;
+  padding: 2rem;
+  box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.31);
+  -webkit-box-shadow: -5px 4px 5px 0px rgba(31, 31, 31, 0.082);
+  -moz-box-shadow: -5px 4px 5px 0px rgba(0,0,0,0.31);
+}
+
+
+.signup-background {
+  background-color: #2196F3;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+}
+
+.signup-btn {
+    border-radius: 2rem;
+    border-radius: 2rem;
+    width: 40%;
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+}
+
+
+p {
+    font-size: 1.2rem;
+}
