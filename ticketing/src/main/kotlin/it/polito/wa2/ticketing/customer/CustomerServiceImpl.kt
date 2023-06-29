@@ -178,5 +178,16 @@ class CustomerServiceImpl(
         return customer.products.map { it.toDTO() }
     }
 
+    override fun deleteProduct(customerId: UUID, ean: String) {
+        val product = productRepository.findProductByEan(ean) ?: throw ProductNotFoundException("The specified product has not been found!")
+        val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
+        val customProducts = customer.products
+        if (customProducts.contains(product)) {
+            customer.removeProduct(product)
+        } else {
+            throw ProductNotRegistered("The specified product is not registered!")
+        }
+    }
+
 }
 

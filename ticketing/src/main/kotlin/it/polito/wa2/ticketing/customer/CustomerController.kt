@@ -140,6 +140,14 @@ class CustomerController(val customerService: CustomerService) {
         customerService.reopenTicket(idTicket)
     }
 
+    @DeleteMapping("/API/customers/product")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_Customer")
+    fun deleteProduct(@RequestBody ean: String) {
+        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
+        customerService.deleteProduct(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), ean)
+    }
+
 
 
 }

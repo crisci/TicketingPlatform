@@ -44,6 +44,11 @@ class Customer {
         product.customers.add(this)
     }
 
+    fun removeProduct(product: Product) {
+        products.remove(product)
+        product.customers.remove(this)
+    }
+
     fun create(id: UUID, first_name: String, last_name: String, email: String, dob: LocalDate, address: String, phone_number: String): Customer {
         val c = Customer()
         c.id = id

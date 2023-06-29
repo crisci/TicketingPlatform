@@ -17,7 +17,6 @@ function LoginForm(props) {
         navigate('/registration')
     }
 
-
     const handleSubmit = (event) => {
         event.preventDefault();
         setErrorMessage();

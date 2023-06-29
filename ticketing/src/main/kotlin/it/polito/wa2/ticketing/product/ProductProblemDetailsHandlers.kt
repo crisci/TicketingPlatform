@@ -35,4 +35,3 @@ class ProductNotFoundException(override val message:String?) : RuntimeException(
 class BlankFieldsException(override val message: String?) : RuntimeException()
 class ProductAlreadyRegisteredException(override val message: String?) : RuntimeException()
 class ProductNotRegistered(override val message: String?) : RuntimeException()
-

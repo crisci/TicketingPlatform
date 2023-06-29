@@ -4,25 +4,24 @@ const APIURL = '/API';
 //POST /API/login
 async function logIn(credentials) {
     return fetch(`${APIURL}/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials)
-  }).then(async res => {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials)
+    }).then(async res => {
         if (res.ok && res !== undefined) {
             const jwt = await res.json()
-            console.log(jwt)
-            localStorage.setItem("jwt", JSON.stringify(jwt)) 
-            return jwt 
-            } else if(res.ok && res === undefined){
+            localStorage.setItem("jwt", JSON.stringify(jwt))
+            return jwt
+        } else if (res.ok && res === undefined) {
             throw Error("An error occurred while logging in.")
         } else {
             throw Error("A network error occurred while logging in.")
         }
-  });
-  }
+    });
+}
 
 async function signup(user) {
     return fetch(`${APIURL}/signup`, {
@@ -42,70 +41,125 @@ async function signup(user) {
 
 }
 
+function addProduct(user, ean) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/product`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+            'Content-Type': 'application/json'
+        },
+        body: ean
+    }).then(res => {
+        if (res.ok) {
+            resolve(true)
+        } else {
+            throw Error("An error occurred while adding device.")
+        }
+    })
+})}
+
+function removeProduct(user, ean) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/product`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+            'Content-Type': 'application/json'
+        },
+        body: ean
+    }).then(res => {
+        if (res.ok) {
+            resolve(true)
+        } else {
+            throw Error("An error occurred while removing device.")
+        }
+    })
+})}
+
+function getProducts() {
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/customers/products`, {
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(res.json())
+            } else {
+                throw Error("An error occurred while getting devices.")
+            }
+        })
+    })
+}
+
 //GET /API/profiles/
 function getAllProfiles() {
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
         fetch(`${APIURL}/customers/`)
             .then((result) => {
                 if (result.ok) {
                     resolve(result.json());
-                }  
+                }
             }).catch((err) => {
-                resolve({detail: "Unable to communicate with the server"})
+                resolve({ detail: "Unable to communicate with the server" })
             });
-     })
-    
+    })
+
 }
 
 
 //GET /API/products
 function getAllProducts(user) {
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
         fetch(`${APIURL}/products`, {
             headers: {
                 'Authorization': 'Bearer ' + user.access_token,
             }
         })
             .then(result => {
-                if(result.ok)
+                if (result.ok)
                     resolve(result.json())
             }).catch(err => {
-                resolve({detail: "Unable to communicate with the server"})
+                resolve({ detail: "Unable to communicate with the server" })
             })
-     })
+    })
 }
 
 
 //GET /API/profiles/:email
 function getProfile(email) {
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
         fetch(`${APIURL}/customers/email=${email}`)
             .then(result => {
-                if(result.ok) 
+                if (result.ok)
                     resolve(result.json())
-                else 
+                else
                     result.json().then(error => reject(error)).catch(() => reject({ detail: "Cannot parse server response." }))
-                
+
             }).catch(err => {
-                resolve({detail: "Unable to communicate with the server"})
+                resolve({ detail: "Unable to communicate with the server" })
             })
-     })
+    })
 }
 
 //GET /API/products/:ean
 function getProduct(ean) {
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
         fetch(`${APIURL}/products/id=${ean}`)
             .then(result => {
-                if(result.ok)
+                if (result.ok)
                     resolve(result.json())
-                else 
+                else
                     result.json().then(error => reject(error)).catch(() => reject({ detail: "Cannot parse server response." }))
-                
+
             }).catch(err => {
-                resolve({detail: "Unable to communicate with the server"})
+                resolve({ detail: "Unable to communicate with the server" })
             })
-     })
+    })
 }
 //POST /API/profiles
 export function addProfile(profile) {
@@ -117,14 +171,15 @@ export function addProfile(profile) {
             },
             body: JSON.stringify({
                 customer: {
-                    first_name: profile.first_name, 
-                    last_name: profile.last_name, 
-                    email: profile.email, 
-                    dob: profile.dob, 
+                    first_name: profile.first_name,
+                    last_name: profile.last_name,
+                    email: profile.email,
+                    dob: profile.dob,
                     address: profile.address,
                     phone_number: profile.phone_number,
                 },
-                password: profile.password}),
+                password: profile.password
+            }),
         }).then((response) => {
             if (response.ok) {
                 resolve(null);
@@ -147,15 +202,17 @@ function updateProfile(profile) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({customer: {
-                first_name: profile.first_name, 
-                last_name: profile.last_name, 
-                email: profile.newEmail, 
-                dob: profile.dob, 
-                address: profile.address,
-                phone_number: profile.phone_number,
-            },
-            password: profile.password }),
+            body: JSON.stringify({
+                customer: {
+                    first_name: profile.first_name,
+                    last_name: profile.last_name,
+                    email: profile.newEmail,
+                    dob: profile.dob,
+                    address: profile.address,
+                    phone_number: profile.phone_number,
+                },
+                password: profile.password
+            }),
         }).then((response) => {
             if (response.ok) {
                 resolve(null);
@@ -170,5 +227,5 @@ function updateProfile(profile) {
 }
 
 
-const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup };
+const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct };
 export default API;
