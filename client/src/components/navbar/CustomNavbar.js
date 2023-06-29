@@ -13,7 +13,7 @@ export function CustomNavbar(props) {
             <Container fluid style={{ paddingLeft: "1.2rem", paddingRight: "1.2rem" }}>
             <Navbar.Brand>Tickets</Navbar.Brand>
             {props.user.role === "Client" ? <Nav className="me-auto">
-                <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
+                <Nav.Link onClick={() => navigate("/")}>Your Tickets</Nav.Link>
                 <Nav.Link onClick={() => navigate("/yourdevices")}>Your Products</Nav.Link>
             </Nav> : null}
             </Container>

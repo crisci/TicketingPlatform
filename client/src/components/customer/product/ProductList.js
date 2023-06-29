@@ -1,4 +1,4 @@
-import { Container, ListGroup } from "react-bootstrap";
+import { Container, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { BsXCircleFill } from "react-icons/bs";
 
 function ProductList(props) {
@@ -6,6 +6,12 @@ function ProductList(props) {
     function handleX(ean) {
         props.removeProduct(ean)
     }
+
+    const tooltip = (
+        <Tooltip id="tooltip">
+            Remove Product
+        </Tooltip>
+    )
 
     return (
         <ListGroup variant="flush" className="px-3">
@@ -21,7 +27,11 @@ function ProductList(props) {
                         <Container>{product.ean}</Container>
                         <Container>{product.name}</Container>
                         <Container>{product.brand}</Container>
-                        <Container ><BsXCircleFill style={{ cursor: "pointer" }} color="red" size="20px" onClick={() => handleX(product.ean)} /></Container>
+                        <Container ><OverlayTrigger placement="top" overlay={tooltip}>
+                            <div style={{ cursor: 'pointer' }} onClick={() => handleX(product.ean)}>
+                                <BsXCircleFill color="red" size="20px" />
+                            </div>
+                        </OverlayTrigger></Container>
                     </ListGroup.Item>)
             }
         </ListGroup>

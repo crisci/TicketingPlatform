@@ -14,8 +14,4 @@ function CustomerLandingPage(props) {
     )
 }
 
-
-
-
-
 export default CustomerLandingPage;

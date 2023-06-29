@@ -44,39 +44,42 @@ async function signup(user) {
 function addProduct(user, ean) {
     return new Promise((resolve, reject) => {
         return fetch(`${APIURL}/customers/product`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
-            'Content-Type': 'application/json'
-        },
-        body: ean
-    }).then(res => {
-        if (res.ok) {
-            resolve(true)
-        } else {
-            res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
-        }
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: ean
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        })
     })
-})}
+}
 
 function removeProduct(user, ean) {
     return new Promise((resolve, reject) => {
         return fetch(`${APIURL}/customers/product`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
-            'Content-Type': 'application/json'
-        },
-        body: ean
-    }).then(res => {
-        if (res.ok) {
-            resolve(true)
-        } else {
-            res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
-        }})
-})}
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: ean
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
 
 function getProducts() {
     return new Promise((resolve, reject) => {
@@ -91,7 +94,46 @@ function getProducts() {
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
-        })
+        }).catch(err => reject(err))
+    })
+}
+
+function getTickets() {
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/customers/tickets`, {
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                res.json().then(tickets => resolve(tickets)).catch(_ => reject("Unable to parse the response."))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+
+
+function openTicket(ticket) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/tickets`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ticket)
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
     })
 }
 
@@ -226,5 +268,5 @@ function updateProfile(profile) {
 }
 
 
-const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct };
+const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct, getTickets, openTicket };
 export default API;

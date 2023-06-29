@@ -13,6 +13,8 @@ import RegistrationForm from './components/registration/SignUpForm';
 import jwt from 'jwt-decode'
 import YourDevices from './components/customer/product/YourProducts';
 import Notification from './utils/Notifications';
+import YourTickets from './components/customer/ticket/YourTickets';
+import OpenTicket from './components/customer/ticket/OpenTicket';
 
 function App() {
   return (
@@ -33,7 +35,10 @@ function MainApp(props) {
   const [loggedIn, setLoggedIn] = useState(false)
 
   const [products, setProducts] = useState([])
+  const [tickets, setTickets] = useState([])
 
+
+  const [loadingTickets, setLoadingTickets] = useState(true)
 
 
 
@@ -45,7 +50,9 @@ function MainApp(props) {
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
       getProducts()
+      getTickets()
     }
+    // eslint-disable-next-line
   }, [])
 
   const jwtToUser = (jwt) => {
@@ -63,6 +70,7 @@ function MainApp(props) {
         setUser(jwtToUser(jwt(res.access_token)));
         setLoggedIn(true);
         getProducts()
+        getTickets()
         navigate('/')
       })
   }
@@ -103,6 +111,23 @@ function MainApp(props) {
     })
   }
 
+  const getTickets = () => {
+    setLoadingTickets(true)
+    return API.getTickets().then(res => {
+      setTickets(res)
+      setLoadingTickets(false)
+    })
+  }
+
+  const openTicket = (ticket) => {
+    return API.openTicket(ticket).then(_ => {
+      Notification.showSuccess("Ticket added correctly")
+      getTickets()
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
 
 
 
@@ -113,8 +138,9 @@ function MainApp(props) {
           ? <Navigate to="/login" />
           : <LandingPage user={user} handleLogout={handleLogout} />
       }>
-        <Route path="/" element={<h1>Welcome, {`${user.firstName}`}</h1>}/>
+        <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets}/>}/>
         <Route path="/yourdevices" element={<YourDevices products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
+        <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />
