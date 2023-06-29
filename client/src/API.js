@@ -55,7 +55,7 @@ function addProduct(user, ean) {
         if (res.ok) {
             resolve(true)
         } else {
-            throw Error("An error occurred while adding device.")
+            res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
         }
     })
 })}
@@ -74,9 +74,8 @@ function removeProduct(user, ean) {
         if (res.ok) {
             resolve(true)
         } else {
-            throw Error("An error occurred while removing device.")
-        }
-    })
+            res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+        }})
 })}
 
 function getProducts() {
@@ -88,9 +87,9 @@ function getProducts() {
             }
         }).then(res => {
             if (res.ok) {
-                resolve(res.json())
+                res.json().then(products => resolve(products)).catch(_ => reject("Unable to parse the response."))
             } else {
-                throw Error("An error occurred while getting devices.")
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
         })
     })

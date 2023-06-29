@@ -8,8 +8,6 @@ function LandingPage(props) {
 
 
     function renderLandingPage(role) {
-        console.log(role)
-        console.log(props.user)
         switch(role) {
             case "Client":
                 return <CustomerLandingPage user={props.user}/>

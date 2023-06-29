@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import AlertDismissibleExample from "../../Alert";
-import ProductCard from "./ProductList";
 import ProductList from "./ProductList";
+import Notification from "../../../utils/Notifications";
 
 
 function YourProducts(props) {
 
-    const navigate = useNavigate()
 
     const [form, setForm] = useState(false)
 
@@ -17,8 +15,7 @@ function YourProducts(props) {
     }
 
     function disableForm() {
-        setForm(false)
-    }
+        setForm(false)}
 
     return (
         <Container className="mt-3">
@@ -43,7 +40,7 @@ function ProductForm(props) {
             props.addProduct(ean)
             props.disableForm()
         } else {
-            setError("Invalid ean!")
+            Notification.showError("EAN must be 13 digits")
         }
     }
     

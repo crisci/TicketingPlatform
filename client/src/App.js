@@ -2,6 +2,9 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/login/LoginForm';
 import { useEffect, useState } from 'react';
@@ -9,11 +12,13 @@ import API from './API';
 import RegistrationForm from './components/registration/SignUpForm';
 import jwt from 'jwt-decode'
 import YourDevices from './components/customer/product/YourProducts';
+import Notification from './utils/Notifications';
 
 function App() {
   return (
     <>
       <Router>
+        <ToastContainer />
         <MainApp />
       </Router>
     </>
@@ -78,12 +83,16 @@ function MainApp(props) {
 
   const addProduct = (ean) => {
     return API.addProduct(user, ean).then(res => {
+      Notification.showSuccess("Product added correctly")
       getProducts()
+    }).catch(err => {
+      Notification.showError(err.detail)
     })
   }
 
   const removeProduct = (ean) => {
     return API.removeProduct(user, ean).then(res => {
+      Notification.showSuccess("Product removed correctly")
       getProducts()
     })
   }
