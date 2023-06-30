@@ -144,7 +144,10 @@ class CustomerServiceImpl(
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
         val lastTicketHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId)
+        println(ticket.toString())
+        println(lastTicketHistory.toString())
         if (lastTicketHistory.isNotEmpty()) {
+            println(lastTicketHistory.first().state.toString())
             if (lastTicketHistory.first().state != TicketStatus.CLOSED) {
                 ticket.addHistory(
                     History().create(

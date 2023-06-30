@@ -137,7 +137,7 @@ class CustomerController(val customerService: CustomerService) {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Secured("ROLE_Customer")
     fun ticketClose(@PathVariable idTicket: Long) {
-        customerService.reopenTicket(idTicket)
+        customerService.closeTicket(idTicket)
     }
 
     @DeleteMapping("/API/customers/product")
@@ -147,7 +147,5 @@ class CustomerController(val customerService: CustomerService) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.deleteProduct(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), ean)
     }
-
-
 
 }
