@@ -1,32 +1,26 @@
 import { Badge, Container, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { BsXCircleFill, BsFillInfoCircleFill, BsCheckCircleFill } from "react-icons/bs";
+import { IoMdRefreshCircle } from "react-icons/io";
+import TicketItem from "./TicketItem";
 
 function TicketList(props) {
 
-    function handleX(ean) {
-        props.removeProduct(ean)
+    function handleX(ticketId) {
+        props.closeTicket(ticketId)
+    }
+
+    function handleV(ticketId) {
+        props.resolveTicket(ticketId)
+    }
+
+    function handleR(ticketId) {
+        props.reopenTicket(ticketId)
     }
 
     const tooltip = (message) => {
         return <Tooltip id="tooltip">{message}</Tooltip>
     }
 
-    const mapStatus = (status) => {
-        switch (status) {
-            case "OPEN":
-                return "primary"
-            case "IN_PROGRESS":
-                return "warning"
-            case "CLOSED":
-                return "danger"
-            case "RESOLVED":
-                return "success"
-            case "REOPENED":
-                return "secondary"
-            default:
-                return "primary"
-        }
-    }
 
     return (
         <ListGroup variant="flush" className="px-3">
@@ -36,34 +30,7 @@ function TicketList(props) {
                 <Container>Actions</Container>
             </ListGroup.Item>
             {
-                props.tickets.map(ticket =>
-                    <ListGroup.Item key={ticket.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
-                        <Container><Badge pill text={ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(ticket.status)}>{ticket.status}</Badge></Container>
-                        <Container>{ticket.title}</Container>
-                        <Container flex>
-                            <div style={{ display: 'inline-block', width: '30px', height: '30px'}}>
-                                <OverlayTrigger placement="top" overlay={tooltip("Details")}>
-                                    <div style={{ cursor: 'pointer' }} onClick={() => handleX(ticket.id)}>
-                                        <BsFillInfoCircleFill color="grey" size="20px" />
-                                    </div>
-                                </OverlayTrigger>
-                            </div>
-                            <div style={{ display: 'inline-block',  width: '30px', height: '30px'}}>
-                                <OverlayTrigger placement="top" overlay={tooltip("Close ticket")}>
-                                    <div style={{ cursor: 'pointer' }} onClick={() => handleX(ticket.id)}>
-                                        <BsXCircleFill color="red" size="20px" />
-                                    </div>
-                                </OverlayTrigger>
-                            </div>
-                            <div style={{ display: 'inline-block',  width: '30px', height: '30px'}}>
-                                <OverlayTrigger placement="top" overlay={tooltip("Resolve ticket")}>
-                                    <div style={{ cursor: 'pointer' }} onClick={() => handleX(ticket.id)}>
-                                        <BsCheckCircleFill color="green" size="20px" />
-                                    </div>
-                                </OverlayTrigger>
-                            </div>
-                        </Container>
-                    </ListGroup.Item>)
+                props.tickets.map(ticket => <TicketItem tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
             }
         </ListGroup>
     )

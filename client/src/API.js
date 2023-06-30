@@ -137,6 +137,60 @@ function openTicket(ticket) {
     })
 }
 
+function closeTicket(ticketId) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/tickets/${ticketId}/close`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+})}
+
+function reopenTicket(ticketId) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/tickets/${ticketId}/reopen`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+})}
+
+function resolveTicket(ticketId) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/tickets/${ticketId}/resolved`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+})}
+
 //GET /API/profiles/
 function getAllProfiles() {
     return new Promise((resolve, reject) => {
@@ -268,5 +322,6 @@ function updateProfile(profile) {
 }
 
 
-const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct, getTickets, openTicket };
+const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct, 
+    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket };
 export default API;

@@ -1,6 +1,7 @@
 import { Button, Container, Row, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TicketList from "./TicketList";
+import { useState } from "react";
 
 function YourTickets(props) {
 
@@ -11,7 +12,7 @@ function YourTickets(props) {
             <h1>Your Tickets</h1>
             <Button onClick={() => {navigate("/openticket")}}>{"Open Ticket"}</Button>
             <Row className="d-flex justify-content-center mt-4">
-                {!props.loadingTickets ? <TicketList tickets={props.tickets} /> : <Spinner  variant="primary"/>}
+                {!props.loadingTickets ? <TicketList tickets={props.tickets} closeTicket={props.closeTicket} resolveTicket={props.resolveTicket} reopenTicket={props.reopenTicket}/> : <Spinner  variant="primary"/>}
             </Row>
         </Container>
     )

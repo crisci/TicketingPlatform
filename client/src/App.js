@@ -128,6 +128,35 @@ function MainApp(props) {
     })
   }
 
+  const closeTicket = (ticketId) => {
+    return API.closeTicket(ticketId).then(_ => {
+      Notification.showSuccess("Ticket closed correctly")
+      getTickets()
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
+  const resolveTicket = (ticketId) => {
+    return API.resolveTicket(ticketId).then(_ => {
+      Notification.showSuccess("Ticket resolved correctly")
+      getTickets()
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
+  const reopenTicket = (ticketId) => {
+    return API.reopenTicket(ticketId).then(_ => {
+      Notification.showSuccess("Ticket reopened correctly")
+      getTickets()
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
+
+
 
 
 
@@ -138,7 +167,7 @@ function MainApp(props) {
           ? <Navigate to="/login" />
           : <LandingPage user={user} handleLogout={handleLogout} />
       }>
-        <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets}/>}/>
+        <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>}/>
         <Route path="/yourdevices" element={<YourDevices products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
       </Route>
