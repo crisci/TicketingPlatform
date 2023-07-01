@@ -62,13 +62,13 @@ function SignUpForm(props) {
                             <Col>
                                 <Form.Group controlId='firstName'>
                                     <Form.Label>First Name</Form.Label>
-                                    <Form.Control type="firstName" value={firstName} onChange={(event) => { setFirstName(event.target.value) }} />
+                                    <Form.Control type="firstName" value={firstName} maxLength={55} onChange={(event) => { setFirstName(event.target.value) }} />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group controlId='lastName'>
                                     <Form.Label>Last Name</Form.Label>
-                                    <Form.Control type="lastName" value={lastName} onChange={(event) => { setLastName(event.target.value) }} />
+                                    <Form.Control type="lastName" value={lastName} maxLength={55} onChange={(event) => { setLastName(event.target.value) }} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -82,25 +82,25 @@ function SignUpForm(props) {
                             <Col>
                                 <Form.Group controlId='phone_number'>
                                     <Form.Label>Phone number</Form.Label>
-                                    <Form.Control type="tel" value={phoneNumber} onChange={(event) => { setPhoneNumber(event.target.value) }} />
+                                    <Form.Control type="tel" value={phoneNumber} maxLength={13} onChange={(event) => { setPhoneNumber(event.target.value) }} />
                                 </Form.Group>
                             </Col>
                         </Row>
                         <Form.Group className="mb-3" controlId='address'>
                             <Form.Label>Address</Form.Label>
-                            <Form.Control type="address" value={address} onChange={(event) => { setAddress(event.target.value) }} />
+                            <Form.Control type="address" value={address} maxLength={100} onChange={(event) => { setAddress(event.target.value) }} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='username'>
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="username" value={username} onChange={(event) => { setUsername(event.target.value) }} />
+                            <Form.Control type="username" value={username} maxLength={55} onChange={(event) => { setUsername(event.target.value) }} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='email'>
                             <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" value={email} onChange={(event) => { setEmail(event.target.value) }} />
+                            <Form.Control type="email" value={email} maxLength={55} onChange={(event) => { setEmail(event.target.value) }} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId='password'>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" value={password} onChange={(event) => { setPassword(event.target.value) }} />
+                            <Form.Control type="password" value={password} maxLength={55} onChange={(event) => { setPassword(event.target.value) }} />
                         </Form.Group>
                         <Row className='m-auto d-flex justify-content-between'>
                             <Button className='btn-primary mt-3 signup-btn' onClick={handleLogin}>Sign in</Button>

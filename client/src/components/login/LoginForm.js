@@ -42,11 +42,11 @@ function LoginForm(props) {
                     <Form onSubmit={event => {event.preventDefault()}}>
                         <Form.Group className="mb-3" controlId='username'>
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="username" value={username} onChange={(event) => { setUsername(event.target.value) }} />
+                            <Form.Control type="username" value={username} maxLength={55} onChange={(event) => { setUsername(event.target.value) }} />
                         </Form.Group>
                         <Form.Group controlId='password'>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" value={password} onChange={(event) => { setPassword(event.target.value) }} />
+                            <Form.Control type="password" value={password} maxLength={55} onChange={(event) => { setPassword(event.target.value) }} />
                         </Form.Group>
                         <Row className='m-auto d-flex justify-content-between'>
                             <Button className='btn-primary mt-3 signin-btn' onClick={handleRegistration}>Sign up</Button>

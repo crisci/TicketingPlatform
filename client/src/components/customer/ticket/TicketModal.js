@@ -1,5 +1,4 @@
 import { Badge, Col, Container, Row } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import formatDateTime from '../../../utils/DateTimeFormatter';
 import mapStatus from '../../../utils/MapStatus';
