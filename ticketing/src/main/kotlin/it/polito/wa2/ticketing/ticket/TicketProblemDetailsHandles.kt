@@ -17,7 +17,12 @@ class TicketProblemDetailsHandles: ResponseEntityExceptionHandler() {
     @ExceptionHandler(DuplicateTicketException::class)
     fun handleDuplicateTicket(e: DuplicateTicketException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.CONFLICT, e.message!! )
+
+    @ExceptionHandler(TicketNotValidException::class)
+    fun handleTicketNotValid(e: TicketNotValidException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.BAD_REQUEST, e.message!! )
 }
     
 class TicketNotFoundException(override val message:String?) : RuntimeException()
 class DuplicateTicketException(override val message:String?) : RuntimeException()
+class TicketNotValidException(override val message:String?) : RuntimeException()

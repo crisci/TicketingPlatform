@@ -14,6 +14,7 @@ import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 
 import jakarta.transaction.Transactional
+import org.springframework.security.access.annotation.Secured
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -44,6 +45,7 @@ class CustomerServiceImpl(
         return customerRepository.findAll().map { it.toDTO() }
     }
 
+    @Secured("ROLE_Customer")
     override fun getTicketsByCustomerId(customerId: UUID): List<TicketDTO> {
         if(!customerRepository.existsById(customerId))
             throw CustomerNotFoundException("No customer found with specified id!")
@@ -105,6 +107,10 @@ class CustomerServiceImpl(
 
 
     override fun addTicket(ticket: TicketDTO, idCustomer: UUID) {
+        //verify that ticket title less than 55 and description less than 2048
+        if (ticket.title.length > 55 || ticket.description.length > 1000)
+            throw TicketNotValidException("The ticket title or description is not valid!")
+
         val customer = customerRepository.findById(idCustomer)
             .orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
         val product = productRepository.findProductByEan(ticket.product?.ean!!) ?: throw ProductNotFoundException("The specified product has not been found!")

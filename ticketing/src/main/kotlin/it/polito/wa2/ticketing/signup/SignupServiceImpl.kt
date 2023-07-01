@@ -34,6 +34,38 @@ class SignupServiceImpl(
             .build()
     }
 
+    private fun customerValidation(customer: Customer): Customer {
+        //all fields less than 55 chars and address less than 100 chars
+        if (customer.first_name.length > 55 || customer.last_name.length > 55 || customer.address.length > 100) {
+            throw SignupError("Invalid customer data")
+        }
+        //email validation
+        if (!customer.email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))) {
+            throw SignupError("Invalid customer email")
+        }
+        //phone number validation
+        if (!customer.phone_number.matches(Regex("[0-9]{10}"))) {
+            throw SignupError("Invalid customer phone number")
+        }
+        //dob validation
+        if (customer.dob != null && customer.dob!!.isAfter(LocalDate.now())) {
+            throw SignupError("Invalid customer date of birth")
+        }
+        return customer
+    }
+
+    private fun employeeValidation(employee: Employee): Employee {
+        //all fields less than 55 chars and address less than 100 chars
+        if (employee.first_name.length > 55 || employee.last_name.length > 55) {
+            throw SignupError("Invalid employee data")
+        }
+        //email validation
+        if (!employee.email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))) {
+            throw SignupError("Invalid employee data")
+        }
+        return employee
+    }
+
     override fun signupCustomer(credentials: Map<String, String>) {
 
         val keycloak = open()
@@ -67,21 +99,21 @@ class SignupServiceImpl(
 
                 //DB Insertion
                 customerRepository.save(
-                    Customer().create(
-                        UUID.fromString(userId),
-                        credentials["firstName"]!!,
-                        credentials["lastName"]!!,
-                        credentials["email"]!!,
-                        LocalDate.parse(credentials["dob"]!!),
-                        credentials["address"]?:"",
-                        credentials["phoneNumber"]!!,
-                    )
+                   customerValidation( Customer().create(
+                       UUID.fromString(userId),
+                       credentials["firstName"]!!,
+                       credentials["lastName"]!!,
+                       credentials["email"]!!,
+                       LocalDate.parse(credentials["dob"]!!),
+                       credentials["address"]?:"",
+                       credentials["phoneNumber"]!!,
+                   ))
                 )
 
             } catch (e: Exception) {
                 keycloak.realm("ticketing").users().delete(userId)
                 customerRepository.deleteById(UUID.fromString(userId))
-                throw SignupError("Error creating user")
+                throw SignupError(e.message)
             } finally {
                 keycloak.close()
             }
@@ -119,18 +151,18 @@ class SignupServiceImpl(
 
             //DB Insertion
             employeeRepository.save(
-                Employee().createExpert(
+                employeeValidation(Employee().createExpert(
                     UUID.fromString(userId),
                     credentials["firstName"]!!,
                     credentials["lastName"]!!,
                     credentials["email"]!!
-                )
+                ))
             )
 
         } catch (e: Exception) {
             keycloak.realm("ticketing").users().delete(userId)
             employeeRepository.deleteById(UUID.fromString(userId))
-            throw SignupError("Error creating user")
+            throw SignupError(e.message)
         } finally {
             keycloak.close()
         }

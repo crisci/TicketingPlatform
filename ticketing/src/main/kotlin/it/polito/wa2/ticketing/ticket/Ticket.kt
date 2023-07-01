@@ -18,6 +18,7 @@ class Ticket : EntityBase<Long>() {
     @NotNull
     var title: String = ""
     @NotNull
+    @Lob
     var description: String = ""
     var priority: PriorityLevel = PriorityLevel.NOT_ASSIGNED
     @JsonIgnore

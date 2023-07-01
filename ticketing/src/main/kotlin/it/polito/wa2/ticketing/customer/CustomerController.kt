@@ -90,7 +90,6 @@ class CustomerController(val customerService: CustomerService) {
 
     @GetMapping("/API/customers/tickets")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Customer")
     fun getTicketsByCustomerId(): List<TicketDTO>? {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         return customerService.getTicketsByCustomerId(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
