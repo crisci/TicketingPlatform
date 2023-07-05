@@ -15,6 +15,7 @@ import Notification from './utils/Notifications';
 import YourTickets from './components/customer/ticket/YourTickets';
 import OpenTicket from './components/customer/ticket/OpenTicket';
 import YourProducts from './components/customer/product/YourProducts';
+import NotFoundPage from './components/404notfound/NotFoundPage';
 
 function App() {
   return (
@@ -173,6 +174,7 @@ function MainApp(props) {
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
