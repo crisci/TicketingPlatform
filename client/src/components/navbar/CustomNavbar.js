@@ -14,7 +14,7 @@ export function CustomNavbar(props) {
             <Navbar.Brand>Tickets</Navbar.Brand>
             {props.user.role === "Client" ? <Nav className="me-auto">
                 <Nav.Link onClick={() => navigate("/")}>Your Tickets</Nav.Link>
-                <Nav.Link onClick={() => navigate("/yourdevices")}>Your Products</Nav.Link>
+                <Nav.Link onClick={() => navigate("/yourproducts")}>Your Products</Nav.Link>
             </Nav> : null}
             </Container>
             <Container className="justify-content-end">

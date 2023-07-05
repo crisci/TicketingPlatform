@@ -1,6 +1,4 @@
-import { Badge, Container, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { BsXCircleFill, BsFillInfoCircleFill, BsCheckCircleFill } from "react-icons/bs";
-import { IoMdRefreshCircle } from "react-icons/io";
+import { Container, ListGroup, Tooltip } from "react-bootstrap";
 import TicketItem from "./TicketItem";
 
 function TicketList(props) {
@@ -24,13 +22,13 @@ function TicketList(props) {
 
     return (
         <ListGroup variant="flush" className="px-3">
-            <ListGroup.Item key="title" as='li' className="d-flex justify-content-beetween list-titles">
+            <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
                 <Container>Status</Container>
                 <Container>Title</Container>
                 <Container>Actions</Container>
             </ListGroup.Item>
             {
-                props.tickets.map(ticket => <TicketItem tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
+                props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
             }
         </ListGroup>
     )

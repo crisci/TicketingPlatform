@@ -11,7 +11,6 @@ const formatDateTime = (dateTime) => {
     const minutes = String(inputDate.getMinutes()).padStart(2, '0');
 
     const formattedDate = `${month} ${day}, ${year} ${hours}:${minutes}`;
-    console.log(formattedDate);
     return formattedDate
 }
 

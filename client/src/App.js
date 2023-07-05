@@ -11,10 +11,10 @@ import { useEffect, useState } from 'react';
 import API from './API';
 import RegistrationForm from './components/registration/SignUpForm';
 import jwt from 'jwt-decode'
-import YourDevices from './components/customer/product/YourProducts';
 import Notification from './utils/Notifications';
 import YourTickets from './components/customer/ticket/YourTickets';
 import OpenTicket from './components/customer/ticket/OpenTicket';
+import YourProducts from './components/customer/product/YourProducts';
 
 function App() {
   return (
@@ -168,7 +168,7 @@ function MainApp(props) {
           : <LandingPage user={user} handleLogout={handleLogout} />
       }>
         <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>}/>
-        <Route path="/yourdevices" element={<YourDevices products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
+        <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
