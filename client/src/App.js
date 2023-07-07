@@ -100,7 +100,7 @@ function MainApp(props) {
   }
 
   const removeProduct = (ean) => {
-    return API.removeProduct(user, ean).then(res => {
+     API.removeProduct(user, ean).then(res => {
       Notification.showSuccess("Product removed correctly")
       getProducts()
     })
@@ -117,7 +117,7 @@ function MainApp(props) {
     return API.getTickets().then(res => {
       setTickets(res)
       setLoadingTickets(false)
-    })
+    }).catch(err => {Notification.showError(err.detail); setLoadingTickets(false)})
   }
 
   const openTicket = (ticket) => {

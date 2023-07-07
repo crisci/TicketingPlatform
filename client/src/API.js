@@ -115,7 +115,7 @@ function getProducts() {
             } else if(res.status === 401) {
                 console.log("Refreshing token...")
                 refreshToken().then(_ => {
-                        getProduct()
+                        getProducts().then(products => resolve(products)).catch(err => reject(err))
                 }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
@@ -137,7 +137,7 @@ function getTickets() {
             } else if(res.status === 401) {
                 console.log("Refreshing token...")
                 refreshToken().then(_ => {
-                        getTickets()
+                        getTickets().then(tickets => resolve(tickets)).catch(err => reject(err))
                 }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
