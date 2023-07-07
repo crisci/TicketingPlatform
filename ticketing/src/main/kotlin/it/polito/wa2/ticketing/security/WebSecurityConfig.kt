@@ -19,7 +19,7 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
         http.csrf().disable()
             .authorizeHttpRequests()
             .requestMatchers(HttpMethod.GET, "/API/login").permitAll()
-            .requestMatchers(HttpMethod.POST, "/API/login", "/API/signup").permitAll()
+            .requestMatchers(HttpMethod.POST, "/API/login", "/API/signup", "/API/refresh").permitAll()
             .requestMatchers(HttpMethod.PUT, "/API/tickets/*/close").authenticated()
             .requestMatchers(HttpMethod.GET, "/API/tickets/*/messages","/API/tickets/*/status").authenticated()
             .requestMatchers(HttpMethod.GET, "/API/messages", "/API/attachments").authenticated()

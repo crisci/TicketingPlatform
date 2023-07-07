@@ -10,9 +10,9 @@ function YourTickets(props) {
 
     return (
         <Container className="mt-3">
-            <Container className="d-flex justify-content-center">
+            <Container className="d-flex justify-content-center align-items-center">
                 <h1 className="m-0">Your Tickets</h1>
-                <Button style={{fontWeight:"700"}} className="mx-3" onClick={() => {navigate("/openticket")}}>{"Open Ticket"}</Button>
+                <Button style={{fontWeight:"700"}} className="mx-3 py-2" onClick={() => {navigate("/openticket")}}>{"Open Ticket"}</Button>
             </Container>
             <Form className="d-flex justify-content-center pt-3">
                 <Form.Group className="w-50">

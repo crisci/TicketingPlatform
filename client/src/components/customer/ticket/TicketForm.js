@@ -67,17 +67,17 @@ function TicketForm(props) {
                 <Form.Group className="mb-3" controlId='priority'>
                     <Form.Label>Priority</Form.Label>
                     <Form.Select value={priority} onChange={(event) => { setPriority(event.target.value) }}>
-                        {priority === "" ? <option>Select the priority</option> : null}
-                        <option value="LOW">Low</option>
-                        <option value="MEDIUM">Medium</option>
-                        <option value="HIGH">High</option>
+                        {priority === "" ? <option key={"default"}>Select the priority</option> : null}
+                        <option key={"low"} value="LOW">Low</option>
+                        <option key={"medium"} value="MEDIUM">Medium</option>
+                        <option key={"high"} value="HIGH">High</option>
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId='product'>
                     <Form.Label>Product</Form.Label>
                     <Form.Select disabled={props.products.length === 0 ? true : false} onChange={(event) => { setProduct(event.target.value) }}>
-                        {product === "" ? <option>Select the product</option> : null}
-                        {props.products.map(p => { return <option value={JSON.stringify(p)}>{p.name}</option> })}
+                        {product === "" ? <option key={"default"}>Select the product</option> : null}
+                        {props.products.map(p => { return <option key={p.name} value={JSON.stringify(p)}>{p.name}</option> })}
                     </Form.Select>
                 </Form.Group>
                 <Container className="d-flex p-0 pt-3 justify-content-between">

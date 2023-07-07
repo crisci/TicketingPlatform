@@ -14,7 +14,14 @@ class SignupProblemDetailsHandler {
     fun handleSignupError(e: SignupError) = ProblemDetail
         .forStatusAndDetail( HttpStatus.CONFLICT, e.message!! )
 
+    @ExceptionHandler(TokenRefreshErrorException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleTokenRefreshError(e: TokenRefreshErrorException) = ProblemDetail
+        .forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+
+
 
 }
 
 class SignupError(override val message:String?) : RuntimeException()
+class TokenRefreshErrorException(override val message:String?) : RuntimeException()

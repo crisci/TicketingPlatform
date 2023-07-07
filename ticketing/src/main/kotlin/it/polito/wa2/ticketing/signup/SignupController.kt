@@ -9,6 +9,7 @@ import org.keycloak.representations.idm.ClientRepresentation
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,4 +35,11 @@ class SignupController (private val signupService: SignupService)
     fun createExpert(@RequestBody credentials: Map<String, String>) {
         signupService.createExpert(credentials)
     }
+
+    @PostMapping("/API/refresh")
+    @ResponseStatus(HttpStatus.OK)
+    fun refresh(@RequestBody credentials: Map<String, String>): ResponseEntity<String> {
+        return signupService.refresh(credentials)
+    }
+
 }

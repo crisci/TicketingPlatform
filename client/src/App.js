@@ -73,14 +73,14 @@ function MainApp(props) {
         getProducts()
         getTickets()
         navigate('/')
-      })
+      }).catch(err => {console.log("AAAAAAAAAA")})
   }
 
   const doSignup = async (credentials) => {
     return API.signup(credentials)
       .then(() => {
         doLogIn({ username: credentials.username, password: credentials.password })
-      })
+      }).catch(err => {console.log("AAAAAAAAAA")})
   }
 
   const handleLogout = () => {
@@ -109,7 +109,7 @@ function MainApp(props) {
   const getProducts = () => {
     return API.getProducts(user).then(res => {
       setProducts(res)
-    })
+    }).catch(err => {Notification.showError(err.detail)})
   }
 
   const getTickets = () => {

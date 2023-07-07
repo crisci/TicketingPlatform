@@ -1,7 +1,9 @@
 package it.polito.wa2.ticketing.signup
 
 import it.polito.wa2.ticketing.customer.Customer
-import it.polito.wa2.ticketing.customer.CustomerDTO
+import org.springframework.http.*
+import org.springframework.util.LinkedMultiValueMap
+import org.springframework.util.MultiValueMap
 import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.employee.Employee
 import it.polito.wa2.ticketing.employee.EmployeeRepository
@@ -12,6 +14,8 @@ import org.keycloak.admin.client.KeycloakBuilder
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriComponentsBuilder
 import java.time.LocalDate
 import java.util.*
 
@@ -165,6 +169,34 @@ class SignupServiceImpl(
             throw SignupError(e.message)
         } finally {
             keycloak.close()
+        }
+    }
+
+    override fun refresh(credentials: Map<String, String>): ResponseEntity<String> {
+        val restTemplate = RestTemplate()
+
+        val url = "http://keycloak:8080/realms/ticketing/protocol/openid-connect/token"
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+
+        val requestBody: MultiValueMap<String, String> = LinkedMultiValueMap()
+        requestBody.add("grant_type", "refresh_token")
+        requestBody.add("client_id", "authN")
+        requestBody.add("refresh_token", credentials["refresh_token"])
+
+        val uri = UriComponentsBuilder.fromHttpUrl(url).build().encode().toUri()
+
+        try {
+            val requestEntity = HttpEntity(requestBody, headers)
+            return restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                String::class.java
+            )
+        } catch (e: Exception) {
+            throw TokenRefreshErrorException("Error during token refresh")
         }
     }
 }

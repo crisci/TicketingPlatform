@@ -15,7 +15,7 @@ function TicketItem(props) {
 
     return (
 
-        <ListGroup.Item as='li' className="d-flex justify-content-beetween mb-3 py-3">
+        <ListGroup.Item key={props.ticket.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container><Badge pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>{props.ticket.status}</Badge></Container>
             <Container>{props.ticket.title}</Container>
             <Container>
