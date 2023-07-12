@@ -13,6 +13,8 @@ import it.polito.wa2.ticketing.ticket.toTicketDTO
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
@@ -24,10 +26,12 @@ class ExpertServiceImpl(private val ticketRepository: TicketRepository,
                         private val employeeRepository: EmployeeRepository
 ):ExpertService {
 
+    @Secured("ROLE_Expert")
     override fun getTickets(idExpert: UUID): List<TicketDTO> {
         return ticketRepository.findTicketByMostRecentExpert(idExpert).stream().map {it.toTicketDTO()}.toList()
     }
 
+    @Secured("ROLE_Expert")
     override fun reassignTicket(ticketId: Long, idExpert: UUID) {
         ticketRepository.findById(ticketId).ifPresentOrElse(
             {
@@ -50,6 +54,7 @@ class ExpertServiceImpl(private val ticketRepository: TicketRepository,
         ticketRepository.flush()
     }
 
+    @Secured("ROLE_Expert")
     override fun addMessage(idTicket: Long, message: MessageDTO, expertId: UUID) {
         ticketRepository.findById(idTicket)
             .ifPresentOrElse(

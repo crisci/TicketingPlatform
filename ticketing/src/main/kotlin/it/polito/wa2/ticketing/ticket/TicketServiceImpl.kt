@@ -13,6 +13,8 @@ import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -31,6 +33,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketWithMessagesDTO() }.toSet()
     }
 
+    @Secured("ROLE_Manager", "ROLE_Client")
     override fun closeTicket(ticketId: Long) {
         val expert = historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().employee
         ticketRepository.findById(ticketId).ifPresentOrElse(
@@ -39,6 +42,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         ticketRepository.flush()
     }
 
+    @Secured("ROLE_Manager", "ROLE_Client", "ROLE_Expert")
     override fun getMessages(ticketId: Long): List<MessageDTO> {
         return messageRepository.findMessagesByTicketId(ticketId).stream()
             .sorted().map {
@@ -46,6 +50,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
             }.toList()
     }
 
+    @Secured("ROLE_Manager", "ROLE_Client","ROLE_Expert")
     override fun getStatus(ticketId: Long): TicketStatus {
         return ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }

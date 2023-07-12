@@ -15,6 +15,7 @@ import it.polito.wa2.ticketing.utils.TicketStatus
 
 import jakarta.transaction.Transactional
 import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -28,7 +29,7 @@ class CustomerServiceImpl(
     private val productRepository: ProductRepository): CustomerService {
 
 
-
+    @Secured("ROLE_Client")
     override fun getTicketsWithMessagesByCustomerId(idCustomer: UUID, idTicket: Long): List<MessageDTO>? {
         if(!customerRepository.existsById(idCustomer))
             throw CustomerNotFoundException("No customer found with specified id!")
@@ -36,22 +37,25 @@ class CustomerServiceImpl(
     }
 
 
+    @Secured("ROLE_Manager", "ROLE_Expert")
     override fun getCustomerByEmail(email: String): CustomerDTO? {
         return customerRepository.findByEmail(email)?.toDTO()
             ?: throw CustomerNotFoundException("Customer not found with the following email '${email}'")
     }
 
+    @Secured("ROLE_Manager")
     override fun getCustomers(): List<CustomerDTO> {
         return customerRepository.findAll().map { it.toDTO() }
     }
 
-    @Secured("ROLE_Customer")
+    @Secured("ROLE_Client")
     override fun getTicketsByCustomerId(customerId: UUID): List<TicketDTO> {
         if(!customerRepository.existsById(customerId))
             throw CustomerNotFoundException("No customer found with specified id!")
         return ticketRepository.findTicketsByCustomerId(customerId).map { it.toTicketDTO() }
     }
 
+    @Secured("ROLE_Client")
     override fun addMessage(idTicket: Long, message: MessageDTO) {
         ticketRepository.findById(idTicket)
             .ifPresentOrElse(
@@ -82,6 +86,8 @@ class CustomerServiceImpl(
                 },
                 { throw TicketNotFoundException("The specified ticket has not been found!") })
     }
+
+    @Secured("ROLE_Client")
     override fun resolveTicket(ticketId: Long) {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
@@ -106,6 +112,7 @@ class CustomerServiceImpl(
     }
 
 
+    @Secured("ROLE_Client")
     override fun addTicket(ticket: TicketDTO, idCustomer: UUID) {
         //verify that ticket title less than 55 and description less than 2048
         if (ticket.title.length > 55 || ticket.description.length > 1000)
@@ -118,11 +125,12 @@ class CustomerServiceImpl(
         if (!products.contains(product))
             throw ProductNotRegistered("The specified product is not registered to the customer!")
         val newTicket = Ticket()
-            .create(ticket.title, ticket.description, PriorityLevel.NOT_ASSIGNED, customer, product) // Priority level assigned by the admin
+            .create(ticket.title, ticket.description, ticket.priority, customer, product) // Priority level assigned by the admin
         newTicket.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), newTicket, null))
         customer.addTicket(newTicket)
     }
 
+    @Secured("ROLE_Client")
     override fun reopenTicket(ticketId: Long) {
         //Check the last history state related to the ticketId
         val ticket = ticketRepository.findById(ticketId)
@@ -146,6 +154,7 @@ class CustomerServiceImpl(
         }
     }
 
+    @Secured("ROLE_Client")
     override fun closeTicket(ticketId: Long) {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
@@ -171,6 +180,7 @@ class CustomerServiceImpl(
         }
     }
 
+    @Secured("ROLE_Client")
     override fun productRegistration(customerId: UUID, ean: String) {
         val product = productRepository.findProductByEan(ean) ?: throw ProductNotFoundException("The specified product has not been found!")
         val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
@@ -182,11 +192,13 @@ class CustomerServiceImpl(
         }
     }
 
+    @Secured("ROLE_Client")
     override fun getRegisteredProducts(customerId: UUID): List<ProductDTO>? {
         val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }
         return customer.products.map { it.toDTO() }
     }
 
+    @Secured("ROLE_Client")
     override fun deleteProduct(customerId: UUID, ean: String) {
         val product = productRepository.findProductByEan(ean) ?: throw ProductNotFoundException("The specified product has not been found!")
         val customer = customerRepository.findById(customerId).orElseThrow { CustomerNotFoundException("The specified customer has not been found!") }

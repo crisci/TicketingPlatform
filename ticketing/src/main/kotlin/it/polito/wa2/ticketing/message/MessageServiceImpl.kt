@@ -5,6 +5,8 @@ import it.polito.wa2.ticketing.ticket.TicketNotFoundException
 import it.polito.wa2.ticketing.ticket.TicketRepository
 import it.polito.wa2.ticketing.utils.ImageUtil
 import jakarta.transaction.Transactional
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
@@ -15,6 +17,7 @@ class MessageServiceImpl(
     private val attachmentRepository: AttachmentRepository
 ): MessageService {
 
+    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     override fun getMessageAttachments(messageId: Long): Set<AttachmentDTO> {
         val a = repository.findById(messageId)
             .orElseThrow{ MessageNotFoundException("Message not found with specified id") }
@@ -44,6 +47,7 @@ class MessageServiceImpl(
         )
     }
 
+    @Secured("ROLE_Expert", "ROLE_Client")
     override fun editMessage(messageId: Long, message: String) {
         repository.findById(messageId).ifPresentOrElse(
             {
@@ -57,6 +61,7 @@ class MessageServiceImpl(
         )
     }
 
+    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     override fun getMessagesByIdTickets(idTicket: Long): List<MessageDTO?> {
         //Check if the ticket exists
         if( ticketRepository.findById(idTicket).isPresent)
@@ -66,6 +71,7 @@ class MessageServiceImpl(
 
     }
 
+    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     override fun getAttachment(idAttachment: Long): ByteArray {
         if (attachmentRepository.findById(idAttachment).isPresent) {
             val v = attachmentRepository.findById(idAttachment).get()

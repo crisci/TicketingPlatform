@@ -20,13 +20,11 @@ class ProductController(private val productService: ProductService) {
 
     @GetMapping("/API/products")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Manager")
     fun getAllProducts() : List<ProductDTO> {
         return productService.getAllProducts()
     }
     @PostMapping("/API/products")
     @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Manager")
     fun addProduct(@RequestBody product: ProductDTO){
         if( product.ean.isNotBlank() && product.name.isNotBlank() && product.brand.isNotBlank() )
         {
@@ -37,7 +35,6 @@ class ProductController(private val productService: ProductService) {
     }
     @GetMapping("/API/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Manager")
     fun getProductById(@PathVariable("productId") productId:String) : ProductDTO {
         if(productService.getProduct(productId)!=null)
             return productService.getProduct(productId)!!
@@ -46,7 +43,6 @@ class ProductController(private val productService: ProductService) {
     }
     @PutMapping("/API/products/{productId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Secured("ROLE_Manager")
     fun updateProduct(@PathVariable productId: String, @RequestBody product: ProductDTO){
         if( product.ean.isNotBlank() && product.name.isNotBlank() && product.brand.isNotBlank() )
         {
@@ -61,7 +57,6 @@ class ProductController(private val productService: ProductService) {
     }
     @DeleteMapping("/API/products/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Secured("ROLE_Manager")
     fun deleteProduct(@PathVariable productId: String){
         if(productService.getProduct(productId) != null){
             productService.deleteProduct(productId)
@@ -71,7 +66,6 @@ class ProductController(private val productService: ProductService) {
     }
     @GetMapping("/API/products/{productId}/tickets")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Manager")
     fun findTicketsByProductId(@PathVariable productId: Long): List<TicketDTO>? {
         return productService.getTickets(productId)
     }

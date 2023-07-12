@@ -61,7 +61,6 @@ class CustomerController(val customerService: CustomerService) {
     }
     @GetMapping("/API/customers/email={email}")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Expert", "ROLE_Manager")
     fun getCustomerByEmail(@PathVariable email: String) : CustomerDTO? {
         if (emailValidator.checkEmail(email)) {
             if(customerService.getCustomerByEmail(email.lowercase()) == null)
@@ -75,7 +74,6 @@ class CustomerController(val customerService: CustomerService) {
 
     @GetMapping("/API/customers/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Customer")
     fun getTicketsWithMessagesByCustomerId(@PathVariable idTicket: Long): List<MessageDTO>? {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         return customerService.getTicketsWithMessagesByCustomerId(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), idTicket)
@@ -83,7 +81,6 @@ class CustomerController(val customerService: CustomerService) {
 
     @PostMapping("/API/customers/tickets/{idTicket}/messages")
     @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Customer")
     fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
         customerService.addMessage(idTicket, message)
     }
@@ -99,7 +96,6 @@ class CustomerController(val customerService: CustomerService) {
 
     @PostMapping("/API/customers/tickets")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Secured("ROLE_Customer")
     fun addTicket(@RequestBody ticket: TicketDTO) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.addTicket(ticket, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
@@ -112,7 +108,6 @@ class CustomerController(val customerService: CustomerService) {
     }
     @PostMapping("/API/customers/product")
     @ResponseStatus(HttpStatus.CREATED)
-    @Secured("ROLE_Customer")
     fun productRegistration(@RequestBody ean: String) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.productRegistration(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), ean)
@@ -120,28 +115,24 @@ class CustomerController(val customerService: CustomerService) {
 
     @PutMapping("/API/customers/tickets/{idTicket}/resolved")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Secured("ROLE_Customer")
     fun ticketResolved(@PathVariable idTicket: Long) {
         customerService.resolveTicket(idTicket)
     }
 
     @PutMapping("/API/customers/tickets/{idTicket}/reopen")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Secured("ROLE_Customer")
     fun ticketReopen(@PathVariable idTicket: Long) {
         customerService.reopenTicket(idTicket)
     }
 
     @PutMapping("/API/customers/tickets/{idTicket}/close")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Secured("ROLE_Customer")
     fun ticketClose(@PathVariable idTicket: Long) {
         customerService.closeTicket(idTicket)
     }
 
     @DeleteMapping("/API/customers/product")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Customer")
     fun deleteProduct(@RequestBody ean: String) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         customerService.deleteProduct(UUID.fromString(userDetails.tokenAttributes["sub"].toString()), ean)

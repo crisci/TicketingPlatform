@@ -20,20 +20,17 @@ class MessageController(val messageService: MessageService) {
 
     @GetMapping("/API/messages/{messageId}/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>{
         return messageService.getMessageAttachments(messageId)
     }
     @GetMapping("/API/attachments", produces = ["image/jpeg", "image/png"])
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     fun getAttachment(@RequestParam id: Long): ByteArray {
         return messageService.getAttachment(id)
     }
 
     @GetMapping("/API/messages")
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
     fun getMessagesByIdTickets(@RequestParam("ticket") idTicket: Long): List<MessageDTO?> {
         return messageService.getMessagesByIdTickets(idTicket)
     }

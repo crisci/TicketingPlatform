@@ -17,6 +17,8 @@ import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
@@ -28,6 +30,9 @@ class ManagerServiceImpl(
     private val ticketRepository: TicketRepository,
     private val historyRepository: HistoryRepository,
     private val customerRepository: CustomerRepository): ManagerService {
+
+
+    @Secured("ROLE_Manager")
     override fun getTicketsByStatus(status: TicketStatus?): List<TicketDTO?> {
         return if(status != null) {
             historyRepository.findMostRecentStateByStatus(status).map { it.ticket?.toTicketDTO() }
@@ -36,6 +41,8 @@ class ManagerServiceImpl(
         }
     }
 
+
+    @Secured("ROLE_Manager")
     override fun getCustomer(id: UUID): CustomerDTO? {
         return customerRepository.findById(id).orElseThrow {
             CustomerNotFoundException("Customer not found with the following id '${id}'")
@@ -43,6 +50,7 @@ class ManagerServiceImpl(
             .toDTO()
     }
 
+    @Secured("ROLE_Manager")
     override fun getExpert(id: UUID): EmployeeDTO? {
         return employeeRepository.findById(id).orElseThrow {
             CustomerNotFoundException("Customer not found with the following id '${id}'")
@@ -50,11 +58,13 @@ class ManagerServiceImpl(
             .toEmployeeDTO()
     }
 
+    @Secured("ROLE_Manager")
     override fun getExperts(): List<EmployeeDTO?>{
         return employeeRepository.findByType(EmployeeRole.EXPERT).map { it.toEmployeeDTO() }
     }
 
 
+    @Secured("ROLE_Manager")
     override fun assignTicket(idTicket: Long, idExpert: UUID, priorityLevel: PriorityLevel) {
         val ticket = ticketRepository.findById(idTicket)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
@@ -73,6 +83,7 @@ class ManagerServiceImpl(
 
     }
 
+    @Secured("ROLE_Manager")
     override fun getTicketMessages(idTicket: Long): List<MessageDTO>? {
         return ticketRepository.findById(idTicket)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
