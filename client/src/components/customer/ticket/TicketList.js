@@ -18,7 +18,8 @@ function TicketList(props) {
     const tooltip = (message) => {
         return <Tooltip id="tooltip">{message}</Tooltip>
     }
-
+    
+    const numberOfFilteredTickets = props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).length
 
     return (
         <ListGroup variant="flush" className="px-3">
@@ -27,8 +28,9 @@ function TicketList(props) {
                 <Container>Title</Container>
                 <Container>Actions</Container>
             </ListGroup.Item>
-            {
-                props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
+            {   numberOfFilteredTickets === 0 
+                    ?  <h2>0 tickets found.</h2>
+                    : props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
             }
         </ListGroup>
     )

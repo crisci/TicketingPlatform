@@ -14,7 +14,6 @@ import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
 import org.springframework.security.access.annotation.Secured
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*

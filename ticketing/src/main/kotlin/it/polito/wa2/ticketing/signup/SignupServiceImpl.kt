@@ -55,6 +55,8 @@ class SignupServiceImpl(
         if (customer.dob != null && customer.dob!!.isAfter(LocalDate.now())) {
             throw SignupError("Invalid customer date of birth")
         }
+        if(customerRepository.findByEmail(customer.email) != null)
+            throw SignupError("Email already in use")
         return customer
     }
 
@@ -66,6 +68,9 @@ class SignupServiceImpl(
         //email validation
         if (!employee.email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))) {
             throw SignupError("Invalid employee data")
+        }
+        if (employeeRepository.findByEmail(employee.email).isPresent) {
+            throw SignupError("Email already in use")
         }
         return employee
     }
