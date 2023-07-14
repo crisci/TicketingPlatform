@@ -11,6 +11,7 @@ import it.polito.wa2.ticketing.ticket.TicketNotFoundException
 import it.polito.wa2.ticketing.ticket.TicketRepository
 import it.polito.wa2.ticketing.ticket.toTicketDTO
 import it.polito.wa2.ticketing.utils.EmployeeRole
+import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

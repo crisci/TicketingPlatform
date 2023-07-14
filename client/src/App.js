@@ -16,6 +16,9 @@ import YourTickets from './components/customer/ticket/YourTickets';
 import OpenTicket from './components/customer/ticket/OpenTicket';
 import YourProducts from './components/customer/product/YourProducts';
 import NotFoundPage from './components/404notfound/NotFoundPage';
+import ExpertTickets from './components/expert/ticket/YourTickets';
+import ExpertMessages from './components/expert/chat/Messages';
+import CustomerMessages from './components/customer/chat/Messages';
 
 function App() {
   return (
@@ -37,11 +40,10 @@ function MainApp(props) {
 
   const [products, setProducts] = useState([])
   const [tickets, setTickets] = useState([])
-
+  const [messages, setMessages] = useState([])
 
   const [loadingTickets, setLoadingTickets] = useState(true)
-
-
+  const [loadingMessages, setLoadingMessages] = useState(true)
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("jwt");
@@ -50,8 +52,10 @@ function MainApp(props) {
       //updated asynchronously
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
-      getProducts()
-      getTickets()
+      if(jwtToUser(jwt(loggedInUser)).role === "Client"){
+        getProducts()
+      }
+      getTickets(jwtToUser(jwt(loggedInUser)))
     }
     // eslint-disable-next-line
   }, [])
@@ -68,10 +72,12 @@ function MainApp(props) {
   const doLogIn = async (credentials) => {
     return API.logIn(credentials)
       .then(res => {
-        setUser(jwtToUser(jwt(res.access_token)));
+        setUser(jwtToUser(jwt(res.access_token)))
         setLoggedIn(true);
-        getProducts()
-        getTickets()
+        if(jwtToUser(jwt(res.access_token)).role === "Client"){
+          getProducts()
+        }
+        getTickets(jwtToUser(jwt(res.access_token)))
         navigate('/')
       }).catch(err => {console.log("AAAAAAAAAA")})
   }
@@ -106,15 +112,15 @@ function MainApp(props) {
     })
   }
 
-  const getProducts = () => {
+  const getProducts = (user) => {
     return API.getProducts(user).then(res => {
       setProducts(res)
     }).catch(err => {Notification.showError(err.detail)})
   }
 
-  const getTickets = () => {
+  const getTickets = (user) => {
     setLoadingTickets(true)
-    return API.getTickets().then(res => {
+    return API.getTickets(user).then(res => {
       setTickets(res)
       setLoadingTickets(false)
     }).catch(err => {Notification.showError(err.detail); setLoadingTickets(false)})
@@ -156,8 +162,40 @@ function MainApp(props) {
     })
   }
 
+  const stopTicket = (ticketId, user) => {
+    return API.stopTicket(ticketId, user).then(_ => {
+      Notification.showSuccess("Ticket stopped correctly")
+      getTickets()
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
 
+  const getMessages = (ticketId) => {
+    setLoadingMessages(true)
+    return API.getMessages(ticketId).then(res => {
+      setMessages(res)
+      setLoadingMessages(false)
+    }).catch(err => {Notification.showError(err.detail); setLoadingMessages(false)})
+  }
 
+  const addExpertMessage = (ticketId, message) => {
+    return API.addExpertMessage(ticketId, message).then(res => {
+      Notification.showSuccess("Message added correctly")
+      getMessages(ticketId)
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
+  const addClientMessage = (ticketId, message) => {
+    return API.addClientMessage(ticketId, message).then(res => {
+      Notification.showSuccess("Message added correctly")
+      getMessages(ticketId)
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
 
 
 
@@ -166,10 +204,26 @@ function MainApp(props) {
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : <LandingPage user={user} handleLogout={handleLogout} />
+          : <LandingPage user={user} tickets={tickets} loadingTickets={loadingTickets} handleLogout={handleLogout} />
       }>
-        <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>}/>
-        <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
+        <Route path="/" element={
+          user.role === "Client" 
+            ? <YourTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>
+            : <></> || 
+          user.role === "Expert" 
+            ? <ExpertTickets user={user} tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket}/>
+            : <></>
+        }/> 
+        <Route path="/yourproducts" element={
+          user.role === "Client"
+          ? <YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>
+          : <></>
+        }/> 
+        <Route path="/messages" element={
+          user.role === "Client"
+          ? <CustomerMessages messages={messages} loadingMessages={loadingMessages} addClientMessage={addClientMessage}></CustomerMessages>
+          : <ExpertMessages messages={messages} loadingMessages={loadingMessages} addExpertMessage={addExpertMessage}></ExpertMessages>
+        }/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />

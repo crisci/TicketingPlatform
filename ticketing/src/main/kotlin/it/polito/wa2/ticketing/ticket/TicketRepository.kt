@@ -11,6 +11,6 @@ interface TicketRepository: JpaRepository<Ticket, Long> {
 
     fun findTicketsByCustomerId(customerId: UUID): Set<Ticket>
 
-    @Query("SELECT t FROM Ticket t, History h WHERE t.history=h AND (h.ticket.id, h.date) IN (SELECT h2.ticket.id, MAX(h2.date) FROM History h2 GROUP BY h2.ticket.id) AND h.employee.id = :expertId")
+    @Query("SELECT t FROM Ticket t INNER JOIN History h WHERE h.state IN (1,2,3) AND h.employee.id=:expertId GROUP BY t.id")
     fun findTicketByMostRecentExpert(expertId: UUID): Set<Ticket>
 }
