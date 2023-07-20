@@ -20,7 +20,7 @@ function TicketModal(props) {
             <Modal.Body>
                 <Container>
                     <Row className='p-2'>
-                        <Col style={{ overflowWrap: 'break-word', padding: 0 }}>
+                        <Col style={{ overflowWrap: 'break-word', padding: 0}}>
                             <h4>{props.ticket.title}</h4>
                             <p>{props.ticket.description}</p>
                         </Col>
@@ -37,18 +37,18 @@ function TicketModal(props) {
                                 <Col style={{ display: "contents" }}>
                                     <h5 className='m-0'>Status: </h5>
                                 </Col>
-                                <Col style={{ display: "contents" }}>
-                                    <Badge className='d-flex justify-content-center mx-2' pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>
+                                <Col>
+                                    <Badge className='d-flex w-25 justify-content-center' pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>
                                         {props.ticket.status}
                                     </Badge>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col style={{ display: "contents"}}>
+                                <Col style={{ display: "contents" }}>
                                     <h5 className='m-0'>Product: </h5>
                                 </Col>
                                 <Col>
-                                    <h5 className='m-0' style={{fontSize:"1.2rem", fontWeight:"400"}}>{props.ticket.product.name}</h5>
+                                    <p className='m-0'>{props.ticket.product.name}</p>
                                 </Col>
                             </Row>
                         </Col>

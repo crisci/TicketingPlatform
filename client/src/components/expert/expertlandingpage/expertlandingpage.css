@@ -1,0 +1,17 @@
+.app-main {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+  }
+  .nav-column {
+    font-family: Helvetica;
+    font-size: 18px;
+    background-color: aqua;
+    overflow: hidden;
+  }
+  
+  .content-column {
+    font-size: 18px;
+    background-color: darkkhaki;
+    overflow: scroll;
+  }

@@ -327,37 +327,27 @@ export function addProfile(profile) {
     });
 }
 
-//PUT /API/profiles/:email
-function updateProfile(profile) {
+//GET /API/messages
+function getMessages(ticketId) {
     return new Promise((resolve, reject) => {
-        fetch(`${APIURL}/customers/${profile.email}`, {
-            method: 'PUT',
-            credentials: 'include',
+        fetch(`${APIURL}/messages?ticket=${ticketId}`, {
             headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                customer: {
-                    first_name: profile.first_name,
-                    last_name: profile.last_name,
-                    email: profile.newEmail,
-                    dob: profile.dob,
-                    address: profile.address,
-                    phone_number: profile.phone_number,
-                },
-                password: profile.password
-            }),
-        }).then((response) => {
-            if (response.ok) {
-                resolve(null);
-            } else {
-                // analyze the cause of error
-                response.json()
-                    .then((obj) => { reject(obj); }) // error message in the response body
-                    .catch(() => { reject({ detail: "Cannot parse server response." }) }); // something else
             }
-        }).catch(() => { reject({ detail: "Cannot communicate with the server." }) }); // connection errors
-    });
+        }).then(res => {
+            if (res.ok) {
+                res.json().then(messages => resolve(messages)).catch(_ => reject("Unable to parse the response."))
+            } else if(res.status === 401) {
+                console.log("Refreshing token...")
+                refreshToken().then(_ => {
+                        getMessages().then(messages => resolve(messages)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
 }
 
 //GET /API/manager/experts
@@ -379,7 +369,56 @@ function getExperts(){
     })
 }
 
+//POST /API/customers/tickets/{idTicket}/messages
+function addClientMessage(idTicket, message) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/customers/tickets/${idTicket}/messages`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                body:message
+            }),
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
 
-const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct, 
-    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,getExperts };
-export default API;
+
+//POST /API/expert/tickets/{idTicket}/messages
+function addExpertMessage(idTicket, message) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/expert/tickets/${idTicket}/messages`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                body:message
+            }),
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+
+const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, logIn, signup, getProducts, addProduct, removeProduct, 
+    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,
+    getMessages, addClientMessage, addExpertMessage, getExperts };
+
+    export default API;
