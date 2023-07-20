@@ -26,3 +26,12 @@ li .container {
     font-weight: 600;
 }
 
+.hover:hover {
+  cursor: pointer;
+}
+
+.hover{
+  font-size: 1.2rem;
+  display: contents;
+}
+

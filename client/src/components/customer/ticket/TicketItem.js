@@ -4,9 +4,12 @@ import { BsCheckCircleFill, BsFillInfoCircleFill, BsXCircleFill } from "react-ic
 import { IoMdRefreshCircle } from "react-icons/io";
 import TicketModal from "./TicketModal";
 import mapStatus from "../../../utils/MapStatus";
+import { useNavigate } from "react-router-dom";
 
 
 function TicketItem(props) {
+
+    const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);
 
@@ -17,7 +20,7 @@ function TicketItem(props) {
 
         <ListGroup.Item key={props.ticket.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container><Badge pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>{props.ticket.status}</Badge></Container>
-            <Container>{props.ticket.title}</Container>
+            <Container onClick={() => navigate(`/chat/${props.ticket.id}`)}><p className="hover m-0">{props.ticket.title}</p></Container>
             <Container>
                 <div style={{ display: 'inline-block', width: '30px', height: '30px' }}>
                     <OverlayTrigger placement="top" overlay={props.tooltip("Details")}>

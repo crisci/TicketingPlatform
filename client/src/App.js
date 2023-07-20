@@ -16,6 +16,7 @@ import YourTickets from './components/customer/ticket/YourTickets';
 import OpenTicket from './components/customer/ticket/OpenTicket';
 import YourProducts from './components/customer/product/YourProducts';
 import NotFoundPage from './components/404notfound/NotFoundPage';
+import MessageConversation from './components/expert/chat/MessageConversation';
 
 function App() {
   return (
@@ -37,9 +38,11 @@ function MainApp(props) {
 
   const [products, setProducts] = useState([])
   const [tickets, setTickets] = useState([])
+  const [messages, setMessages] = useState([])
 
 
   const [loadingTickets, setLoadingTickets] = useState(true)
+  const [loadingMessages, setLoadingMessages] = useState(true)
 
 
 
@@ -157,6 +160,32 @@ function MainApp(props) {
   }
 
 
+  const getMessages = (ticketId) => {
+    return API.getMessages(ticketId).then(res => {
+      setMessages(res)
+      setLoadingMessages(false)
+    }).catch(err => {Notification.showError(err.detail); setLoadingMessages(false)})
+  }
+
+  const addExpertMessage = (ticketId, message) => {
+    return API.addExpertMessage(ticketId, message).then(res => {
+      Notification.showSuccess("Message added correctly")
+      getMessages(ticketId)
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
+  const addClientMessage = (ticketId, message) => {
+    return API.addClientMessage(ticketId, message).then(res => {
+      Notification.showSuccess("Message added correctly")
+      getMessages(ticketId)
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
+
+
 
 
 
@@ -172,6 +201,7 @@ function MainApp(props) {
         <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
       </Route>
+      <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />
       <Route path="*" element={<NotFoundPage />} />
