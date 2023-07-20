@@ -11,6 +11,8 @@ function LandingPage(props) {
         switch(role) {
             case "Client":
                 return <CustomerLandingPage user={props.user}/>
+            case "Manager":
+                return <></>
             default:
                 return null
     }}

@@ -1,4 +1,4 @@
-const APIURL = '/API';
+const APIURL = 'http://localhost:8081/API';
 
 
 async function refreshToken() {
@@ -360,7 +360,26 @@ function updateProfile(profile) {
     });
 }
 
+//GET /API/manager/experts
+function getExperts(){
+    return new Promise((resolve,reject)=>{
+        fetch(`${APIURL}/manager/experts`,{
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then((response)=>{
+            if (response.ok){
+                resolve(response.json())
+            } else {
+                response.json().then(error => reject(error)).catch(() => reject({ detail: "Cannot parse server response." }))
+            }
+        })
+    })
+}
+
 
 const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, updateProfile, logIn, signup, getProducts, addProduct, removeProduct, 
-    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket };
+    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,getExperts };
 export default API;
