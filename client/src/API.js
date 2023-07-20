@@ -362,7 +362,7 @@ function addClientMessage(idTicket, message) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                body:message
+                body: message
             }),
         }).then(res => {
             if (res.ok) {
