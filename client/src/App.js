@@ -161,6 +161,7 @@ function MainApp(props) {
 
 
   const getMessages = (ticketId) => {
+    setLoadingMessages(true)
     return API.getMessages(ticketId).then(res => {
       setMessages(res)
       setLoadingMessages(false)
@@ -185,6 +186,11 @@ function MainApp(props) {
     })
   }
 
+  const handleCloseChat = () => {
+    setMessages([])
+    navigate('/')
+  }
+
 
 
 
@@ -200,7 +206,7 @@ function MainApp(props) {
         <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>}/>
         <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
-        <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
+        <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />
