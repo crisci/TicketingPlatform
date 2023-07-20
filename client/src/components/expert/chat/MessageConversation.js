@@ -2,11 +2,12 @@ import { Card, ListGroup, Container, Form, Button, InputGroup, Spinner } from "r
 import { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
 import dayjs from "dayjs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function MessageConversation(props) {
 
     const params = useParams()
+    const navigate = useNavigate()
 
     const reverseMessages = [...props.messages].sort((a,b) => {return new Date(a.date).getTime() - new Date(b.date).getTime()}).reverse()
     const [ticket, setTicket] = useState({})
@@ -15,8 +16,12 @@ function MessageConversation(props) {
     useEffect(() => {
         setTicket(props.tickets.find(t => t.id.toString() === params.id)) 
         props.getMessages(params.id)
-    }, [])
+    }, [params.id, props])
 
+
+    useEffect(() => {
+        if(ticket === undefined) navigate("/")
+    }, [navigate, ticket])
 
     const handleSend = () => {
         props.addMessage(params.id, send)
@@ -46,7 +51,7 @@ function MessageConversation(props) {
                 <Form.Group className="w-100">
                     <InputGroup>
                         <Form.Control type="text" placeholder="Your answer.." value={send} onChange={event => setSend(event.target.value)}/>
-                        {send !== "" ? <Button onClick={() => handleSend()}>Send</Button> : null}
+                        {send !== "" ? <Button disabled={ticket.status !== "IN_PROGRESS"} onClick={() => handleSend()}>Send</Button> : null}
                     </InputGroup>
                 </Form.Group>
             </Form>

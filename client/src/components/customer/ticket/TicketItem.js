@@ -15,12 +15,16 @@ function TicketItem(props) {
 
     const handleShowModal = () => setShowModal(oldValue => !oldValue);
 
+    const hover = () => {
+        if(props.ticket.status === "IN_PROGRESS") return "hover"
+    }
+
 
     return (
 
         <ListGroup.Item key={props.ticket.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container><Badge pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>{props.ticket.status}</Badge></Container>
-            <Container onClick={() => navigate(`/chat/${props.ticket.id}`)}><p className="hover m-0">{props.ticket.title}</p></Container>
+            <Container onClick={() => {if(props.ticket.status === "IN_PROGRESS") navigate(`/chat/${props.ticket.id}`)}}><p className={`${hover()} m-0`}>{props.ticket.title}</p></Container>
             <Container>
                 <div style={{ display: 'inline-block', width: '30px', height: '30px' }}>
                     <OverlayTrigger placement="top" overlay={props.tooltip("Details")}>
@@ -45,7 +49,7 @@ function TicketItem(props) {
                         </OverlayTrigger>
                     </div>}
                 {
-                    props.ticket.status !== "CLOSED"
+                    props.ticket.status !== "CLOSED" && props.ticket.status !== "RESOLVED"
                         ? <div style={{ display: 'inline-block', width: '30px', height: '30px' }}>
                             <OverlayTrigger placement="top" overlay={props.tooltip("Resolve ticket")}>
                                 <div style={{ cursor: 'pointer' }} onClick={() => props.handleV(props.ticket.id)}>
