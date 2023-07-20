@@ -1,4 +1,4 @@
-import { Card, ListGroup, Container, Form, Button, InputGroup, Spinner, Row } from "react-bootstrap";
+import { Card, ListGroup, Container, Form, Button, InputGroup, Spinner, Row, Alert, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
 import dayjs from "dayjs";
@@ -37,12 +37,17 @@ function MessageConversation(props) {
                     {props.loadingMessages === true
                         ? <Spinner variant="primary" />
                         : <Container>
-                            <Card className="py-3">
-                                {props.messages.length !== 0
+                            <Card>
+                            <Card.Header>
+                                <h5 className="text-center">Ticket status: <Badge className='justify-content-center mx-2' pill text={ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(ticket.status)}>{ticket.status}</Badge></h5>
+                            </Card.Header>
+                            <Card.Body>
+                            {props.messages.length !== 0
                                     ? <ListGroup className="mt-2 mb-2">
                                     {props.messages.map(m => <MessageItem user={props.user} key={m.id} message={m}></MessageItem>)}
                                     </ListGroup>
                                     : <h4 className="text-center">No messages found</h4>}
+                            </Card.Body>
                             </Card>
                             {ticket.status === "IN_PROGRESS"
                                 ? <Form className="d-flex justify-content-center py-3" onSubmit={event => { event.preventDefault() }} >
