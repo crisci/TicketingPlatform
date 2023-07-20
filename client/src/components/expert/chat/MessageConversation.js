@@ -16,7 +16,6 @@ function MessageConversation(props) {
     useEffect(() => {
         setTicket(props.tickets.find(t => t.id.toString() === params.id)) 
         props.getMessages(params.id)
-        console.log("test")
         // eslint-disable-next-line
     }, [])
 
