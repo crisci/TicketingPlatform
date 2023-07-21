@@ -1,5 +1,5 @@
 const formatDateTime = (dateTime) => {
-    const inputDate = new Date("2023-06-29T15:29:36.654392");
+    const inputDate = new Date(dateTime);
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
