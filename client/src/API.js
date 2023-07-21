@@ -357,7 +357,8 @@ function getExperts(){
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
             }
         }).then((response)=>{
             if (response.ok){
@@ -371,7 +372,7 @@ function getExperts(){
 
 //POST /API/customers/tickets/{idTicket}/messages
 function addClientMessage(idTicket, message) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         return fetch(`${APIURL}/customers/tickets/${idTicket}/messages`, {
             method: 'POST',
             credentials: 'include',
@@ -416,9 +417,140 @@ function addExpertMessage(idTicket, message) {
     })
 }
 
+//GET /API/manager/tickets
+function getManagerTickets(){
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/manager/tickets`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                res.json().then(tickets => resolve(tickets)).catch(_ => reject("Unable to parse the response."))
+            } else if(res.status === 401) {
+                console.log("Refreshing token...")
+                refreshToken().then(_ => {
+                    getManagerTickets().then(tickets => resolve(tickets)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+//GET /API/tickets/{ticketId}/expert
+function getTicketCurrentExpert(ticketId){
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/tickets/${ticketId}/expert`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                res.json().then(expert => resolve(expert)).catch(_ => reject("Unable to parse the response."))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+//PUT /API/expert/{ticketId}/reassign
+function reasignTicket(ticketId, expertId){
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/expert/${ticketId}/reassign`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                body:expertId
+            })
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else if(res.status === 401) {
+                console.log("Refreshing token...")
+                refreshToken().then(_ => {
+                    reasignTicket().then(expert => resolve(expert)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+//GET API/tickets/{ticketId}/history
+function getTicketHistory(ticketId){
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/tickets/${ticketId}/history`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                res.json().then(history => resolve(history)).catch(_ => reject("Unable to parse the response."))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+//GET API/tickets/{ticketId}/messages
+function getTicketMessage(ticketId){
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/tickets/${ticketId}/messages`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                res.json().then(message => resolve(message)).catch(_ => reject("Unable to parse the response."))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+//PUT /API/manager/experts/{expertId}/approve
+function approveExpert(expertId){
+    return new Promise((resolve, reject) => {
+        fetch(`${APIURL}/manager/experts/${expertId}/approve`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
 
 const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, logIn, signup, getProducts, addProduct, removeProduct, 
-    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,
-    getMessages, addClientMessage, addExpertMessage, getExperts };
+    getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,getTicketHistory,getTicketMessage, approveExpert,
+    getMessages, addClientMessage, addExpertMessage, getExperts,getManagerTickets,getTicketCurrentExpert,reasignTicket };
 
     export default API;

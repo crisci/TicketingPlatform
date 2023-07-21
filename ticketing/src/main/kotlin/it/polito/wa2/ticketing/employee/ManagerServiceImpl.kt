@@ -41,6 +41,10 @@ class ManagerServiceImpl(
         }
     }
 
+    @Secured("ROLE_Manager")
+    override fun getTickets(): List<TicketDTO?>{
+        return ticketRepository.findAll().map { it.toTicketDTO() }
+    }
 
     @Secured("ROLE_Manager")
     override fun getCustomer(id: UUID): CustomerDTO? {
@@ -89,6 +93,9 @@ class ManagerServiceImpl(
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
             .listOfMessage.map { it.toDTO() }
     }
-
-
+    
+    @Secured("ROLE_Manager")
+    override fun expertApprove(expertId: UUID){
+        return employeeRepository.setApprovedById(expertId,true)
+    }
 }

@@ -23,6 +23,8 @@ class Employee {
     @Column(unique = true)
     @NotNull
     var email: String = ""
+    @Column(columnDefinition = "boolean default false")
+    var approved: Boolean = false
     @Enumerated(EnumType.ORDINAL)
     var type: EmployeeRole = EmployeeRole.EXPERT
     @JsonManagedReference
@@ -32,13 +34,14 @@ class Employee {
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfMessages: MutableSet<Message> = mutableSetOf()
 
-    fun createExpert(id:UUID, firstName: String, last_name: String, email: String): Employee {
+    fun createExpert(id:UUID, firstName: String, last_name: String, email: String, approved: Boolean): Employee {
         return Employee().apply {
             this.id = id
             this.first_name = firstName
             this.last_name = last_name
             this.email = email
             this.type = EmployeeRole.EXPERT
+            this.approved = approved
         }
     }
 

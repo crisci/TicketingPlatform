@@ -1,13 +1,15 @@
 version: '3.8'
 services:
   postgres:
-    image: "postgres:latest"
+    image: "postgres"
     environment:
       POSTGRES_DB: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d  # Mount the init-scripts folder
+      - ./imports:/var/lib/postgresql/data/imports
     ports:
       - "5432:5432"
     healthcheck:
@@ -16,6 +18,7 @@ services:
       retries: 14
     networks:
       - wa2-app
+
   keycloak:
     depends_on:
       - postgres

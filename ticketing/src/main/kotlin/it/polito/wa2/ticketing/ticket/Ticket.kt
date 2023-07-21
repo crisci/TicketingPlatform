@@ -15,11 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired
 @Entity
 @Table(name = "tickets")
 class Ticket : EntityBase<Long>() {
+    @Id
+    var id:Long? = null
     @NotNull
     var title: String = ""
-    @NotNull
     @Lob
-    var description: String = ""
+    var description: String? = ""
     var priority: PriorityLevel = PriorityLevel.NOT_ASSIGNED
     @JsonIgnore
     @ManyToOne
@@ -33,7 +34,7 @@ class Ticket : EntityBase<Long>() {
     @OneToMany(mappedBy = "ticket", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfMessage: MutableSet<Message> = mutableSetOf()
 
-    fun create(title: String, description: String, priority: PriorityLevel, customer: Customer, product: Product): Ticket {
+    fun create(title: String, description: String?, priority: PriorityLevel, customer: Customer, product: Product): Ticket {
         val t = Ticket()
         t.title = title
         t.description = description

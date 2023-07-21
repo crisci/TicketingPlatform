@@ -11,8 +11,9 @@ data class EmployeeDTO(
     val lastName: String,
     val email: String,
     val type: EmployeeRole? = null,
+    val approved: Boolean
 )
 
 fun Employee.toEmployeeDTO(): EmployeeDTO {
-    return EmployeeDTO(id,first_name,last_name,email,type)
+    return EmployeeDTO(id,first_name,last_name,email,type,approved)
 }

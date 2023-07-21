@@ -3,11 +3,14 @@ package it.polito.wa2.ticketing.ticket
 import it.polito.wa2.ticketing.customer.CustomerNotFoundException
 import it.polito.wa2.ticketing.customer.CustomerRepository
 import it.polito.wa2.ticketing.employee.Employee
+import it.polito.wa2.ticketing.employee.EmployeeDTO
+import it.polito.wa2.ticketing.employee.toEmployeeDTO
 import it.polito.wa2.ticketing.employee.EmployeeRepository
 import it.polito.wa2.ticketing.history.*
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.message.MessageRepository
 import it.polito.wa2.ticketing.message.toDTO
+import it.polito.wa2.ticketing.history.toDTO
 import it.polito.wa2.ticketing.product.ProductRepository
 import it.polito.wa2.ticketing.utils.EmployeeRole
 import it.polito.wa2.ticketing.utils.TicketStatus
@@ -50,6 +53,11 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
             }.toList()
     }
 
+    @Secured("ROLE_Manager", "ROLE_Client", "ROLE_Expert")
+    override fun getHistory(ticketId: Long):List<HistoryDTO>{
+        return historyRepository.findByTicketIdOrderByDateDesc(ticketId).map{it.toDTO()}
+    }
+
     @Secured("ROLE_Manager", "ROLE_Client","ROLE_Expert")
     override fun getStatus(ticketId: Long): TicketStatus {
         return ticketRepository.findById(ticketId)
@@ -57,4 +65,8 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
             .history.stream().sorted().findFirst().get().state
     }
 
+    @Secured("ROLE_Manager", "ROLE_Client","ROLE_Expert")
+    override fun getExpert(ticketId: Long): EmployeeDTO?{
+        return historyRepository.findByTicketIdOrderByDateDesc(ticketId).first()?.employee?.toEmployeeDTO()
+    }
 }

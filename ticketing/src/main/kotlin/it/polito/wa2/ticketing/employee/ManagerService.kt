@@ -11,6 +11,10 @@ interface ManagerService {
 
     fun getTicketsByStatus(status: TicketStatus?): List<TicketDTO?>
 
+    fun getTickets(): List<TicketDTO?>
+
+    fun expertApprove(expertId: UUID)
+
     fun assignTicket(idTicket: Long, idExpert: UUID, priorityLevel: PriorityLevel)
 
     fun getTicketMessages(idTicket: Long): List<MessageDTO>?

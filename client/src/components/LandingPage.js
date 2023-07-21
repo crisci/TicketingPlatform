@@ -12,7 +12,7 @@ function LandingPage(props) {
             case "Client":
                 return <CustomerLandingPage user={props.user}/>
             case "Manager":
-                return <></>
+                return <CustomerLandingPage user={props.user}/>
             default:
                 return null
     }}

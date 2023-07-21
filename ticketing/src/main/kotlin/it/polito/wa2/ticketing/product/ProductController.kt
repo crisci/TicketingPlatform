@@ -35,7 +35,7 @@ class ProductController(private val productService: ProductService) {
     }
     @GetMapping("/API/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    fun getProductById(@PathVariable("productId") productId:String) : ProductDTO {
+    fun getProductById(@PathVariable productId:String) : ProductDTO {
         if(productService.getProduct(productId)!=null)
             return productService.getProduct(productId)!!
         else

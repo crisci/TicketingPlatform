@@ -18,6 +18,7 @@ import YourProducts from './components/customer/product/YourProducts';
 import NotFoundPage from './components/404notfound/NotFoundPage';
 import AdminMainPage from './components/admin/AdminMainPage';
 import MessageConversation from './components/expert/chat/MessageConversation';
+import TicketDetails from './components/admin/TicketDetails';
 
 function App() {
   return (
@@ -50,7 +51,7 @@ function MainApp(props) {
   useEffect(() => {
     const loggedInUser = localStorage.getItem("jwt");
 
-    if (loggedInUser) {
+    if (loggedInUser && user.role === "Client") {
       //updated asynchronously
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
@@ -74,8 +75,11 @@ function MainApp(props) {
       .then(res => {
         setUser(jwtToUser(jwt(res.access_token)));
         setLoggedIn(true);
-        getProducts()
-        getTickets()
+        if(jwtToUser(jwt(res.access_token)).role !== "Manager"){
+          getProducts()
+          getTickets()
+        }
+        console.log(jwtToUser(jwt(res.access_token)))
         navigate('/')
       }).catch(err => {console.log("Login error")})
   }
@@ -202,12 +206,13 @@ function MainApp(props) {
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : /*<LandingPage user={user} handleLogout={handleLogout} />*/<AdminMainPage />
+          : <LandingPage user={user} handleLogout={handleLogout}/>
       }>
         <Route path="/" element={/*<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>*/<AdminMainPage />}/>
         <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
         <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
+        <Route path="/:ticketId/details" element={<TicketDetails/>}/>
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />
