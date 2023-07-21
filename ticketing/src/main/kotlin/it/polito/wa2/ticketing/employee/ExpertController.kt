@@ -28,8 +28,8 @@ class ExpertController(val expertService: ExpertService) {
 
     @PutMapping("/API/expert/{ticketId}/reassign")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketReassign(@RequestBody idExpert: UUID, @PathVariable ticketId: Long) {
-        return expertService.reassignTicket(ticketId, idExpert)
+    fun ticketReassign(@RequestBody expertId: UUID, @PathVariable ticketId: Long) {
+        return expertService.reassignTicket(ticketId, expertId)
     }
 
 }

@@ -196,10 +196,22 @@ function MainApp(props) {
     navigate('/')
   }
 
+  //select the home page for the user
+  const [home,setHome] = useState();
+  useEffect(()=>{
+    switch(user.role){
+      case "Client":
+        setHome(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
+        break;
+      case "Expert":
+        setHome(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
+        break;
+      case "Manager":
+        setHome(<AdminMainPage />);
+        break;
+    }
 
-
-
-
+  },[user])
 
   return (
     <Routes>
@@ -208,7 +220,7 @@ function MainApp(props) {
           ? <Navigate to="/login" />
           : <LandingPage user={user} handleLogout={handleLogout}/>
       }>
-        <Route path="/" element={/*<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>*/<AdminMainPage />}/>
+        <Route path="/" element={home}/>
         <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
         <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />

@@ -96,6 +96,14 @@ class ManagerServiceImpl(
     
     @Secured("ROLE_Manager")
     override fun expertApprove(expertId: UUID){
-        return employeeRepository.setApprovedById(expertId,true)
+        val expertOptional = employeeRepository.findById(expertId)
+        if (expertOptional.isPresent) {
+            val expert = expertOptional.get()
+            expert.approved = true
+            employeeRepository.save(expert)
+            employeeRepository.flush();
+        } else {
+            throw ExpertNotFoundException("Can't find the expert with the specified id")
+        }
     }
 }

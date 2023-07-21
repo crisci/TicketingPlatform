@@ -14,7 +14,4 @@ interface EmployeeRepository: JpaRepository<Employee, UUID> {
     fun findByType(type: EmployeeRole): List<Employee>
     fun findByIdAndType(idExpert: UUID, type: EmployeeRole): Optional<Employee>
     fun findByEmail(email: String): Optional<Employee>
-    @Modifying
-    @Query("UPDATE Employee e SET e.approved = :approved WHERE e.id = :idExpert")
-    fun setApprovedById(@Param("idExpert") idExpert: UUID, @Param("approved") approved: Boolean)
 }

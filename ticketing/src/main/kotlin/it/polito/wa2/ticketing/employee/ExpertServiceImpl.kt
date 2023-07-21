@@ -32,18 +32,21 @@ class ExpertServiceImpl(private val ticketRepository: TicketRepository,
         return ticketRepository.findTicketByMostRecentExpert(idExpert).stream().map {it?.toTicketDTO()}.toList()
     }
 
+    @Transactional
     @Secured("ROLE_Manager")
-    override fun reassignTicket(ticketId: Long, idExpert: UUID) {
-        val ticket: Ticket? = ticketRepository.findById(ticketId).get();
-        if(ticket == null){
-            throw TicketNotFoundException("The specified ticket has not been found!")
-        }
-        val expert: Employee? = employeeRepository.findById(idExpert).get();
-        if(expert == null){
-            throw ExpertNotFoundException("can't find the specified expert")
-        }
-        ticket.addHistory(History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert));
-        ticketRepository.save(ticket); 
+    override fun reassignTicket(ticketId: Long, expertId: UUID) {
+        val ticket: Ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+
+        val expert: Employee = employeeRepository.findById(expertId)
+            .orElseThrow { ExpertNotFoundException("Can't find the specified expert!") }
+
+        val historyEntry = History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
+        ticket.addHistory(historyEntry)
+
+        ticketRepository.save(ticket)
+        historyRepository.save(historyEntry)
+        historyRepository.flush()
         ticketRepository.flush()
     }
 
