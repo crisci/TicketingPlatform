@@ -26,10 +26,4 @@ class ExpertController(val expertService: ExpertService) {
         expertService.addMessage(idTicket, message, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
-    @PutMapping("/API/expert/{ticketId}/reassign")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketReassign(@RequestBody expertId: UUID, @PathVariable ticketId: Long) {
-        return expertService.reassignTicket(ticketId, expertId)
-    }
-
 }

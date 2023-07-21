@@ -25,4 +25,5 @@ interface ManagerService {
 
     fun getExperts(): List<EmployeeDTO?>
 
+    fun reassignTicket(ticketId: Long, expertId: UUID)
 }

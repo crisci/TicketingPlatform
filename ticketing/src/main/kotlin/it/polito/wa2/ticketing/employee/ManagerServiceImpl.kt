@@ -10,6 +10,7 @@ import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.message.toDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
+import it.polito.wa2.ticketing.ticket.Ticket
 import it.polito.wa2.ticketing.ticket.TicketNotFoundException
 import it.polito.wa2.ticketing.ticket.TicketRepository
 import it.polito.wa2.ticketing.ticket.toTicketDTO
@@ -105,5 +106,20 @@ class ManagerServiceImpl(
         } else {
             throw ExpertNotFoundException("Can't find the expert with the specified id")
         }
+    }
+
+    @Secured("ROLE_Manager")
+    override fun reassignTicket(ticketId: Long, expertId: UUID) {
+        val ticket: Ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
+
+        val expert: Employee = employeeRepository.findById(expertId)
+            .orElseThrow { ExpertNotFoundException("Can't find the specified expert!") }
+
+        val historyEntry = History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
+        ticket.addHistory(historyEntry)
+
+        ticketRepository.save(ticket)
+        historyRepository.save(historyEntry)
     }
 }

@@ -461,10 +461,10 @@ function getTicketCurrentExpert(ticketId){
     })
 }
 
-//PUT /API/expert/{ticketId}/reassign
+//PUT "/API/manager/tickets/{ticketId}/reassign"
 function reasignTicket(ticketId, expertId){
     return new Promise((resolve, reject) => {
-        fetch(`${APIURL}/expert/${ticketId}/reassign`, {
+        fetch(`${APIURL}/manager/tickets/${ticketId}/reassign`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
