@@ -66,4 +66,10 @@ class ManagerController(
         managerService.expertApprove(expertId)
     }
 
+    @PutMapping("/API/manager/tickets/{ticketId}/reassign")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun ticketReassign(@RequestBody expertId: UUID, @PathVariable ticketId: Long) {
+        return managerService.reassignTicket(ticketId, expertId)
+    }
+
 }
