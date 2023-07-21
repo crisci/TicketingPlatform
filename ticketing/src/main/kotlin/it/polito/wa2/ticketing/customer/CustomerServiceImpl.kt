@@ -115,7 +115,7 @@ class CustomerServiceImpl(
     @Secured("ROLE_Client")
     override fun addTicket(ticket: TicketDTO, idCustomer: UUID) {
         //verify that ticket title less than 55 and description less than 2048
-        if (ticket.title.length > 55 || ticket.description.length > 1000)
+        if ( ticket.title.length > 55 || ticket.description!=null && ticket.description.length > 1000)
             throw TicketNotValidException("The ticket title or description is not valid!")
 
         val customer = customerRepository.findById(idCustomer)

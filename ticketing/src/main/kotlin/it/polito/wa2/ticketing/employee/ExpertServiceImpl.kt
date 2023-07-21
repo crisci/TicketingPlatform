@@ -7,6 +7,8 @@ import it.polito.wa2.ticketing.history.OperationNotPermittedException
 import it.polito.wa2.ticketing.message.Message
 import it.polito.wa2.ticketing.message.MessageDTO
 import it.polito.wa2.ticketing.ticket.TicketDTO
+import it.polito.wa2.ticketing.employee.Employee
+import it.polito.wa2.ticketing.ticket.Ticket
 import it.polito.wa2.ticketing.ticket.TicketNotFoundException
 import it.polito.wa2.ticketing.ticket.TicketRepository
 import it.polito.wa2.ticketing.ticket.toTicketDTO
@@ -26,31 +28,24 @@ class ExpertServiceImpl(private val ticketRepository: TicketRepository,
 ):ExpertService {
 
     @Secured("ROLE_Expert")
-    override fun getTickets(idExpert: UUID): List<TicketDTO> {
-        return ticketRepository.findTicketByMostRecentExpert(idExpert).stream().map {it.toTicketDTO()}.toList()
+    override fun getTickets(idExpert: UUID): List<TicketDTO?> {
+        return ticketRepository.findTicketByMostRecentExpert(idExpert).stream().map {it?.toTicketDTO()}.toList()
     }
 
-    @Secured("ROLE_Expert")
-    override fun reassignTicket(ticketId: Long, idExpert: UUID) {
-        ticketRepository.findById(ticketId).ifPresentOrElse(
-            {
-                if (historyRepository.findByTicketIdOrderByDateDesc(ticketId).first().state != TicketStatus.OPEN) {
+    @Transactional
+    @Secured("ROLE_Manager")
+    override fun reassignTicket(ticketId: Long, expertId: UUID) {
+        val ticket: Ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
 
-                    var admin: Employee? = null
-                    for (h: History in it.history.sorted()) {
-                        if (h.employee == null || h.employee?.type == EmployeeRole.MANAGER) {
-                            admin = h.employee
-                            break
-                        }
-                    }
-                    it.addHistory(History().create(TicketStatus.OPEN, LocalDateTime.now(), it, admin))
-                    ticketRepository.save(it)
-                } else {
-                    throw OperationNotPermittedException("The ticket is still open!")
-                }
-            },
-            { throw TicketNotFoundException("The specified ticket has not been found!") })
-        ticketRepository.flush()
+        val expert: Employee = employeeRepository.findById(expertId)
+            .orElseThrow { ExpertNotFoundException("Can't find the specified expert!") }
+
+        val historyEntry = History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
+        ticket.addHistory(historyEntry)
+
+        ticketRepository.save(ticket)
+        historyRepository.save(historyEntry)
     }
 
     @Secured("ROLE_Expert")
@@ -60,7 +55,7 @@ class ExpertServiceImpl(private val ticketRepository: TicketRepository,
                 {
                     val histories = historyRepository.findByTicketIdOrderByDateDesc(idTicket)
                     if (histories.isNotEmpty() && histories
-                            .first().state == TicketStatus.IN_PROGRESS
+                            .first()?.state == TicketStatus.IN_PROGRESS
                     ) {
                         val employee = employeeRepository.findById(expertId)
                         val newMessage = Message().create(

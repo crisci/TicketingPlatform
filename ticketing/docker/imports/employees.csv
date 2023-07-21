@@ -1,0 +1,4 @@
+id,email,firstName,lastName,type
+5400f251-3b3f-45f9-b8d9-27350a94e6e5,expert1@ticketing.com,John,Doe,1
+28bcc4db-ac83-49be-9cb8-b231b869a1a4,expert2@ticketing.com,Jane,Doe,1
+51fa2706-c584-496a-8910-21fe797d92de,manager@ticketing.com,Emily,Johnson,0

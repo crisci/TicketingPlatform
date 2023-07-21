@@ -16,7 +16,9 @@ import YourTickets from './components/customer/ticket/YourTickets';
 import OpenTicket from './components/customer/ticket/OpenTicket';
 import YourProducts from './components/customer/product/YourProducts';
 import NotFoundPage from './components/404notfound/NotFoundPage';
+import AdminMainPage from './components/admin/AdminMainPage';
 import MessageConversation from './components/expert/chat/MessageConversation';
+import TicketDetails from './components/admin/TicketDetails';
 
 function App() {
   return (
@@ -49,7 +51,7 @@ function MainApp(props) {
   useEffect(() => {
     const loggedInUser = localStorage.getItem("jwt");
 
-    if (loggedInUser) {
+    if (loggedInUser && user.role === "Client") {
       //updated asynchronously
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
@@ -73,17 +75,20 @@ function MainApp(props) {
       .then(res => {
         setUser(jwtToUser(jwt(res.access_token)));
         setLoggedIn(true);
-        getProducts()
-        getTickets()
+        if(jwtToUser(jwt(res.access_token)).role !== "Manager"){
+          getProducts()
+          getTickets()
+        }
+        console.log(jwtToUser(jwt(res.access_token)))
         navigate('/')
-      }).catch(err => {console.log("AAAAAAAAAA")})
+      }).catch(err => {console.log("Login error")})
   }
 
   const doSignup = async (credentials) => {
     return API.signup(credentials)
       .then(() => {
         doLogIn({ username: credentials.username, password: credentials.password })
-      }).catch(err => {console.log("AAAAAAAAAA")})
+      }).catch(err => {console.log("Login error")})
   }
 
   const handleLogout = () => {
@@ -191,22 +196,35 @@ function MainApp(props) {
     navigate('/')
   }
 
+  //select the home page for the user
+  const [home,setHome] = useState(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
+  useEffect(()=>{
+    switch(user.role){
+      case "Client":
+        setHome(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
+        break;
+      case "Expert":
+        setHome(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
+        break;
+      case "Manager":
+        setHome(<AdminMainPage />);
+        break;
+    }
 
-
-
-
+  },[user])
 
   return (
     <Routes>
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : <LandingPage user={user} handleLogout={handleLogout} />
+          : <LandingPage user={user} handleLogout={handleLogout}/>
       }>
-        <Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>}/>
+        <Route path="/" element={home}/>
         <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
         <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
+        <Route path="/:ticketId/details" element={<TicketDetails/>}/>
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />

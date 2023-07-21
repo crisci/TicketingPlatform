@@ -15,7 +15,7 @@ import java.util.*
 class ExpertController(val expertService: ExpertService) {
     @GetMapping("/API/expert/tickets")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun getAssignedTickets(@RequestParam("expert") idExpert: UUID) : List<TicketDTO>{
+    fun getAssignedTickets(@RequestParam("expert") idExpert: UUID) : List<TicketDTO?>{
         return expertService.getTickets(idExpert)
     }
 
@@ -26,10 +26,10 @@ class ExpertController(val expertService: ExpertService) {
         expertService.addMessage(idTicket, message, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
-    @PutMapping("/API/expert/{ticketId}/stop")
+    @PutMapping("/API/expert/{ticketId}/reassign")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketMakeReassignable(@RequestParam("expert") idExpert: UUID, @PathVariable("ticketId") ticketId: Long) {
-        return expertService.reassignTicket(ticketId, idExpert)
+    fun ticketReassign(@RequestBody expertId: UUID, @PathVariable ticketId: Long) {
+        return expertService.reassignTicket(ticketId, expertId)
     }
 
 }

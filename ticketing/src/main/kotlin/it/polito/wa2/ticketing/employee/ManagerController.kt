@@ -18,25 +18,31 @@ import java.util.*
 class ManagerController(
     private val managerService: ManagerService) {
 
-    @GetMapping("/API/manager/tickets")
+    @GetMapping("/API/manager/tickets/{status}")
     @ResponseStatus(HttpStatus.OK)
-    fun getTicketsByStatus(@RequestParam("status") status: TicketStatus?): List<TicketDTO?> {
+    fun getTicketsByStatus(@PathVariable status: TicketStatus?): List<TicketDTO?> {
         return managerService.getTicketsByStatus(status)
     }
 
-    @GetMapping("/API/manager/customers")
+    @GetMapping("/API/manager/tickets")
     @ResponseStatus(HttpStatus.OK)
-    fun getCustomer(@RequestParam("id") idCustomer: UUID): CustomerDTO? {
+    fun getTickets(): List<TicketDTO?> {
+        return managerService.getTickets()
+    }
+
+    @GetMapping("/API/manager/customer")
+    @ResponseStatus(HttpStatus.OK)
+    fun getCustomer(@RequestBody idCustomer: UUID): CustomerDTO? {
         return managerService.getCustomer(idCustomer)
     }
 
-    @GetMapping("/API/manager/experts")
+    @GetMapping("/API/manager/expert")
     @ResponseStatus(HttpStatus.OK)
-    fun getExpert(@RequestParam("id") idExpert: UUID): EmployeeDTO? {
+    fun getExpert(@RequestBody idExpert: UUID): EmployeeDTO? {
         return managerService.getExpert(idExpert)
     }
 
-    @GetMapping("/API/manager/experts/")
+    @GetMapping("/API/manager/experts")
     @ResponseStatus(HttpStatus.OK)
     fun getExperts(): List<EmployeeDTO?> {
         return managerService.getExperts()
@@ -50,9 +56,14 @@ class ManagerController(
 
     @PutMapping("/API/manager/tickets/{idTicket}/assign")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun ticketAssign(@PathVariable idTicket: Long, @RequestParam("expert") idExpert: UUID, @RequestParam("priority") priorityLevel: PriorityLevel) {
+    fun ticketAssign(@PathVariable idTicket: Long, @RequestBody idExpert: UUID, @RequestBody priorityLevel: PriorityLevel) {
         managerService.assignTicket(idTicket, idExpert, priorityLevel)
     }
 
+    @PutMapping("/API/manager/experts/{expertId}/approve")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun expertApprove(@PathVariable expertId: UUID){
+        managerService.expertApprove(expertId)
+    }
 
 }
