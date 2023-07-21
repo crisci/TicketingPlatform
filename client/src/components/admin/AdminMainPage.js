@@ -149,7 +149,7 @@ function TicketItem(props){
     const navigate = useNavigate();
     const [expertMsg,setExpertMsg] = useState("Waiting response")
     const [expertWait,setExpertWait] = useState(true);
-    const [currentExpert,setCurrentExpert] = useState("");
+    const [currentExpert,setCurrentExpert] = useState('');
     const [selectedExpert,setSelectedExpert] = useState();
     const [render,setRender] = useState(false);
     useEffect(()=>{
@@ -183,17 +183,17 @@ function TicketItem(props){
             <Container>{props.ticket.priority}</Container>
             <Container>{expertWait || !props.experts ? expertMsg : currentExpert.id}</Container>
             <Container>
-                <Form.Select onChange={(event)=>{setSelectedExpert(event.target.value)}}>
-                    <option key="-1" defaultValue={currentExpert ? false : true}></option>
+                <Form.Select defaultValue={currentExpert ? currentExpert : ''} onChange={(event)=>{setSelectedExpert(event.target.value)} }>
+                    <option key="-1"></option>
                     {props.experts ? props.experts.map((expert)=>
-                        <option key={expert.id} defaultValue={currentExpert ? expert.id === selectedExpert.id : false} >
+                        <option key={expert.id}>
                             {expert.id}
                         </option>
                     ):<></>}
                 </Form.Select>
             </Container>
             <Container>
-                { !selectedExpert ? "select an expert" :
+                { !selectedExpert  ? "select an expert" :
                 <Button variant="outline-success" onClick={()=>submitNewExpert(selectedExpert)}>
                     reassign
                 </Button>

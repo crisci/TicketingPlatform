@@ -471,7 +471,7 @@ function reasignTicket(ticketId, expertId){
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ idExpert: expertId })
+            body: JSON.stringify({ expertId: expertId })
         }).then(res => {
             if (res.ok) {
                 resolve(true)

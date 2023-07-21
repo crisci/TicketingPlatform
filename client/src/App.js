@@ -197,7 +197,7 @@ function MainApp(props) {
   }
 
   //select the home page for the user
-  const [home,setHome] = useState();
+  const [home,setHome] = useState(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
   useEffect(()=>{
     switch(user.role){
       case "Client":

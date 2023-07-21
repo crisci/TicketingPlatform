@@ -46,8 +46,6 @@ class ExpertServiceImpl(private val ticketRepository: TicketRepository,
 
         ticketRepository.save(ticket)
         historyRepository.save(historyEntry)
-        historyRepository.flush()
-        ticketRepository.flush()
     }
 
     @Secured("ROLE_Expert")
