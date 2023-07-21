@@ -172,10 +172,10 @@ function MainApp(props) {
   }
 
   const getMessages = (ticketId) => {
-    setLoadingMessages(true)
+    setLoadingMessages(true);
     return API.getMessages(ticketId).then(res => {
       setMessages(res)
-      setLoadingMessages(false)
+      setLoadingMessages(false);
     }).catch(err => {Notification.showError(err.detail); setLoadingMessages(false)})
   }
 
@@ -208,10 +208,10 @@ function MainApp(props) {
       }>
         <Route path="/" element={
           user.role === "Client" 
-            ? <YourTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>
+            ? <YourTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} getMessages={getMessages} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>
             : <></> || 
           user.role === "Expert" 
-            ? <ExpertTickets user={user} tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket}/>
+            ? <ExpertTickets user={user} tickets={tickets} loadingTickets={loadingTickets} messages={messages} getMessages={getMessages} stopTicket={stopTicket}/>
             : <></>
         }/> 
         <Route path="/yourproducts" element={
@@ -221,8 +221,8 @@ function MainApp(props) {
         }/> 
         <Route path="/messages" element={
           user.role === "Client"
-          ? <CustomerMessages messages={messages} loadingMessages={loadingMessages} addClientMessage={addClientMessage}></CustomerMessages>
-          : <ExpertMessages messages={messages} loadingMessages={loadingMessages} addExpertMessage={addExpertMessage}></ExpertMessages>
+          ? <CustomerMessages getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} addClientMessage={addClientMessage}></CustomerMessages>
+          : <ExpertMessages getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} addExpertMessage={addExpertMessage}></ExpertMessages>
         }/>
         <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
       </Route>

@@ -20,7 +20,7 @@ function YourTickets(props) {
                 </Form.Group>
             </Form>
             <Row className="d-flex justify-content-center mt-4">
-                {!props.loadingTickets ? <TicketList tickets={props.tickets} messages={props.messages} loadingMessages={props.loadingMessages} getMessages={props.getMessages} nameFilter={nameFilter} closeTicket={props.closeTicket} resolveTicket={props.resolveTicket} reopenTicket={props.reopenTicket}/> : <Spinner  variant="primary"/>}
+                {!props.loadingTickets ? <TicketList tickets={props.tickets} messages={props.messages} getMessages={props.getMessages} nameFilter={nameFilter} closeTicket={props.closeTicket} resolveTicket={props.resolveTicket} reopenTicket={props.reopenTicket}/> : <Spinner  variant="primary"/>}
             </Row>
         </Container>
     )

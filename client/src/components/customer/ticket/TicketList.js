@@ -32,7 +32,7 @@ function TicketList(props) {
                 <Container>Actions</Container>
             </ListGroup.Item>
             {
-                props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} messages={props.messages} loadingMessages={props.loadingMessages} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} handleM={handleM} ticket={ticket}/>)
+                props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} messages={props.messages} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} handleM={handleM} ticket={ticket}/>)
             }
         </ListGroup>
     )
