@@ -75,20 +75,20 @@ function MainApp(props) {
       .then(res => {
         setUser(jwtToUser(jwt(res.access_token)));
         setLoggedIn(true);
-        if(jwtToUser(jwt(res.access_token)).role !== "Manager"){
+        if (jwtToUser(jwt(res.access_token)).role !== "Manager") {
           getProducts()
           getTickets()
         }
         console.log(jwtToUser(jwt(res.access_token)))
         navigate('/')
-      }).catch(err => {console.log("Login error")})
+      }).catch(err => { console.log("Login error") })
   }
 
   const doSignup = async (credentials) => {
     return API.signup(credentials)
       .then(() => {
         doLogIn({ username: credentials.username, password: credentials.password })
-      }).catch(err => {console.log("Login error")})
+      }).catch(err => { console.log("Login error") })
   }
 
   const handleLogout = () => {
@@ -108,7 +108,7 @@ function MainApp(props) {
   }
 
   const removeProduct = (ean) => {
-     API.removeProduct(user, ean).then(res => {
+    API.removeProduct(user, ean).then(res => {
       Notification.showSuccess("Product removed correctly")
       getProducts()
     })
@@ -117,7 +117,7 @@ function MainApp(props) {
   const getProducts = () => {
     return API.getProducts(user).then(res => {
       setProducts(res)
-    }).catch(err => {Notification.showError(err.detail)})
+    }).catch(err => { Notification.showError(err.detail) })
   }
 
   const getTickets = () => {
@@ -125,7 +125,7 @@ function MainApp(props) {
     return API.getTickets().then(res => {
       setTickets(res)
       setLoadingTickets(false)
-    }).catch(err => {Notification.showError(err.detail); setLoadingTickets(false)})
+    }).catch(err => { Notification.showError(err.detail); setLoadingTickets(false) })
   }
 
   const openTicket = (ticket) => {
@@ -170,7 +170,7 @@ function MainApp(props) {
     return API.getMessages(ticketId).then(res => {
       setMessages(res)
       setLoadingMessages(false)
-    }).catch(err => {Notification.showError(err.detail); setLoadingMessages(false)})
+    }).catch(err => { Notification.showError(err.detail); setLoadingMessages(false) })
   }
 
   const addExpertMessage = (ticketId, message) => {
@@ -182,8 +182,8 @@ function MainApp(props) {
     })
   }
 
-  const addClientMessage = (ticketId, message) => {
-    return API.addClientMessage(ticketId, message).then(res => {
+  const addClientMessage = (ticketId, message, listOfAttachments) => {
+    return API.addClientMessage(ticketId, message, listOfAttachments).then(res => {
       Notification.showSuccess("Message added correctly")
       getMessages(ticketId)
     }).catch(err => {
@@ -196,35 +196,24 @@ function MainApp(props) {
     navigate('/')
   }
 
-  //select the home page for the user
-  const [home,setHome] = useState(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
-  useEffect(()=>{
-    switch(user.role){
-      case "Client":
-        setHome(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
-        break;
-      case "Expert":
-        setHome(<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket}/>);
-        break;
-      case "Manager":
-        setHome(<AdminMainPage />);
-        break;
-    }
-
-  },[user])
 
   return (
     <Routes>
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : <LandingPage user={user} handleLogout={handleLogout}/>
+          : <LandingPage user={user} handleLogout={handleLogout} />
       }>
-        <Route path="/" element={home}/>
-        <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct}/>}/>
-        <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket}/>}/>
-        <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
-        <Route path="/:ticketId/details" element={<TicketDetails/>}/>
+        {user.role === "Client"
+          ? <><Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket} />} />
+            <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct} />} />
+            <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket} />} />
+            <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
+            <Route path="/:ticketId/details" element={<TicketDetails />} /></>
+          : user.role === "Manager"
+            ? <Route path="/" element={<AdminMainPage />} />
+            : null
+        }
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />
       <Route path="/registration" element={loggedIn ? <Navigate to="/" /> : <RegistrationForm signup={doSignup} />} />

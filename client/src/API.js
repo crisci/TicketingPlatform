@@ -1,4 +1,4 @@
-const APIURL = 'http://localhost:8081/API';
+const APIURL = '/API';
 
 
 async function refreshToken() {
@@ -371,7 +371,7 @@ function getExperts(){
 }
 
 //POST /API/customers/tickets/{idTicket}/messages
-function addClientMessage(idTicket, message) {
+function addClientMessage(idTicket, message, listOfAttachments) {
     return new Promise(async (resolve, reject) => {
         return fetch(`${APIURL}/customers/tickets/${idTicket}/messages`, {
             method: 'POST',
@@ -381,7 +381,7 @@ function addClientMessage(idTicket, message) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                body: message
+                body: message, listOfAttachments
             }),
         }).then(res => {
             if (res.ok) {

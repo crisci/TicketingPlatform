@@ -1,8 +1,12 @@
 import formatDateTime from '../../../utils/DateTimeFormatter';
 import './custommessages.css'
-import { Col, Container, ListGroup } from "react-bootstrap";
+import { Button, Col, Container, ListGroup } from "react-bootstrap";
 
 function MessageItem(props) {
+
+    const Image = ({ data }) => <img src={`data:image/jpeg;base64,${data}`} />
+
+    
 
     return (
         <Container>
@@ -31,6 +35,13 @@ function MessageItem(props) {
                             <Col style={{ padding: 0 }}>
                                 <Container className='text-start' style={{ wordBreak: 'break-all' }}>
                                     {props.message.body}
+                                </Container>
+                                <Container>
+                                    {props.message.listOfAttachments.map((attachment, index) => (
+                                        <div key={index}>
+                                            <Image data={attachment.attachment} />
+                                         </div>
+                                    ))}
                                 </Container>
                                 <Container className='text-end' style={{fontSize:"0.85rem"}}>
                                     {formatDateTime(props.message.date)}

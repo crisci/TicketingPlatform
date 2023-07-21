@@ -12,6 +12,7 @@ function MessageConversation(props) {
     const reverseMessages = [...props.messages].sort((a, b) => { return new Date(a.date).getTime() - new Date(b.date).getTime() }).reverse()
     const [ticket, setTicket] = useState({})
     const [send, setSend] = useState("")
+    const [attachments, setAttachments] = useState([])
 
     useEffect(() => {
         setTicket(props.tickets.find(t => t.id.toString() === params.id))
@@ -21,10 +22,32 @@ function MessageConversation(props) {
 
 
     const handleSend = () => {
-        props.addMessage(params.id, send)
+            // Create an array of attachment objects
+            const listOfAttachments = attachments.map((attachment) => ({
+                attachment: attachment,
+            }));
+
+          
+        props.addMessage(params.id, send, listOfAttachments)
         setSend("")
     }
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0]; // Get the selected file from the input
+        console.log("Reading file...")
+        if (file) {
+            const reader = new FileReader();
+
+            // Read the file as a binary string
+            reader.readAsArrayBuffer(file);
+
+            // When the file is loaded, convert it to a byte array
+            reader.onload = () => {
+                const byteArray = new Uint8Array(reader.result);
+                setAttachments([btoa(String.fromCharCode.apply(null, byteArray))]); // Update the state with the byte array
+            };
+        }
+    };
 
     return (
         <>
@@ -38,24 +61,27 @@ function MessageConversation(props) {
                         ? <Spinner variant="primary" />
                         : <Container>
                             <Card>
-                            <Card.Header>
-                                <h5 className="text-center">Ticket status: <Badge className='justify-content-center mx-2' pill text={ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(ticket.status)}>{ticket.status}</Badge></h5>
-                            </Card.Header>
-                            <Card.Body>
-                            {props.messages.length !== 0
-                                    ? <ListGroup className="mt-2 mb-2">
-                                    {props.messages.map(m => <MessageItem user={props.user} key={m.id} message={m}></MessageItem>)}
-                                    </ListGroup>
-                                    : <h4 className="text-center">No messages found</h4>}
-                            </Card.Body>
+                                <Card.Header>
+                                    <h5 className="text-center">Ticket status: <Badge className='justify-content-center mx-2' pill text={ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(ticket.status)}>{ticket.status}</Badge></h5>
+                                </Card.Header>
+                                <Card.Body>
+                                    {props.messages.length !== 0
+                                        ? <ListGroup className="mt-2 mb-2">
+                                            {props.messages.map(m => <MessageItem user={props.user} key={m.id} message={m}></MessageItem>)}
+                                        </ListGroup>
+                                        : <h4 className="text-center">No messages found</h4>}
+                                </Card.Body>
                             </Card>
                             {ticket.status === "IN_PROGRESS"
-                                ? <Form className="d-flex justify-content-center py-3" onSubmit={event => { event.preventDefault() }} >
+                                ? <Form className="justify-content-center py-3" onSubmit={event => { event.preventDefault() }} >
                                     <Form.Group className="w-100">
                                         <InputGroup>
                                             <Form.Control type="text" placeholder="Your answer.." value={send} onChange={event => setSend(event.target.value)} />
                                             {send !== "" ? <Button disabled={ticket.status !== "IN_PROGRESS"} onClick={() => handleSend()}>Send</Button> : null}
                                         </InputGroup>
+                                    </Form.Group>
+                                    <Form.Group controlId="formFile" onChange={handleFileChange}>
+                                        <Form.Control type="file" />
                                     </Form.Group>
                                 </Form> : null}
                         </Container>
