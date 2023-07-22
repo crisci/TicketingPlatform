@@ -34,8 +34,8 @@ async function logIn(credentials) {
             const jwt = await res.json()
             localStorage.setItem("jwt", JSON.stringify(jwt))
             return jwt
-        } else if (res.ok && res === undefined) {
-            throw Error("An error occurred while logging in.")
+        } else if (res.status === 400) {
+            throw Error("Invalid credentials, please retry.")
         } else {
             throw Error("A network error occurred while logging in.")
         }
@@ -147,9 +147,15 @@ function getProducts() {
     })
 }
 
-function getTickets() {
+function getTickets(user) {
+    let role = "";
+    if(user.role === "Client"){
+        role = "customers";
+    }else if(user.role === "Expert"){
+        role = "expert";
+    }
     return new Promise((resolve, reject) => {
-        fetch(`${APIURL}/customers/tickets`, {
+        fetch(`${APIURL}/${role}/tickets`, {
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
                 'Content-Type': 'application/json'
@@ -414,7 +420,7 @@ function addClientMessage(idTicket, message, listOfAttachments) {
 
 
 //POST /API/expert/tickets/{idTicket}/messages
-function addExpertMessage(idTicket, message) {
+function addExpertMessage(idTicket, message, listOfAttachments) {
     return new Promise((resolve, reject) => {
         return fetch(`${APIURL}/expert/tickets/${idTicket}/messages`, {
             method: 'POST',
@@ -424,7 +430,7 @@ function addExpertMessage(idTicket, message) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                body:message
+                body: message, listOfAttachments
             }),
         }).then(res => {
             if (res.ok) {
@@ -459,6 +465,26 @@ function getManagerTickets(){
         }).catch(err => reject(err))
     })
 }
+
+//PUT /API/expert/{ticketId}/stop
+function stopTicket(ticketId) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/expert/${ticketId}/stop`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+})}
+
 //GET /API/tickets/{ticketId}/expert
 function getTicketCurrentExpert(ticketId){
     return new Promise((resolve, reject) => {
@@ -578,7 +604,7 @@ function approveExpert(expertId){
 
 const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, logIn, signup, getProducts, addProduct, removeProduct, 
     getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,getTicketHistory,getTicketMessage, approveExpert,
-    getMessages, addClientMessage, addExpertMessage, getExperts,getManagerTickets,getTicketCurrentExpert,reasignTicket,
+    getMessages, addClientMessage, addExpertMessage, getExperts,getManagerTickets,getTicketCurrentExpert,reasignTicket, stopTicket,
     expertRegistration };
 
     export default API;

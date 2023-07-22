@@ -15,8 +15,9 @@ import java.util.*
 class ExpertController(val expertService: ExpertService) {
     @GetMapping("/API/expert/tickets")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun getAssignedTickets(@RequestParam("expert") idExpert: UUID) : List<TicketDTO?>{
-        return expertService.getTickets(idExpert)
+    fun getAssignedTickets() : List<TicketDTO?>{
+        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
+        return expertService.getTickets(UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
     @PostMapping("/API/expert/tickets/{idTicket}/messages")
@@ -24,6 +25,14 @@ class ExpertController(val expertService: ExpertService) {
     fun addMessage(@PathVariable idTicket: Long, @RequestBody message: MessageDTO) {
         val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
         expertService.addMessage(idTicket, message, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
+    }
+
+    @PutMapping("/API/expert/{ticketId}/stop")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_Expert")
+    fun ticketMakeReassignable(@PathVariable("ticketId") ticketId: Long) {
+        val userDetails = SecurityContextHolder.getContext().authentication as JwtAuthenticationToken
+        return expertService.reassignTicket(ticketId, UUID.fromString(userDetails.tokenAttributes["sub"].toString()))
     }
 
 }

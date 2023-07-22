@@ -30,7 +30,7 @@ function TicketModal(props) {
                                     <h5 className='m-0'>Opened: </h5>
                                 </Col>
                                 <Col>
-                                    <p className='m-0'>{formatDateTime(props.ticket.dateTime)}</p>
+                                    <p className='m-0'>{formatDateTime(props.ticket.openDate)}</p>
                                 </Col>
                             </Row>
                             <Row className="align-items-center mb-3">

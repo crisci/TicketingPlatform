@@ -19,7 +19,7 @@ function ExpertTickets(props) {
                 </Form.Group>
             </Form>
             <Row className="d-flex justify-content-center mt-4">
-                {!props.loadingTickets ? <TicketList user={props.user} tickets={props.tickets.filter(t => ["IN_PROGRESS", "CLOSED", "RESOLVED"].includes(t.status))} messages={props.messages} loadingMessages={props.loadingMessages} nameFilter={nameFilter} getMessages={props.getMessages} stopTicket={props.stopTicket}/> : <Spinner  variant="primary"/>}
+                {!props.loadingTickets ? <TicketList tickets={props.tickets.filter(t => ["IN_PROGRESS", "CLOSED", "RESOLVED"].includes(t.status))} messages={props.messages} loadingMessages={props.loadingMessages} nameFilter={nameFilter} getMessages={props.getMessages} stopTicket={props.stopTicket}/> : <Spinner  variant="primary"/>}
             </Row>
         </Container>
     )

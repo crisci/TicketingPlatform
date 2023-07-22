@@ -7,4 +7,5 @@ import java.util.*
 interface ExpertService {
     fun getTickets(idExpert: UUID): List<TicketDTO?>
     fun addMessage(idTicket: Long, message: MessageDTO, expertId: UUID)
+    fun reassignTicket(ticketId: Long, idExpert: UUID)
 }

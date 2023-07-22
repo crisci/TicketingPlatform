@@ -1,15 +1,13 @@
-import { Card, ListGroup, Container, Form, Button, InputGroup, Spinner, Row, Alert, Badge } from "react-bootstrap";
+import { Card, ListGroup, Container, Form, Button, InputGroup, Spinner, Row, Badge } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
-import dayjs from "dayjs";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import mapStatus from "../../../utils/MapStatus";
 
 function MessageConversation(props) {
 
     const params = useParams()
 
-    const reverseMessages = [...props.messages].sort((a, b) => { return new Date(a.date).getTime() - new Date(b.date).getTime() }).reverse()
     const [ticket, setTicket] = useState({})
     const [send, setSend] = useState("")
     const [attachments, setAttachments] = useState([])
@@ -76,7 +74,7 @@ function MessageConversation(props) {
                                 <Card.Body>
                                     {props.messages.length !== 0
                                         ? <ListGroup className="mt-2 mb-2">
-                                            {props.messages.map(m => <MessageItem user={props.user} key={m.id} message={m}></MessageItem>)}
+                                            {props.messages.map(m => <MessageItem ticket={ticket} user={props.user} key={m.id} message={m}></MessageItem>)}
                                         </ListGroup>
                                         : <h4 className="text-center">No messages found</h4>}
                                 </Card.Body>
@@ -86,7 +84,7 @@ function MessageConversation(props) {
                                     <Form.Group className="w-100">
                                         <InputGroup>
                                             <Form.Control type="text" placeholder="Your answer.." value={send} onChange={event => setSend(event.target.value)} />
-                                            {send !== "" ? <Button disabled={ticket.status !== "IN_PROGRESS"} onClick={() => handleSend()}>Send</Button> : null}
+                                            {send !== "" || attachments.length > 0 ? <Button disabled={ticket.status !== "IN_PROGRESS"} onClick={() => handleSend()}>Send</Button> : null}
                                         </InputGroup>
                                     </Form.Group>
                                     <Form.Group controlId="formFile" onChange={handleFileChange}>

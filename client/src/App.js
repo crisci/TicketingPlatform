@@ -19,6 +19,7 @@ import NotFoundPage from './components/404notfound/NotFoundPage';
 import AdminMainPage from './components/admin/AdminMainPage';
 import MessageConversation from './components/expert/chat/MessageConversation';
 import TicketDetails from './components/admin/TicketDetails';
+import ExpertTickets from './components/expert/ticket/YourTickets';
 import ExpertRegistration from './components/admin/ExpertRegistration';
 
 function App() {
@@ -58,8 +59,13 @@ function MainApp(props) {
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
       getProducts()
-      getTickets()
+      getTickets(jwtToUser(jwt(loggedInUser)))
+    }else if(loggedInUser){
+      setUser(jwtToUser(jwt(loggedInUser)))
+      setLoggedIn(true);
+      getTickets(jwtToUser(jwt(loggedInUser)))
     }
+    //TODO: Expert and Manager
     // eslint-disable-next-line
   }, [])
 
@@ -77,12 +83,14 @@ function MainApp(props) {
       .then(res => {
         setUser(jwtToUser(jwt(res.access_token)));
         setLoggedIn(true);
-        if (jwtToUser(jwt(res.access_token)).role !== "Manager") {
+        if (jwtToUser(jwt(res.access_token)).role === "Client") {
           getProducts()
-          getTickets()
+          getTickets(jwtToUser(jwt(res.access_token)))
+        } else if(jwtToUser(jwt(res.access_token)).role === "Expert") {
+          getTickets(jwtToUser(jwt(res.access_token)))
         }
         navigate('/')
-      }).catch(err => { Notification.showError(err.detail) })
+      }).catch(err =>  {throw err})
   }
 
   const doSignup = async (credentials) => {
@@ -95,6 +103,9 @@ function MainApp(props) {
   const handleLogout = () => {
     setLoggedIn(false)
     setUser({})
+    setProducts([])
+    setTickets([])
+    setMessages([])
     localStorage.removeItem("jwt")
     navigate('/')
   }
@@ -121,9 +132,9 @@ function MainApp(props) {
     }).catch(err => { Notification.showError(err.detail) })
   }
 
-  const getTickets = () => {
+  const getTickets = (user) => {
     setLoadingTickets(true)
-    return API.getTickets().then(res => {
+    return API.getTickets(user).then(res => {
       setTickets(res)
       setLoadingTickets(false)
     }).catch(err => { Notification.showError(err.detail); setLoadingTickets(false) })
@@ -132,7 +143,7 @@ function MainApp(props) {
   const openTicket = (ticket) => {
     return API.openTicket(ticket).then(_ => {
       Notification.showSuccess("Ticket added correctly")
-      getTickets()
+      getTickets(jwtToUser(jwt(localStorage.getItem("jwt"))))
     }).catch(err => {
       Notification.showError(err.detail)
     })
@@ -141,7 +152,7 @@ function MainApp(props) {
   const closeTicket = (ticketId) => {
     return API.closeTicket(ticketId).then(_ => {
       Notification.showSuccess("Ticket closed correctly")
-      getTickets()
+      getTickets(jwtToUser(jwt(localStorage.getItem("jwt"))))
     }).catch(err => {
       Notification.showError(err.detail)
     })
@@ -150,7 +161,7 @@ function MainApp(props) {
   const resolveTicket = (ticketId) => {
     return API.resolveTicket(ticketId).then(_ => {
       Notification.showSuccess("Ticket resolved correctly")
-      getTickets()
+      getTickets(jwtToUser(jwt(localStorage.getItem("jwt"))))
     }).catch(err => {
       Notification.showError(err.detail)
     })
@@ -159,12 +170,20 @@ function MainApp(props) {
   const reopenTicket = (ticketId) => {
     return API.reopenTicket(ticketId).then(_ => {
       Notification.showSuccess("Ticket reopened correctly")
-      getTickets()
+      getTickets(jwtToUser(jwt(localStorage.getItem("jwt"))))
     }).catch(err => {
       Notification.showError(err.detail)
     })
   }
 
+  const stopTicket = (ticketId) => {
+    return API.stopTicket(ticketId).then(_ => {
+      Notification.showSuccess("Ticket stopped correctly")
+      getTickets(jwtToUser(jwt(localStorage.getItem("jwt"))))
+    }).catch(err => {
+      Notification.showError(err.detail)
+    })
+  }
 
   const getMessages = (ticketId) => {
     setLoadingMessages(true)
@@ -174,8 +193,8 @@ function MainApp(props) {
     }).catch(err => { Notification.showError(err.detail); setLoadingMessages(false) })
   }
 
-  const addExpertMessage = (ticketId, message) => {
-    return API.addExpertMessage(ticketId, message).then(res => {
+  const addExpertMessage = (ticketId, message, listOfAttachments) => {
+    return API.addExpertMessage(ticketId, message, listOfAttachments).then(res => {
       Notification.showSuccess("Message added correctly")
       getMessages(ticketId)
     }).catch(err => {
@@ -215,7 +234,7 @@ function MainApp(props) {
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : <LandingPage user={user} handleLogout={handleLogout} />
+          : <LandingPage user={user} tickets={tickets} loadingTickets={loadingTickets} handleLogout={handleLogout} />
       }>
         {user.role === "Client"
           ? <><Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket} />} />
@@ -233,6 +252,13 @@ function MainApp(props) {
               <Route path="/:ticketId/details" element={<TicketDetails />} />
             </>
             : null
+        }
+	{ user.role === "Expert"
+              ? <>
+                <Route path="/" element={<ExpertTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket}/>} />
+                <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
+                </>
+              : null
         }
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />

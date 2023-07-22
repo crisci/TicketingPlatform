@@ -17,7 +17,7 @@ function TicketItem(props) {
 
         <ListGroup.Item key={props.ticket.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container><Badge pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>{props.ticket.status}</Badge></Container>
-            <Container>{props.ticket.title}</Container>
+            <Container onClick={() => {navigate(`/chat/${props.ticket.id}`)}}><p className={`hover m-0`}>{props.ticket.title}</p></Container>
             <Container>
                 <div style={{ display: 'inline-block', width: '30px', height: '30px' }}>
                     <OverlayTrigger placement="top" overlay={props.tooltip("Details")}>
@@ -36,13 +36,6 @@ function TicketItem(props) {
                     </div>
                     : null
                 }
-                <div style={{ display: 'inline-block', width: '30px', height: '30px' }}>
-                    <OverlayTrigger placement="top" overlay={props.tooltip("Messages")}>
-                        <div style={{ cursor: 'pointer' }} onClick={() => {props.handleM(props.ticket.id); navigate("/messages", { state: { ticket: props.ticket } })}}>
-                            <BsSignal color="#0d6efd" size="20px" />
-                        </div>
-                    </OverlayTrigger>
-                </div>
             </Container>
             <TicketModal show={showModal} onHide={handleShowModal} ticket={props.ticket} />
         </ListGroup.Item>
