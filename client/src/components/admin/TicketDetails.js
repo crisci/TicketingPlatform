@@ -11,7 +11,7 @@ function TicketDetails(){
     const ticketId = params.ticketId;
     const {expertId,customer,product,ticket} = state;
     const [legaState,setLegalState] = useState(true);
-    const [histories,setHistories] = useState();
+    const [histories,setHistories] = useState([]);
     const [historyMsg,setHistoryMsg] = useState("loading");
     const [historyWait,setHistoryWait] = useState(true);
     const [messages,setMessages] = useState();
@@ -123,7 +123,7 @@ function TicketDetails(){
             <h4 className="m-0">ordered history</h4>
         </Container>
         <Row className="d-flex justify-content-center mt-4">
-            <ListGroup variant="flush" className="px-3">
+            {/* <ListGroup variant="flush" className="px-3">
                 <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
                         <Container>Id</Container>
                         <Container>State</Container>
@@ -140,7 +140,7 @@ function TicketDetails(){
                         <Container>{history.employee.email}</Container>
                         </ListGroup.Item>
                     )}
-            </ListGroup>
+            </ListGroup> */}
         </Row>
     </Container></>
     }
@@ -152,7 +152,7 @@ function TicketDetails(){
             <h4 className="m-0">messages</h4>
         </Container>
         <Row className="d-flex justify-content-center mt-4">
-            <ListGroup variant="flush" className="px-3">
+            {/* <ListGroup variant="flush" className="px-3">
                 <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
                         <Container>Id</Container>
                         <Container>Body</Container>
@@ -169,7 +169,7 @@ function TicketDetails(){
                     <Container>{message.expert}</Container>
                     </ListGroup.Item>
                 )}
-            </ListGroup>
+            </ListGroup> */}
         </Row>
     </Container></>
     }

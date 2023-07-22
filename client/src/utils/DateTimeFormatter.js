@@ -1,5 +1,6 @@
 const formatDateTime = (dateTime) => {
     const inputDate = new Date(dateTime);
+    inputDate.setHours(inputDate.getHours() + 2);
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"

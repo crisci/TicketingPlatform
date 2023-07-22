@@ -4,6 +4,8 @@ import it.polito.wa2.ticketing.product.ProductDTO
 import it.polito.wa2.ticketing.product.toDTO
 import it.polito.wa2.ticketing.customer.CustomerDTO
 import it.polito.wa2.ticketing.customer.toDTO
+import it.polito.wa2.ticketing.employee.EmployeeDTO
+import it.polito.wa2.ticketing.employee.toEmployeeDTO
 import it.polito.wa2.ticketing.utils.PriorityLevel
 import it.polito.wa2.ticketing.utils.TicketStatus
 import java.time.LocalDateTime
@@ -16,9 +18,13 @@ data class TicketDTO(
     val customer: CustomerDTO?,
     val product: ProductDTO?,
     val status: TicketStatus?,
-    val openDate: LocalDateTime?
+    val openDate: LocalDateTime?,
+    //val currentExpert: EmployeeDTO? = null
 )
 
 fun Ticket.toTicketDTO(): TicketDTO {
-    return TicketDTO(id,title,description,priority,customer?.toDTO(), product?.toDTO(), history.maxByOrNull { it.date }?.state, history.minByOrNull { it.date }?.date)
+    return TicketDTO(id,title,description,priority,customer?.toDTO(), product?.toDTO(),
+        history.maxByOrNull { it.date }?.state, history.minByOrNull { it.date }?.date
+        //history.maxByOrNull { it.date }?.employee?.toEmployeeDTO()?
+    )
 }

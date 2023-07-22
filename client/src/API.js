@@ -10,10 +10,8 @@ async function refreshToken() {
         },
         body: JSON.stringify({"refresh_token": JSON.parse(localStorage.getItem("jwt")).refresh_token})}
     ).then(async res => {
-        console.log(res)
         if (res.ok) {
             const jwt = await res.json()
-            console.log(jwt)
             localStorage.setItem("jwt", JSON.stringify(jwt))
             return jwt
         } else {
@@ -60,6 +58,32 @@ async function signup(user) {
         }
     })
 
+}
+
+
+async function expertRegistration(expert) {
+    return fetch(`${APIURL}/createExpert`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(expert)
+    }).then(async res => {
+        if (res.ok) {
+            return true
+        } else if (res.status === 401) {
+                try {
+                    await refreshToken()
+                    await expertRegistration(expert)
+                } catch (error) {
+                    throw Error(error)
+                }
+        } else {
+            throw Error("An error occurred while creating expert.")
+        }
+    })
 }
 
 function addProduct(user, ean) {
@@ -113,7 +137,6 @@ function getProducts() {
             if (res.ok) {
                 res.json().then(products => resolve(products)).catch(_ => reject("Unable to parse the response."))
             } else if(res.status === 401) {
-                console.log("Refreshing token...")
                 refreshToken().then(_ => {
                         getProducts().then(products => resolve(products)).catch(err => reject(err))
                 }).catch(err => reject(err))
@@ -135,7 +158,6 @@ function getTickets() {
             if (res.ok) {
                 res.json().then(tickets => resolve(tickets)).catch(_ => reject("Unable to parse the response."))
             } else if(res.status === 401) {
-                console.log("Refreshing token...")
                 refreshToken().then(_ => {
                         getTickets().then(tickets => resolve(tickets)).catch(err => reject(err))
                 }).catch(err => reject(err))
@@ -162,13 +184,11 @@ function openTicket(ticket) {
             if (res.ok) {
                 resolve(true)
             } else if(res.status === 401) {
-                console.log("Refreshing token...")
                 refreshToken().then(res => {
                     if(res.ok) {
-                        console.log(res.json())
                         openTicket(ticket).then(() => resolve(true)).catch(err => reject(err))
                     }
-                }).catch(err => console.log("error while refreshing token: " + err.detail))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -339,7 +359,6 @@ function getMessages(ticketId) {
             if (res.ok) {
                 res.json().then(messages => resolve(messages)).catch(_ => reject("Unable to parse the response."))
             } else if(res.status === 401) {
-                console.log("Refreshing token...")
                 refreshToken().then(_ => {
                         getMessages().then(messages => resolve(messages)).catch(err => reject(err))
                 }).catch(err => reject(err))
@@ -431,7 +450,6 @@ function getManagerTickets(){
             if (res.ok) {
                 res.json().then(tickets => resolve(tickets)).catch(_ => reject("Unable to parse the response."))
             } else if(res.status === 401) {
-                console.log("Refreshing token...")
                 refreshToken().then(_ => {
                     getManagerTickets().then(tickets => resolve(tickets)).catch(err => reject(err))
                 }).catch(err => reject(err))
@@ -454,7 +472,11 @@ function getTicketCurrentExpert(ticketId){
         }).then(res => {
             if (res.ok) {
                 res.json().then(expert => resolve(expert)).catch(_ => reject("Unable to parse the response."))
-            } else {
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    getTicketCurrentExpert(ticketId).then(expert => resolve(expert)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            }else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
         }).catch(err => reject(err))
@@ -471,12 +493,11 @@ function reasignTicket(ticketId, expertId){
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ expertId: expertId })
+            body: JSON.stringify(expertId)
         }).then(res => {
             if (res.ok) {
                 resolve(true)
             } else if(res.status === 401) {
-                console.log("Refreshing token...")
                 refreshToken().then(_ => {
                     reasignTicket().then(expert => resolve(expert)).catch(err => reject(err))
                 }).catch(err => reject(err))
@@ -500,6 +521,10 @@ function getTicketHistory(ticketId){
         }).then(res => {
             if (res.ok) {
                 res.json().then(history => resolve(history)).catch(_ => reject("Unable to parse the response."))
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    getTicketHistory(ticketId).then(history => resolve(history)).catch(err => reject(err))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -520,7 +545,11 @@ function getTicketMessage(ticketId){
         }).then(res => {
             if (res.ok) {
                 res.json().then(message => resolve(message)).catch(_ => reject("Unable to parse the response."))
-            } else {
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    getTicketMessage(ticketId).then(message => resolve(message)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            }else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
         }).catch(err => reject(err))
@@ -549,6 +578,7 @@ function approveExpert(expertId){
 
 const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, logIn, signup, getProducts, addProduct, removeProduct, 
     getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,getTicketHistory,getTicketMessage, approveExpert,
-    getMessages, addClientMessage, addExpertMessage, getExperts,getManagerTickets,getTicketCurrentExpert,reasignTicket };
+    getMessages, addClientMessage, addExpertMessage, getExperts,getManagerTickets,getTicketCurrentExpert,reasignTicket,
+    expertRegistration };
 
     export default API;

@@ -19,6 +19,7 @@ import NotFoundPage from './components/404notfound/NotFoundPage';
 import AdminMainPage from './components/admin/AdminMainPage';
 import MessageConversation from './components/expert/chat/MessageConversation';
 import TicketDetails from './components/admin/TicketDetails';
+import ExpertRegistration from './components/admin/ExpertRegistration';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function MainApp(props) {
 
   const [loadingTickets, setLoadingTickets] = useState(true)
   const [loadingMessages, setLoadingMessages] = useState(true)
+  const [loadingExpertRegistration, setLoadingExpertRegistration] = useState(false)
 
 
 
@@ -79,16 +81,15 @@ function MainApp(props) {
           getProducts()
           getTickets()
         }
-        console.log(jwtToUser(jwt(res.access_token)))
         navigate('/')
-      }).catch(err => { console.log("Login error") })
+      }).catch(err => { Notification.showError(err.detail) })
   }
 
   const doSignup = async (credentials) => {
     return API.signup(credentials)
       .then(() => {
         doLogIn({ username: credentials.username, password: credentials.password })
-      }).catch(err => { console.log("Login error") })
+      }).catch(err => { Notification.showError(err.detail) })
   }
 
   const handleLogout = () => {
@@ -191,6 +192,18 @@ function MainApp(props) {
     })
   }
 
+  const handleCreateExpert = (expert) => {
+    setLoadingExpertRegistration(true)
+    return API.expertRegistration(expert).then(res => {
+      navigate("/")
+      Notification.showSuccess("Expert created correctly")
+      setLoadingExpertRegistration(false)
+    }).catch(err => {
+      setLoadingExpertRegistration(false)
+      Notification.showError(err.detail)
+    })
+  }
+
   const handleCloseChat = () => {
     setMessages([])
     navigate('/')
@@ -210,8 +223,15 @@ function MainApp(props) {
             <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket} />} />
             <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
             <Route path="/:ticketId/details" element={<TicketDetails />} /></>
-          : user.role === "Manager"
-            ? <Route path="/" element={<AdminMainPage />} />
+          : null
+        }
+        {
+          user.role === "Manager"
+            ? <>
+              <Route path="/" element={<AdminMainPage handleLogout={handleLogout}/>} />
+              <Route path="/expertRegistration" element={<ExpertRegistration handleCreateExpert={handleCreateExpert} handleLogout={handleLogout} loadingExpertRegistration={loadingExpertRegistration}/>} />
+              <Route path="/:ticketId/details" element={<TicketDetails />} />
+            </>
             : null
         }
       </Route>

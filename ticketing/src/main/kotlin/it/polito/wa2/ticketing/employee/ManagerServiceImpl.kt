@@ -81,7 +81,6 @@ class ManagerServiceImpl(
                 History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
             )
             ticket.priority = priorityLevel
-            ticketRepository.save(ticket)
         } else {
             throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
         }
@@ -112,14 +111,14 @@ class ManagerServiceImpl(
     override fun reassignTicket(ticketId: Long, expertId: UUID) {
         val ticket: Ticket = ticketRepository.findById(ticketId)
             .orElseThrow { TicketNotFoundException("The specified ticket has not been found!") }
-
         val expert: Employee = employeeRepository.findById(expertId)
             .orElseThrow { ExpertNotFoundException("Can't find the specified expert!") }
 
+        val lastHistory = historyRepository.findByTicketIdOrderByDateDesc(ticketId).first()
+        if (lastHistory.state == TicketStatus.CLOSED || lastHistory.state == TicketStatus.RESOLVED) {
+            throw OperationNotPermittedException("This operation is not permitted for the current ticket's state!")
+        }
         val historyEntry = History().create(TicketStatus.IN_PROGRESS, LocalDateTime.now(), ticket, expert)
         ticket.addHistory(historyEntry)
-
-        ticketRepository.save(ticket)
-        historyRepository.save(historyEntry)
     }
 }

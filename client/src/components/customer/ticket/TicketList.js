@@ -19,20 +19,23 @@ function TicketList(props) {
         return <Tooltip id="tooltip">{message}</Tooltip>
     }
     
-    const numberOfFilteredTickets = props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).length
+    const numberOfFilteredTickets = props.tickets.filter(a => {return a.title.toLowerCase().startsWith(props.nameFilter.toLowerCase())}).length
 
     return (
-        <ListGroup variant="flush" className="px-3">
+        <>
+            {numberOfFilteredTickets === 0
+                ? <h3>0 tickets found.</h3>
+                : <ListGroup variant="flush" className="px-3">
             <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
                 <Container>Status</Container>
                 <Container>Title</Container>
                 <Container>Actions</Container>
             </ListGroup.Item>
-            {   numberOfFilteredTickets === 0 
-                    ?  <h2>0 tickets found.</h2>
-                    : props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
+            {  
+                props.tickets.filter(a => {return a.title.toLowerCase().startsWith(props.nameFilter.toLowerCase())}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleR={handleR} handleV={handleV} handleX={handleX} ticket={ticket}/>)
             }
-        </ListGroup>
+        </ListGroup>}
+        </>
     )
 }
 

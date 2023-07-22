@@ -1,9 +1,9 @@
-import './signup.css'
 import { useState } from "react";
-import { Container, Form, Col, Row, Button, Alert } from "react-bootstrap";
-import { useNavigate } from 'react-router-dom';
+import { Alert, Button, Col, Container, Form, Row, Spinner } from "react-bootstrap"
+import { useNavigate } from "react-router-dom";
 
-function SignUpForm(props) {
+
+function ExpertRegistration(props) {
 
     const navigate = useNavigate();
 
@@ -12,9 +12,6 @@ function SignUpForm(props) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [dob, setDob] = useState('');
-    const [address, setAddress] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
     const [errorMessage, setErrorMessage] = useState("");
 
     const emailValidation = (username) => {
@@ -35,33 +32,32 @@ function SignUpForm(props) {
         } else if (password.trim() === '') {
             setErrorMessage('Password is mandatory.')
         } else {
-            //registration api than login asynch await
-            console.log(JSON.stringify({ username, password, firstName, lastName, email, dob, address, phoneNumber }))
-            props.signup({ username, password, firstName, lastName, email, dob, address, phoneNumber }).catch(err => { setErrorMessage(err.message) });
+           props.handleCreateExpert({ username, password, firstName, lastName, email })
         }
     }
 
-    const handleLogin = (event) => {
+    const handleCancel = (event) => {
         event.preventDefault();
-        navigate('/login')
+        navigate("/")
     }
 
     return (
-        <Row className="m-0 signup-background">
+        <>
+            <h1>Expert Registration</h1>
+            <Row className="mt-4">
             <Col>
-                <Container className='signup-form'>
-                    <h1 className="text-center mb-4">Sign up</h1>
+                <Container className="w-50">
                     {errorMessage
                         ? <Alert variant='danger' onClose={() => setErrorMessage()} dismissible>
                             <Alert.Heading>Something went wrong!</Alert.Heading>
                             {errorMessage}
                         </Alert>
                         : ''}
-                    <Form onSubmit={event => event.preventDefault()}>
+                    <Form onSubmit={event => event.preventDefault()} style={{textAlign:"initial"}}>
                         <Row className="mb-3">
                             <Col>
                                 <Form.Group controlId='firstName'>
-                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Label >First Name</Form.Label>
                                     <Form.Control type="firstName" value={firstName} maxLength={55} onChange={(event) => { setFirstName(event.target.value) }} />
                                 </Form.Group>
                             </Col>
@@ -72,24 +68,6 @@ function SignUpForm(props) {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Row className="mb-3">
-                            <Col>
-                                <Form.Group controlId='dob'>
-                                    <Form.Label>Date of Birth</Form.Label>
-                                    <Form.Control type="date" value={dob} onChange={(event) => { setDob(event.target.value) }} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group controlId='phone_number'>
-                                    <Form.Label>Phone number</Form.Label>
-                                    <Form.Control type="tel" value={phoneNumber} maxLength={13} onChange={(event) => { setPhoneNumber(event.target.value) }} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Form.Group className="mb-3" controlId='address'>
-                            <Form.Label>Address</Form.Label>
-                            <Form.Control type="address" value={address} maxLength={100} onChange={(event) => { setAddress(event.target.value) }} />
-                        </Form.Group>
                         <Form.Group className="mb-3" controlId='username'>
                             <Form.Label>Username</Form.Label>
                             <Form.Control type="username" value={username} maxLength={55} onChange={(event) => { setUsername(event.target.value) }} />
@@ -102,15 +80,20 @@ function SignUpForm(props) {
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" value={password} maxLength={55} onChange={(event) => { setPassword(event.target.value) }} />
                         </Form.Group>
-                        <Row className='m-auto d-flex justify-content-between'>
-                        <Button className='btn-primary mt-3 signup-btn' variant="danger" onClick={handleLogin}>Cancel</Button>
-                            <Button className='btn-primary mt-3 signup-btn' onClick={handleSubmit}>Sign up</Button>
+                       {!props.loadingExpertRegistration 
+                        ? <Row className='m-auto d-flex justify-content-between'>
+                            <Button className='btn-primary mt-3 signup-btn' variant="danger" onClick={handleCancel}>Cancel</Button>
+                            <Button className='btn-primary mt-3 signup-btn' onClick={handleSubmit}>Create</Button>
                         </Row>
+                        : <Row className="justify-content-center">
+                        <Spinner variant="primary" />
+                        </Row>}
                     </Form>
                 </Container>
             </Col>
         </Row>
+        </>
     )
 }
 
-export default SignUpForm;
+export default ExpertRegistration;
