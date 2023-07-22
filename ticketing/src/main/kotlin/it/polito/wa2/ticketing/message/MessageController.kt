@@ -18,17 +18,6 @@ import org.springframework.web.bind.annotation.*
 @Observed
 class MessageController(val messageService: MessageService) {
 
-    @GetMapping("/API/messages/{messageId}/attachments", produces = ["image/jpeg", "image/png"])
-    @ResponseStatus(HttpStatus.OK)
-    fun getMessageAttachments(@PathVariable messageId: Long): Set<AttachmentDTO>{
-        return messageService.getMessageAttachments(messageId)
-    }
-    @GetMapping("/API/attachments", produces = ["image/jpeg", "image/png"])
-    @ResponseStatus(HttpStatus.OK)
-    fun getAttachment(@RequestParam id: Long): ByteArray {
-        return messageService.getAttachment(id)
-    }
-
     @GetMapping("/API/messages")
     @ResponseStatus(HttpStatus.OK)
     fun getMessagesByIdTickets(@RequestParam("ticket") idTicket: Long): List<MessageDTO?> {

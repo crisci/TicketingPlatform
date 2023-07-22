@@ -5,7 +5,7 @@ import java.sql.Blob
 
 data class AttachmentDTO(
     val id: Long?,
-    val attachment: ByteArray?
+    val attachment: String?
 
 ) {
     override fun equals(other: Any?): Boolean {
@@ -25,7 +25,7 @@ data class AttachmentDTO(
 
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
-        result = 31 * result + (attachment?.contentHashCode() ?: 0)
+        result = 31 * result + (attachment?.hashCode() ?: 0)
         return result
     }
 }

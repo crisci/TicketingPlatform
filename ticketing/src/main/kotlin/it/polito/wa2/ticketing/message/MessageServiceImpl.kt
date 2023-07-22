@@ -17,35 +17,7 @@ class MessageServiceImpl(
     private val attachmentRepository: AttachmentRepository
 ): MessageService {
 
-    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
-    override fun getMessageAttachments(messageId: Long): Set<AttachmentDTO> {
-        val a = repository.findById(messageId)
-            .orElseThrow{ MessageNotFoundException("Message not found with specified id") }
-            .toMessageWithAttachmentsDTO().listOfAttachment
-        val set = mutableSetOf<AttachmentDTO>()
-        a!!.forEach{
-            val b = AttachmentDTO(it.id, ImageUtil().decompressImage(it.attachment!!))
-            set.add(b)
-        }
-        return set
-    }
 
-    override fun addAttachment(messageId: Long, attachment: Array<MultipartFile>) {
-        repository.findById(messageId).ifPresentOrElse(
-            { m ->
-                attachment.forEach { a ->
-                    if (a.contentType == "image/png" || a.contentType == "image/jpeg") {
-                        m.addAttachment(Attachment().create(ImageUtil().compressImage(a.bytes), m))
-                    } else {
-                        throw FileTypeNotSupportedException("Cannot send this type of file")
-                    }
-                }
-            },
-            {
-                throw MessageNotFoundException("Message not found with specified id")
-            }
-        )
-    }
 
     @Secured("ROLE_Expert", "ROLE_Client")
     override fun editMessage(messageId: Long, message: String) {
@@ -71,14 +43,6 @@ class MessageServiceImpl(
 
     }
 
-    @Secured("ROLE_Expert", "ROLE_Client", "ROLE_Manager")
-    override fun getAttachment(idAttachment: Long): ByteArray {
-        if (attachmentRepository.findById(idAttachment).isPresent) {
-            val v = attachmentRepository.findById(idAttachment).get()
-            return ImageUtil().decompressImage(v.attachment!!)!!
-        } else {
-            throw AttachmentNotFoundException("The specified attachment has not been found!")
-        }
-    }
+
 
 }

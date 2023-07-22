@@ -30,25 +30,34 @@ function MessageConversation(props) {
           
         props.addMessage(params.id, send, listOfAttachments)
         setSend("")
+        setAttachments([])
     }
-
     const handleFileChange = (event) => {
         const file = event.target.files[0]; // Get the selected file from the input
-        console.log("Reading file...")
+        console.log("Reading file...");
         if (file) {
             const reader = new FileReader();
-
+    
             // Read the file as a binary string
             reader.readAsArrayBuffer(file);
-
-            // When the file is loaded, convert it to a byte array
+    
+            // When the file is loaded, convert it to a base64 data URL
             reader.onload = () => {
                 const byteArray = new Uint8Array(reader.result);
-                setAttachments([btoa(String.fromCharCode.apply(null, byteArray))]); // Update the state with the byte array
+                const base64String = btoa(String.fromCharCode.apply(null, byteArray));
+                const fileType = file.type;
+
+                // Check if the file type is jpg, jpeg, or png before setting the attachment
+            if (fileType === "image/jpeg" || fileType === "image/jpg" || fileType === "image/png" || fileType === "application/pdf") {
+                const attachment = `data:${fileType};base64,${base64String}`;
+                setAttachments([attachment]); // Update the state with the attachment data URL
+            } else {
+                Notification.error("Invalid file type. Only JPG, JPEG, PNG or PDF files are allowed.");
+                // Optionally, you can provide feedback to the user about the invalid file type here.
+            }
             };
         }
     };
-
     return (
         <>
             {ticket === undefined

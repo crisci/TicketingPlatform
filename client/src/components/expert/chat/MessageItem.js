@@ -1,12 +1,38 @@
 import formatDateTime from '../../../utils/DateTimeFormatter';
 import './custommessages.css'
 import { Button, Col, Container, ListGroup } from "react-bootstrap";
+import { GrDocumentPdf } from "react-icons/gr";
 
 function MessageItem(props) {
 
-    const Image = ({ data }) => <img src={`data:image/jpeg;base64,${data}`} />
+    const Image = ({ data }) => {
+        
+        const handleDownload = () => {
+            const link = document.createElement('a');
+            link.href = data;
+            link.download = 'image.jpg';
+            link.click();
+          };
 
-    
+        return (<img src={data} onClick={handleDownload} alt='' style={{cursor:"pointer"}}/>)
+    }
+
+    const Pdf = ({data}) => {
+      
+        const handleDownload = () => {
+          const link = document.createElement('a');
+          link.href = data;
+          link.download = 'document.pdf';
+          link.click();
+        };
+      
+        return (
+          <div className='d-flex py-2'>
+            <GrDocumentPdf style={{ display: 'inline-block', width: '25px', height: '25px' }}/>
+            <text style={{ display: 'inline-block', width: '100px', height: '25px', cursor:"pointer" }} onClick={handleDownload}>Download</text>
+          </div>
+        );
+      };
 
     return (
         <Container>
@@ -38,9 +64,13 @@ function MessageItem(props) {
                                 </Container>
                                 <Container>
                                     {props.message.listOfAttachments.map((attachment, index) => (
-                                        <div key={index}>
+                                         attachment.attachment.startsWith("data:image") 
+                                         ? <div className='my-2' key={index}>
                                             <Image data={attachment.attachment} />
                                          </div>
+                                         : <div className='my-2' key={index}>
+                                            <Pdf data={attachment.attachment}/>
+                                            </div>
                                     ))}
                                 </Container>
                                 <Container className='text-end' style={{fontSize:"0.85rem"}}>
