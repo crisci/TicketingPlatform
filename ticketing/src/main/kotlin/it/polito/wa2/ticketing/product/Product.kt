@@ -18,7 +18,7 @@ class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var listOfTicket: MutableSet<Ticket> = mutableSetOf()
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     val customers: MutableSet<Customer> = mutableSetOf()
 
     fun create(ean: String, name: String, brand: String): Product {

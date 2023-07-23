@@ -5,7 +5,6 @@ import Notification from '../../utils/Notifications';
 import { useNavigate } from "react-router-dom";
 import mapStatus from "../../utils/MapStatus";
 import TicketStats from "./TicketsStats";
-import statusArray from "../../utils/StatusArray";
 
 
 function AdminMainPage(props) {

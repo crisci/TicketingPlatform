@@ -17,7 +17,7 @@ class ProductServiceImpl(private val repository: ProductRepository) : ProductSer
         return repository.findProductByEan(productId.toString())?.listOfTicket?.map { it.toTicketDTO() } ?: throw ProductNotFoundException("No product found with specified id!")
     }
 
-    @Secured("ROLE_Manager")
+
     override fun getAllProducts(): List<ProductDTO> {
         return repository.findAll().map {p -> p.toDTO()}
     }
@@ -29,12 +29,16 @@ class ProductServiceImpl(private val repository: ProductRepository) : ProductSer
 
     @Secured("ROLE_Manager")
     override fun addProduct(product: ProductDTO) {
+        repository.findProductByEan(product.ean)?.let { throw ProductAlreadyExistsException("Product already exists!") }
+
         repository.save(Product().create(product.ean, product.name, product.brand))
     }
 
     @Secured("ROLE_Manager")
     override fun updateProduct(productId: String, product: ProductDTO) {
         if(productId != "" && product.name != "" && product.brand != "" && product.ean != ""){
+            if(product.ean != productId)
+                repository.findProductByEan(product.ean)?.let { throw ProductAlreadyExistsException("Product already exists!") }
             val p = repository.findProductByEan(productId)
             if(p != null){
                 p.ean = product.ean

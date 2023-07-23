@@ -21,6 +21,7 @@ import MessageConversation from './components/expert/chat/MessageConversation';
 import TicketDetails from './components/admin/TicketDetails';
 import ExpertTickets from './components/expert/ticket/YourTickets';
 import ExpertRegistration from './components/admin/ExpertRegistration';
+import Products from './components/admin/Products';
 
 function App() {
   return (
@@ -60,7 +61,7 @@ function MainApp(props) {
       setLoggedIn(true);
       getProducts()
       getTickets(jwtToUser(jwt(loggedInUser)))
-    }else if(loggedInUser){
+    } else if (loggedInUser) {
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
       getTickets(jwtToUser(jwt(loggedInUser)))
@@ -86,11 +87,11 @@ function MainApp(props) {
         if (jwtToUser(jwt(res.access_token)).role === "Client") {
           getProducts()
           getTickets(jwtToUser(jwt(res.access_token)))
-        } else if(jwtToUser(jwt(res.access_token)).role === "Expert") {
+        } else if (jwtToUser(jwt(res.access_token)).role === "Expert") {
           getTickets(jwtToUser(jwt(res.access_token)))
         }
         navigate('/')
-      }).catch(err =>  {throw err})
+      }).catch(err => { throw err })
   }
 
   const doSignup = async (credentials) => {
@@ -219,7 +220,8 @@ function MainApp(props) {
       setLoadingExpertRegistration(false)
     }).catch(err => {
       setLoadingExpertRegistration(false)
-      Notification.showError(err.detail)
+      console.log(err)
+      Notification.showError(err.message)
     })
   }
 
@@ -247,18 +249,19 @@ function MainApp(props) {
         {
           user.role === "Manager"
             ? <>
-              <Route path="/" element={<AdminMainPage handleLogout={handleLogout}/>} />
-              <Route path="/expertRegistration" element={<ExpertRegistration handleCreateExpert={handleCreateExpert} handleLogout={handleLogout} loadingExpertRegistration={loadingExpertRegistration}/>} />
+              <Route path="/" element={<AdminMainPage handleLogout={handleLogout} />} />
+              <Route path="/expertRegistration" element={<ExpertRegistration handleCreateExpert={handleCreateExpert} handleLogout={handleLogout} loadingExpertRegistration={loadingExpertRegistration} />} />
               <Route path="/:ticketId/details" element={<TicketDetails />} />
+              <Route path="/products" element={<Products/>} />
             </>
             : null
         }
-	{ user.role === "Expert"
-              ? <>
-                <Route path="/" element={<ExpertTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket}/>} />
-                <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
-                </>
-              : null
+        {user.role === "Expert"
+          ? <>
+            <Route path="/" element={<ExpertTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket} />} />
+            <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
+          </>
+          : null
         }
       </Route>
       <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <LoginForm login={doLogIn} />} />

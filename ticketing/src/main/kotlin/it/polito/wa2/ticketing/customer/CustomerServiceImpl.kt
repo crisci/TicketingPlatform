@@ -169,7 +169,7 @@ class CustomerServiceImpl(
                         TicketStatus.CLOSED,
                         LocalDateTime.now(),
                         ticket,
-                        null
+                        lastTicketHistory.first().employee
                     )
                 )
             } else {

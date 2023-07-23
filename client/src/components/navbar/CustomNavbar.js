@@ -19,6 +19,7 @@ export function CustomNavbar(props) {
                 </Nav> : null}
                 {props.user.role === "Manager" ? <Nav className="me-auto">
                     <Nav.Link onClick={() => navigate("/expertRegistration")}>Expert registration</Nav.Link>
+                    <Nav.Link onClick={() => navigate("/products")}>Products</Nav.Link>
                 </Nav>
                     : null}
                 {props.user.role === "Expert" ? <Nav className="me-auto">

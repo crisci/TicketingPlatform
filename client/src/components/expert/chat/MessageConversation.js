@@ -14,7 +14,7 @@ function MessageConversation(props) {
     const [attachments, setAttachments] = useState([])
     const [spin, setSpin] = useState(true)
 
-    const REFRESH = 5000;
+    const REFRESH = 1000;
 
     useEffect(() => {
         setTicket(props.tickets.find(t => t.id.toString() === params.id))

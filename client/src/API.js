@@ -78,12 +78,12 @@ async function expertRegistration(expert) {
                     await refreshToken()
                     await expertRegistration(expert)
                 } catch (error) {
-                    throw Error(error)
+                    throw Error(error.detail)
                 }
         } else {
-            throw Error("An error occurred while creating expert.")
+            throw Error(await res.json().then(err => err.detail))
         }
-    })
+    }).catch(err => { throw Error(err) })
 }
 
 function addProduct(user, ean) {
@@ -273,16 +273,23 @@ function getAllProfiles() {
 
 
 //GET /API/products
-function getAllProducts(user) {
+function getAllProducts() {
     return new Promise((resolve, reject) => {
         fetch(`${APIURL}/products`, {
             headers: {
-                'Authorization': 'Bearer ' + user.access_token,
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token
             }
         })
             .then(result => {
                 if (result.ok)
-                    resolve(result.json())
+                   { resolve(result.json())}
+                   else if(result.status === 401) {
+                    refreshToken().then(_ => {
+                            getAllProducts().then(products => resolve(products)).catch(err => reject(err))
+                    }).catch(err => reject(err))
+                } else {
+                    result.json().then(error => reject(error)).catch(() => reject({ detail: "Cannot parse server response." }))
+                }
             }).catch(err => {
                 resolve({ detail: "Unable to communicate with the server" })
             })
@@ -602,9 +609,61 @@ function approveExpert(expertId){
     })
 }
 
+//POST /API/products
+function addManagerProduct(ean, brand, name) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/products`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ean, brand, name})
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    addManagerProduct(ean, brand, name).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        }).catch(err => reject(err))
+    })
+}
+
+
+function updateManagerProduct(oldEan, newEan, brand, name) {
+    return new Promise((resolve, reject) => {
+        return fetch(`${APIURL}/products/${oldEan}`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: JSON.stringify({ean: newEan, brand, name}),
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            if (res.ok) {
+                resolve(true)
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    updateManagerProduct(oldEan, newEan, brand, name).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
+            } else {
+                res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
+            }
+        })
+    })
+}
+
+
+
 const API = { getAllProfiles, getAllProducts, getProfile, getProduct, addProfile, logIn, signup, getProducts, addProduct, removeProduct, 
     getTickets, openTicket, closeTicket, resolveTicket, reopenTicket,getTicketHistory,getTicketMessage, approveExpert,
     getMessages, addClientMessage, addExpertMessage, getExperts,getManagerTickets,getTicketCurrentExpert,reasignTicket, stopTicket,
-    expertRegistration };
+    expertRegistration, addManagerProduct, updateManagerProduct };
 
     export default API;
