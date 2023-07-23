@@ -99,6 +99,10 @@ function addProduct(user, ean) {
         }).then(res => {
             if (res.ok) {
                 resolve(true)
+            } else if(res.status === 401) {
+                refreshToken().then(_ => {
+                        addProduct(user, ean).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))            
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -106,7 +110,7 @@ function addProduct(user, ean) {
     })
 }
 
-function removeProduct(user, ean) {
+function removeProduct(ean) {
     return new Promise((resolve, reject) => {
         return fetch(`${APIURL}/customers/product`, {
             method: 'DELETE',
@@ -119,6 +123,10 @@ function removeProduct(user, ean) {
         }).then(res => {
             if (res.ok) {
                 resolve(true)
+            } if(res.status === 401) {
+                refreshToken().then(_ => {
+                    removeProduct(ean).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -214,6 +222,10 @@ function closeTicket(ticketId) {
         }).then(res => {
             if (res.ok) {
                 resolve(true)
+            } if(res.status === 401) {
+                refreshToken().then(_ => {
+                    closeTicket(ticketId).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -232,6 +244,10 @@ function reopenTicket(ticketId) {
         }).then(res => {
             if (res.ok) {
                 resolve(true)
+            } else if(res.status === 401) {
+                refreshToken().then(_ => {
+                    reopenTicket(ticketId).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -250,6 +266,10 @@ function resolveTicket(ticketId) {
         }).then(res => {
             if (res.ok) {
                 resolve(true)
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    resolveTicket(ticketId).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -486,6 +506,10 @@ function stopTicket(ticketId) {
         }).then(res => {
             if (res.ok) {
                 resolve(true)
+            } else if (res.status === 401) {
+                refreshToken().then(_ => {
+                    stopTicket(ticketId).then(() => resolve(true)).catch(err => reject(err))
+                }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
             }
@@ -504,10 +528,10 @@ function getTicketCurrentExpert(ticketId){
             }
         }).then(res => {
             if (res.ok) {
-                res.json().then(expert => resolve(expert)).catch(_ => reject("Unable to parse the response."))
+                res.json().then(expert => resolve(expert)).catch(_ => resolve(""))
             } else if (res.status === 401) {
                 refreshToken().then(_ => {
-                    getTicketCurrentExpert(ticketId).then(expert => resolve(expert)).catch(err => reject(err))
+                    getTicketCurrentExpert(ticketId).then(expert => resolve(expert)).catch(_ => resolve(""))
                 }).catch(err => reject(err))
             }else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))

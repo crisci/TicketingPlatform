@@ -121,9 +121,11 @@ function MainApp(props) {
   }
 
   const removeProduct = (ean) => {
-    API.removeProduct(user, ean).then(res => {
+    API.removeProduct(ean).then(res => {
       Notification.showSuccess("Product removed correctly")
       getProducts()
+    }).catch(err => {
+      Notification.showError(err.detail)
     })
   }
 

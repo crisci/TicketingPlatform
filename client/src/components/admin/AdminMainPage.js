@@ -16,6 +16,8 @@ function AdminMainPage(props) {
     const [tickets, setTickets] = useState(null);
     const [ticketWait, setTicketWait] = useState(true);
 
+    const [expertTickets, setExpertToTickets] = useState({});
+    
     const [assigned, setAssigned] = useState(true);
 
 
@@ -159,7 +161,7 @@ function TicketTable(props) {
                 </ListGroup.Item>
                 {props.tickets.length === 0 ?
                     <h2>0 tickets found.</h2>
-                    : props.tickets.filter(ticket => selectedStatus ? ticket.status === selectedStatus : true).map((ticket, index) => <TicketItem key={index} index={index} ticket={ticket} experts={props.experts} refreshTickets={props.refreshTickets} />)}
+                    : props.tickets.filter(ticket => selectedStatus ? ticket.status === selectedStatus : true).map((ticket, index) => <TicketItem key={ticket.id} index={ticket.id} ticket={ticket} experts={props.experts} refreshTickets={props.refreshTickets} filter={selectedStatus}/>)}
             </ListGroup>}
     </>
 }
@@ -171,6 +173,8 @@ function TicketItem(props) {
     const [currentExpert, setCurrentExpert] = useState('');
     const [selectedExpert, setSelectedExpert] = useState();
     const [render, setRender] = useState(false);
+
+    
     useEffect(() => {
         if (props.ticket && props.ticket.id !== undefined) {
             API.getTicketCurrentExpert(props.ticket.id)
@@ -184,7 +188,7 @@ function TicketItem(props) {
                     setExpertMsg("Error contacting the server.");
                 })
         }
-    }, [props.ticket, props.ticket.id, render])
+    }, [props.ticket, props.ticket.id])
 
     const submitNewExpert = (id) => {
         if (currentExpert === selectedExpert) {
@@ -202,11 +206,11 @@ function TicketItem(props) {
 
     return (
 
-        <ListGroup.Item key={props.index} as='li' className="d-flex justify-content-beetween mb-3 py-3">
+        <ListGroup.Item key={props.ticket.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container><Badge pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>{props.ticket.status}</Badge></Container>
             <Container>{props.ticket.title}</Container>
             <Container>{props.ticket.priority}</Container>
-            <Container>{expertWait || !props.experts ? "Not assigned" : currentExpert.id}</Container>
+            <Container>{expertWait || !currentExpert ? "Not assigned" : currentExpert.id}</Container>
             <Container>
                 <Form.Select hidden={props.ticket.status === "CLOSED" || props.ticket.status === "RESOLVED"} value={selectedExpert} onChange={(event) => setSelectedExpert(event.target.value)}>
                     <option key="-1"></option>
