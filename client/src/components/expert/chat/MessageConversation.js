@@ -11,12 +11,26 @@ function MessageConversation(props) {
     const [ticket, setTicket] = useState({})
     const [send, setSend] = useState("")
     const [attachments, setAttachments] = useState([])
+    const [spin, setSpin] = useState(true)
+
+    const REFRESH = 5000;
 
     useEffect(() => {
         setTicket(props.tickets.find(t => t.id.toString() === params.id))
         props.getMessages(params.id)
+        const interval = setInterval(() => {
+            props.getMessages(params.id)
+        }, REFRESH);
+      
+        return() => clearTimeout(interval);// This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
         // eslint-disable-next-line
     }, [])
+
+    useEffect(() => { //Use spin state instead of loadingMessages to avoid Spinner animation at every poll
+        if(props.loadingMessages === false && spin === true){
+            setSpin(false);
+        }
+    }, [props.loadingMessages]);
 
 
     const handleSend = () => {
@@ -64,7 +78,7 @@ function MessageConversation(props) {
                     <h2 className="text-center">{ticket.title}</h2>
                     <p className="text-center">{ticket.description}</p>
                     <Row className="d-flex justify-content-center"><Button className="mb-3 w-25" variant="danger" onClick={() => props.handleCloseChat()}>Close chat</Button></Row>
-                    {props.loadingMessages === true
+                    {spin === true
                         ? <Spinner variant="primary" />
                         : <Container>
                             <Card>
