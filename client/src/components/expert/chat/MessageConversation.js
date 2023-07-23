@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
 import { useParams } from "react-router-dom";
 import mapStatus from "../../../utils/MapStatus";
+import Notification from "../../../utils/Notifications";
 
 function MessageConversation(props) {
 
@@ -30,44 +31,56 @@ function MessageConversation(props) {
         if(props.loadingMessages === false && spin === true){
             setSpin(false);
         }
+        // eslint-disable-next-line
     }, [props.loadingMessages]);
 
 
     const handleSend = () => {
-            // Create an array of attachment objects
-            const listOfAttachments = attachments.map((attachment) => ({
-                attachment: attachment,
-            }));
+        // Create an array of attachment objects
+        const listOfAttachments = attachments.map((attachment) => ({
+            attachment: attachment,
+        }));
 
-          
         props.addMessage(params.id, send, listOfAttachments)
         setSend("")
         setAttachments([])
     }
     const handleFileChange = (event) => {
-        const file = event.target.files[0]; // Get the selected file from the input
-        console.log("Reading file...");
-        if (file) {
-            const reader = new FileReader();
-    
-            // Read the file as a binary string
-            reader.readAsArrayBuffer(file);
-    
-            // When the file is loaded, convert it to a base64 data URL
-            reader.onload = () => {
-                const byteArray = new Uint8Array(reader.result);
-                const base64String = btoa(String.fromCharCode.apply(null, byteArray));
-                const fileType = file.type;
+        const files = event.target.files // Get the selected file from the input
+        console.log("Reading files...");
 
-                // Check if the file type is jpg, jpeg, or png before setting the attachment
-            if (fileType === "image/jpeg" || fileType === "image/jpg" || fileType === "image/png" || fileType === "application/pdf") {
-                const attachment = `data:${fileType};base64,${base64String}`;
-                setAttachments([attachment]); // Update the state with the attachment data URL
-            } else {
-                Notification.error("Invalid file type. Only JPG, JPEG, PNG or PDF files are allowed.");
-                // Optionally, you can provide feedback to the user about the invalid file type here.
+        if (files) {
+            if(files.length <= 3){
+                Array.from(files).forEach((file) => {
+                    const reader = new FileReader();
+        
+                    // Read the file as a binary string
+                    reader.readAsArrayBuffer(file);
+            
+                    // When the file is loaded, convert it to a base64 data URL
+                    reader.onload = () => {
+                        const byteArray = new Uint8Array(reader.result);
+                        const base64String = btoa(String.fromCharCode.apply(null, byteArray));
+                        const fileType = file.type;
+        
+                        // Check if the file type is jpg, jpeg, or png before setting the attachment
+                    if (fileType === "image/jpeg" || fileType === "image/jpg" || fileType === "image/png" || fileType === "application/pdf") {
+                        const attachment = `data:${fileType};base64,${base64String}`;
+                        var newArray = attachments;
+                        newArray.push(attachment);
+                        setAttachments(newArray); // Update the state with the attachment data URL
+                    } else {
+                        Notification.showError("Invalid file type. Only JPG, JPEG, PNG or PDF files are allowed.");
+                        event.target.value = null;
+                        setAttachments([]);
+                    }
+                    };
+                });
+            }else{
+                Notification.showError("Max 3 files are permitted");
+                event.target.value = null;
+                setAttachments([]);
             }
-            };
         }
     };
     return (
@@ -102,7 +115,7 @@ function MessageConversation(props) {
                                         </InputGroup>
                                     </Form.Group>
                                     <Form.Group controlId="formFile" onChange={handleFileChange}>
-                                        <Form.Control type="file" />
+                                        <Form.Control type="file" id="fileForm" multiple />
                                     </Form.Group>
                                 </Form> : null}
                         </Container>
