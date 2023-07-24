@@ -47,8 +47,7 @@ function MessageConversation(props) {
     }
     const handleFileChange = (event) => {
         const files = event.target.files // Get the selected file from the input
-        console.log("Reading files...");
-
+        setAttachments([]);
         if (files) {
             if(files.length <= 3){
                 Array.from(files).forEach((file) => {
@@ -60,15 +59,13 @@ function MessageConversation(props) {
                     // When the file is loaded, convert it to a base64 data URL
                     reader.onload = () => {
                         const byteArray = new Uint8Array(reader.result);
-                        const base64String = btoa(String.fromCharCode.apply(null, byteArray));
+                        const base64String = arrayBufferToBase64(byteArray);
                         const fileType = file.type;
         
                         // Check if the file type is jpg, jpeg, or png before setting the attachment
                     if (fileType === "image/jpeg" || fileType === "image/jpg" || fileType === "image/png" || fileType === "application/pdf") {
                         const attachment = `data:${fileType};base64,${base64String}`;
-                        var newArray = attachments;
-                        newArray.push(attachment);
-                        setAttachments(newArray); // Update the state with the attachment data URL
+                        setAttachments(a => [...a, attachment]); // Update the state with the attachment data URL
                     } else {
                         Notification.showError("Invalid file type. Only JPG, JPEG, PNG or PDF files are allowed.");
                         event.target.value = null;
@@ -83,6 +80,18 @@ function MessageConversation(props) {
             }
         }
     };
+
+    function arrayBufferToBase64(buffer) {
+        let binary = "";
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+      }
+
+
     return (
         <>
             {ticket === undefined
@@ -114,8 +123,8 @@ function MessageConversation(props) {
                                             {send !== "" || attachments.length > 0 ? <Button disabled={ticket.status !== "IN_PROGRESS"} onClick={() => handleSend()}>Send</Button> : null}
                                         </InputGroup>
                                     </Form.Group>
-                                    <Form.Group onChange={handleFileChange}>
-                                        <Form.Control type="file" id="fileForm" multiple />
+                                    <Form.Group>
+                                        <Form.Control type="file" id="fileForm" multiple onChange={handleFileChange}/>
                                     </Form.Group>
                                 </Form> : null}
                         </Container>
