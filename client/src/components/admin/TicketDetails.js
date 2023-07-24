@@ -162,7 +162,7 @@ function TicketDetails(props){
         </Container>
         <Row key="r5" className="d-flex justify-content-center mt-4">
             <ListGroup key="lg5" variant="flush" className="px-3">
-                {messages.map((m,index)=><Container key={index}>
+                {messages.sort((a,b) => a.date > b.date).map((m,index)=><Container key={index}>
                     <MessageItem ticket={ticket} user={props.user} key={m.id} message={m}></MessageItem>
                 </Container>)}
             </ListGroup>
