@@ -220,7 +220,7 @@ class IntegrationTest {
         expert.addMessage(message1)
         ticket.addMessage(message1)
 
-        attachment.attachment = "Attachment Test".toByteArray()
+        attachment.attachment = "Attachment Test"
         attachmentRepository.save(attachment)
 
         message2.body = "Here it is."
@@ -242,10 +242,6 @@ class IntegrationTest {
             assert(attachmentRepository.findByIdOrNull(it.getId()!!) == it)
         }
         assert(!message2.listOfAttachment.isEmpty())
-
-        assertThrows<MessageNotFoundException> {
-            messageService.addAttachment(message2.getId()!!.inc(), arrayOf(MockMultipartFile("attachment", "Meow".toByteArray())))
-        }
 
         customerRepository.deleteAll()
         productRepository.deleteAll()

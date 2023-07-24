@@ -67,6 +67,6 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
 
     @Secured("ROLE_Manager", "ROLE_Client","ROLE_Expert")
     override fun getExpert(ticketId: Long): EmployeeDTO?{
-        return historyRepository.findByTicketIdOrderByDateDesc(ticketId)?.first()?.employee?.toEmployeeDTO()
+        return historyRepository.findByTicketIdOrderByDateDesc(ticketId).first()?.employee?.toEmployeeDTO()
     }
 }

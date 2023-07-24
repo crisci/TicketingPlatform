@@ -164,8 +164,7 @@ class SignupServiceImpl(
                     UUID.fromString(userId),
                     credentials["firstName"]!!,
                     credentials["lastName"]!!,
-                    credentials["email"]!!,
-                    false
+                    credentials["email"]!!
                 ))
             )
 

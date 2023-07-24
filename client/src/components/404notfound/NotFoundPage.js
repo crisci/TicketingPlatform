@@ -1,8 +1,14 @@
 import { Col, Image, Row } from "react-bootstrap";
 import "./notfoundpage.css";
 import image from './404error.png';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function NotFoundPage() {
+    const navigate = useNavigate();
+    useEffect(()=>{
+        setTimeout(()=>navigate("/"),4000)
+    })
     return (
         <Row className="vh-100 m-0 main">
             <Col md={7} className="m-auto message">

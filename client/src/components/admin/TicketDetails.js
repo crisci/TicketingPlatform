@@ -3,14 +3,15 @@ import { Container, ListGroup, Row } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "../../API";
 import Notification from "../../utils/Notifications";
+import Divider from '@mui/material/Divider'
 
 function TicketDetails(){
     const navigate = useNavigate();
     const params = useParams();
     const {state} = useLocation();
     const ticketId = params.ticketId;
-    const {expertId,customer,product,ticket} = state;
-    const [legaState,setLegalState] = useState(true);
+    const {expertId,customer,product,ticket} = state ? state : {expertId:undefined,customer:undefined,product:undefined,ticket:undefined}
+    const [legalState,setLegalState] = useState(true);
     const [histories,setHistories] = useState([]);
     const [historyMsg,setHistoryMsg] = useState("loading");
     const [historyWait,setHistoryWait] = useState(true);
@@ -19,8 +20,8 @@ function TicketDetails(){
     const [messagesWait,setMessagesWait] = useState(true);
 
     useEffect(()=>{
-        setLegalState(()=>(Number(ticketId)===Number(ticket.id) && product!==undefined && customer!==undefined))
-        if(Number(ticketId)===Number(ticket.id) && product!==undefined && customer!==undefined){
+        setLegalState(()=>(ticket!==undefined && ticketId!==undefined && product!==undefined && customer!==undefined && Number(ticketId)===Number(ticket.id)))
+        if(ticket!==undefined && ticketId!==undefined && product!==undefined && customer!==undefined && Number(ticketId)===Number(ticket.id)){
             API.getTicketHistory(Number(ticketId))
                 .then((histories)=>{
                     setHistories(histories);
@@ -40,107 +41,113 @@ function TicketDetails(){
                     setMessagesMsg("can't reach the server")
                 })
         }
-    },[ticketId,ticket.id,product,customer])
+    },[ticketId,ticket,ticket.id,product,customer])
     
-    return legaState ? <>
+    return legalState ? <>
     <Container className="mt-3">
         <Container className="d-flex justify-content-center align-items-center">
-            <h2 className="m-0">ticket</h2>
+            <h2 className="m-0">Ticket</h2>
         </Container>
-        <Row className="d-flex justify-content-center mt-4">
-    <ListGroup variant="flush" className="px-3">
+        <Row key="r1" className="d-flex justify-content-center mt-4">
+    <ListGroup key="lg1" variant="flush" className="px-3">
         <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
                 <Container>Id</Container>
                 <Container>Title</Container>
                 <Container>Description</Container>
                 <Container>Priority</Container>
-                <Container>Expert Id</Container>
-                <Container>Customer Id</Container>
-                <Container>Product Id</Container>
         </ListGroup.Item>
         <ListGroup.Item key="attr1" as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container>{ticketId}</Container>
             <Container>{ticket.title}</Container>
             <Container>{ticket.description}</Container>
             <Container>{ticket.priority}</Container>
-            <Container>{expertId}</Container>
-            <Container>{customer.id}</Container>
-            <Container>{product.ean}</Container>
         </ListGroup.Item>
     </ListGroup>
     </Row>
     </Container>
-    <Container className="mt-3">
-        <Container className="d-flex justify-content-center align-items-center">
-            <h4 className="m-0">customer</h4>
-        </Container>
-        <Row className="d-flex justify-content-center mt-4">
-    <ListGroup variant="flush" className="px-3">
-        <ListGroup.Item key="attr2" as='li' className="d-flex justify-content-beetween list-titles">
-                <Container>Id</Container>
-                <Container>First Name</Container>
-                <Container>Last Name</Container>
-                <Container>Email</Container>
-                <Container>Date Of Birthday</Container>
-                <Container>Address</Container>
-                <Container>Phone</Container>
-        </ListGroup.Item>
-        <ListGroup.Item key="attr3" as='li' className="d-flex justify-content-beetween mb-3 py-3">
-            <Container>{customer.id}</Container>
-            <Container>{customer.firstName}</Container>
-            <Container>{customer.lastName}</Container>
-            <Container>{customer.email}</Container>
-            <Container>{customer.dob}</Container>
-            <Container>{customer.address}</Container>
-            <Container>{customer.phoneNumber}</Container>
-        </ListGroup.Item>
-    </ListGroup>
-    </Row>
+    <Container  style={{'backgroundColor':'#ccffff','borderRadius':'2rem'}}>
+        <Container className="mt-3">
+            <Container className="d-flex justify-content-center align-items-center">
+                <h2 className="m-0">Details:</h2>
+            </Container>
+            <br/><br/>
+            <Container className="d-flex justify-content-center align-items-center">
+                <h3 className="m-0">Customer</h3>
+            </Container>
+            <Container className="d-flex justify-content-center align-items-center">
+                <h5 className="m-0"><i> - who opened the ticket - </i></h5>
+            </Container>
+            <Row key="r2" className="d-flex justify-content-center mt-4">
+            <ListGroup key="lg2" variant="flush" className="px-3">
+                <ListGroup.Item key="attr2" as='li' className="d-flex justify-content-beetween list-titles">
+                    <Container>Id</Container>
+                    <Container>First Name</Container>
+                    <Container>Last Name</Container>
+                    <Container>Email</Container>
+                    <Container>Date Of Birthday</Container>
+                    <Container>Address</Container>
+                    <Container>Phone</Container>
+                </ListGroup.Item>
+                <ListGroup.Item key="attr3" as='li' className="d-flex justify-content-beetween mb-3 py-3">
+                    <Container>{customer.id}</Container>
+                    <Container>{customer.firstName}</Container>
+                    <Container>{customer.lastName}</Container>
+                    <Container>{customer.email}</Container>
+                    <Container>{customer.dob}</Container>
+                    <Container>{customer.address}</Container>
+                    <Container>{customer.phoneNumber}</Container>
+                </ListGroup.Item>
+            </ListGroup>
+        </Row>
     </Container>
     <Container className="mt-3">
         <Container className="d-flex justify-content-center align-items-center">
-            <h4 className="m-0">product</h4>
+            <h3 className="m-0">Product</h3>
         </Container>
-        <Row className="d-flex justify-content-center mt-4">
-    <ListGroup variant="flush" className="px-3">
-        <ListGroup.Item key="attr4" as='li' className="d-flex justify-content-beetween list-titles">
-                <Container>EAN</Container>
-                <Container>Name</Container>
-                <Container>Brand</Container>
-        </ListGroup.Item>
-        <ListGroup.Item key="attr5" as='li' className="d-flex justify-content-beetween mb-3 py-3">
-            <Container>{product.ean}</Container>
-            <Container>{product.name}</Container>
-            <Container>{product.brand}</Container>
-        </ListGroup.Item>
-    </ListGroup>
-    </Row>
+        <Container className="d-flex justify-content-center align-items-center">
+            <h5 className="m-0"><i> - interested from the ticket - </i></h5>
+        </Container>
+        <Row key="r3" className="d-flex justify-content-center mt-4">
+            <ListGroup key="lg3" variant="flush" className="px-3">
+                <ListGroup.Item key="attr4" as='li' className="d-flex justify-content-beetween list-titles">
+                    <Container>EAN</Container>
+                        <Container>Name</Container>
+                        <Container>Brand</Container>
+                </ListGroup.Item>
+                <ListGroup.Item key="attr5" as='li' className="d-flex justify-content-beetween mb-3 py-3">
+                    <Container>{product.ean}</Container>
+                    <Container>{product.name}</Container>
+                    <Container>{product.brand}</Container>
+                </ListGroup.Item>
+            </ListGroup>
+        </Row>
     </Container>
     {
         historyWait ? historyMsg :
         <><Container className="mt-3">
         <Container className="d-flex justify-content-center align-items-center">
-            <h4 className="m-0">ordered history</h4>
+            <h3 className="m-0">History of the Ticket</h3>
         </Container>
-        <Row className="d-flex justify-content-center mt-4">
-            {/* <ListGroup variant="flush" className="px-3">
-                <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
-                        <Container>Id</Container>
+        <Container className="d-flex justify-content-center align-items-center">
+            <h5 className="m-0"><i> - from newest to oldest - </i></h5>
+        </Container>
+        <Row key="r4" className="d-flex justify-content-center mt-4">
+            <ListGroup key="lg4" variant="flush" className="px-3">
+                <ListGroup.Item key="attr6" as='li' className="d-flex justify-content-beetween list-titles">
                         <Container>State</Container>
                         <Container>Date</Container>
                         <Container>Employee Id</Container>
                         <Container>Employee Email</Container>
                 </ListGroup.Item>
-                    {histories.map((history)=>
-                        <ListGroup.Item key="attr1" as='li' className="d-flex justify-content-beetween mb-3 py-3">
-                        <Container>{history.id}</Container>
+                    {histories.map((history,index)=>
+                        <ListGroup.Item key={`history${history.id}`} as='li' className="d-flex justify-content-beetween mb-3 py-3">
                         <Container>{history.state}</Container>
-                        <Container>{history.date}</Container>
+                        <Container>{history.date.replace('T','   ').split('.')[0]}</Container>
                         <Container>{history.employee.id}</Container>
                         <Container>{history.employee.email}</Container>
                         </ListGroup.Item>
                     )}
-            </ListGroup> */}
+            </ListGroup>
         </Row>
     </Container></>
     }
@@ -149,30 +156,34 @@ function TicketDetails(){
         messagesWait ? messagesMsg :
         <><Container className="mt-3">
         <Container className="d-flex justify-content-center align-items-center">
-            <h4 className="m-0">messages</h4>
+            <h3 className="m-0">Messages</h3>
         </Container>
-        <Row className="d-flex justify-content-center mt-4">
-            {/* <ListGroup variant="flush" className="px-3">
-                <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
-                        <Container>Id</Container>
-                        <Container>Body</Container>
+        <Container className="d-flex justify-content-center align-items-center">
+            <h5 className="m-0"><i> - about the ticket - </i></h5>
+        </Container>
+        <Row key="r5" className="d-flex justify-content-center mt-4">
+            <ListGroup key="lg5" variant="flush" className="px-3">
+                <ListGroup.Item key="attr7" as='li' className="d-flex justify-content-beetween list-titles">
                         <Container>Date</Container>
                         <Container>List Of Attachments</Container>
                         <Container>Expert Id</Container>
                 </ListGroup.Item>
-                {messages.map((message)=>
-                    <ListGroup.Item key="attr1" as='li' className="d-flex justify-content-beetween mb-3 py-3">
-                    <Container>{message.id}</Container>
-                    <Container>{message.body}</Container>
-                    <Container>{message.date}</Container>
-                    <Container>{message.listOfAttachments}</Container>
-                    <Container>{message.expert}</Container>
+                {messages.map((message,index)=><Container key={index}>
+                    <ListGroup.Item key={`message${message.id}`} as='li' className="d-flex justify-content-beetween mb-3 py-3">
+                        <Container>{message.date.replace('T','   ').split('.')[0]}</Container>
+                        <Container>{message.listOfAttachments}</Container>
+                        <Container>{message.expert}</Container>
                     </ListGroup.Item>
-                )}
-            </ListGroup> */}
+                    <ListGroup.Item key={`messageBody${index}`} as='li' className="d-flex justify-content-beetween mb-3 py-3">
+                        <Container style={{'backgroundColor':'white','align':'center'}}>{message.body}</Container>
+                    </ListGroup.Item>
+                    <Divider><i>next message</i></Divider>
+                </Container>)}
+            </ListGroup>
         </Row>
-    </Container></>
+    </Container>
+    </>
     }
-    </> : navigate("/")
+    </Container></> : navigate("/")
 }
 export default TicketDetails;
