@@ -7,7 +7,7 @@ function TicketStats(props) {
         <>
             <Row>
                 {statusArray.map((status, index) => {
-                    return <Col>
+                    return <Col key={index}>
                             <Card onClick={() => props.onItemClick(status === "REOPENED" ? '' : status)} style={{cursor:"pointer"}}>
                                 <Card.Header>
                                 <Badge pill text={status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(status)}>{status === "REOPENED" ? "ALL" : status}</Badge>

@@ -22,6 +22,7 @@ import TicketDetails from './components/admin/TicketDetails';
 import ExpertTickets from './components/expert/ticket/YourTickets';
 import ExpertRegistration from './components/admin/ExpertRegistration';
 import Products from './components/admin/Products';
+import ExpertList from './components/admin/ExpertList';
 
 function App() {
   return (
@@ -61,10 +62,11 @@ function MainApp(props) {
       setLoggedIn(true);
       getProducts()
       getTickets(jwtToUser(jwt(loggedInUser)))
-    } else if (loggedInUser) {
+    } else if (loggedInUser && user.role) {
       setUser(jwtToUser(jwt(loggedInUser)))
       setLoggedIn(true);
-      getTickets(jwtToUser(jwt(loggedInUser)))
+      if(user)
+        getTickets(jwtToUser(jwt(loggedInUser)))
     }
     //TODO: Expert and Manager
     // eslint-disable-next-line
@@ -255,6 +257,7 @@ function MainApp(props) {
               <Route path="/expertRegistration" element={<ExpertRegistration handleCreateExpert={handleCreateExpert} handleLogout={handleLogout} loadingExpertRegistration={loadingExpertRegistration} />} />
               <Route path="/:ticketId/details" element={<TicketDetails />} />
               <Route path="/products" element={<Products/>} />
+              <Route path="/experts" element={<ExpertList/>} />
             </>
             : null
         }

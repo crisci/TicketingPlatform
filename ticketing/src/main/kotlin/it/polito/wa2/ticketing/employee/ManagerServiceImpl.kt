@@ -99,7 +99,6 @@ class ManagerServiceImpl(
         val expertOptional = employeeRepository.findById(expertId)
         if (expertOptional.isPresent) {
             val expert = expertOptional.get()
-            expert.approved = true
             employeeRepository.save(expert)
             employeeRepository.flush();
         } else {

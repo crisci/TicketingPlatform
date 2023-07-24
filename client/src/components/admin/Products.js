@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../../API";
 import Notification from "../../utils/Notifications";
-import { Button, Col, Container, Form, ListGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
+import { Button, Container, Form, ListGroup, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { BsCheckCircleFill, BsPencilSquare, BsXCircleFill } from "react-icons/bs";
 
 
@@ -40,8 +40,8 @@ function Products(props) {
         setLoadingProducts(true)
     }
 
-    function updateProduct(oldEan, newEan, brand, name) {
-        API.updateManagerProduct(oldEan, newEan, brand, name).then(_ => {
+    function updateProduct(oldEan, brand, name) {
+        API.updateManagerProduct(oldEan, brand, name).then(_ => {
             setLoadingProducts(true)
             Notification.showSuccess("Product updated correctly!")
         }).catch(error => {
@@ -170,7 +170,7 @@ function ProductManagerList(props) {
                         || p.ean.startsWith(props.nameFilter))
                     .map(product =>
                         updateForm === product.ean
-                            ? <UpdateForm ean={product.ean} name={product.name} brand={product.brand} cancelUpdate={cancelUpdate} updateProduct={props.updateProduct} />
+                            ? <UpdateForm key={product.ean} ean={product.ean} name={product.name} brand={product.brand} cancelUpdate={cancelUpdate} updateProduct={props.updateProduct} />
                             : <ListGroup.Item key={product.ean} as='li' className="d-flex justify-content-beetween mb-3 py-3">
                                 <Container>{product.ean}</Container>
                                 <Container>{product.name}</Container>
@@ -188,7 +188,6 @@ function ProductManagerList(props) {
 
 
 function UpdateForm(props) {
-    const [newEan, setNewEan] = useState(props.ean)
     const [newBrand, setNewBrand] = useState(props.brand)
     const [newName, setNewName] = useState(props.name)
 
@@ -203,16 +202,14 @@ function UpdateForm(props) {
     }
 
     function handleC() {
-        props.updateProduct(props.ean, newEan, newBrand, newName)
+        props.updateProduct(props.ean, newBrand, newName)
     }
 
 
     return (
         <ListGroup.Item key={props.ean} as='li' className="d-flex justify-content-beetween mb-3 py-3">
             <Container>
-                <Form.Group className="mb-3" controlId='ean'>
-                    <Form.Control className="text-center" value={newEan} maxLength={13} onChange={(event) => { setNewEan(event.target.value) }} />
-                </Form.Group>
+                {props.ean}
             </Container>
             <Container>
                 <Form.Group className="mb-3" controlId='name'>

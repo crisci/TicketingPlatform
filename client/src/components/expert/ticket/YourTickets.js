@@ -1,11 +1,9 @@
 import { Container, Form, Row, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import TicketList from "./TicketList";
 import { useState } from "react";
 
 function ExpertTickets(props) {
 
-    const navigate = useNavigate();
     const [nameFilter, setNameFilter] = useState("")
 
     return (

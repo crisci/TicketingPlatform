@@ -20,16 +20,6 @@ function AdminMainPage(props) {
     
     const [assigned, setAssigned] = useState(true);
 
-
-    const approvedExpert = (expertId) => {
-        setExperts((old) => old.map((ex) => {
-            if (ex.id === expertId) {
-                ex.approved = true;
-            }
-            return ex;
-        }))
-    }
-
     useEffect(() => {
         if (assigned) {
             setAssigned(false)
@@ -61,20 +51,6 @@ function AdminMainPage(props) {
     }
 
     return <>
-        {/* <Container className="mt-3">
-        <Container className="d-flex justify-content-center align-items-center">
-            <h1 className="m-0">List of Experts</h1>
-        </Container>
-        <Row className="d-flex justify-content-center mt-4">
-        {
-            expertWait ? 
-                expertMsg
-            : 
-                <ExpertTable experts={experts} approvedExpert={approvedExpert}/>
-        }
-        </Row>
-    </Container>
-    <br/> */}
         <Container className="mt-3">
             <Container className="d-flex justify-content-center align-items-center">
                 <h1 className="m-0">List of Tickets</h1>
@@ -89,52 +65,6 @@ function AdminMainPage(props) {
         </Container>
     </>
 }
-
-function ExpertTable(props) {
-    return <>
-        <ListGroup variant="flush" className="px-3">
-            <ListGroup.Item key="attr" as='li' className="d-flex justify-content-beetween list-titles">
-                <Container>Id</Container>
-                <Container>First Name</Container>
-                <Container>Last Name</Container>
-                <Container>Email</Container>
-                <Container>Approved</Container>
-                <Container>Approve</Container>
-            </ListGroup.Item>
-            {!props.experts || props.experts.length === 0 ?
-                <h2>0 experts found.</h2>
-                : props.experts.map((expert) => <ExpertItem key={expert.id} expert={expert} approvedExpert={props.approvedExpert} />)}
-        </ListGroup>
-    </>
-}
-
-function ExpertItem(props) {
-    const approveExpert = (expertId) => {
-        API.approveExpert(expertId)
-            .then(() => {
-                props.approvedExpert(expertId);
-                Notification.showSuccess("Approved!")
-            })
-            .catch((err) => Notification.showError("Can't reach the server"))
-    }
-    return (
-
-        <ListGroup.Item key={props.expert.id} as='li' className="d-flex justify-content-beetween mb-3 py-3">
-            <Container>{props.expert.id}</Container>
-            <Container>{props.expert.firstName}</Container>
-            <Container>{props.expert.lastName}</Container>
-            <Container>{props.expert.email}</Container>
-            <Container>{props.expert.approved ? 'Approved' : 'Not Approved'}</Container>
-            <Container>
-                {!props.expert.approved &&
-                    <Button variant="outline-success" onClick={() => approveExpert(props.expert.id)}>
-                        Approve
-                    </Button>}
-            </Container>
-        </ListGroup.Item>
-    )
-}
-
 
 function TicketTable(props) {
     const [selectedStatus, setSelectedStatus] = useState("");
@@ -200,7 +130,7 @@ function TicketItem(props) {
                 props.refreshTickets()
 
             })
-            .catch((err) => Notification.showError(err.detail))
+            .catch((err) => {console.log(err);Notification.showError(err.detail);})
             .finally(() => setRender((old) => !old))
     }
 
