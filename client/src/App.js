@@ -240,10 +240,10 @@ function MainApp(props) {
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : <LandingPage user={user} tickets={tickets} loadingTickets={loadingTickets} handleLogout={handleLogout} />
+          : <LandingPage user={user} tickets={tickets} loadingTickets={loadingTickets} getTickets={getTickets} handleLogout={handleLogout} />
       }>
         {user.role === "Client"
-          ? <><Route path="/" element={<YourTickets tickets={tickets} loadingTickets={loadingTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket} />} />
+          ? <><Route path="/" element={<YourTickets user={user} tickets={tickets} loadingTickets={loadingTickets} getTickets={getTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket} />} />
             <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct} />} />
             <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket} />} />
             <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
@@ -263,7 +263,7 @@ function MainApp(props) {
         }
         {user.role === "Expert"
           ? <>
-            <Route path="/" element={<ExpertTickets tickets={tickets} loadingTickets={loadingTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket} />} />
+            <Route path="/" element={<ExpertTickets user = {user} tickets={tickets} loadingTickets={loadingTickets} getTickets={getTickets} messages={messages} loadingMessages={loadingMessages} getMessages={getMessages} stopTicket={stopTicket} />} />
             <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
           </>
           : null

@@ -3,10 +3,33 @@ import "./customnavbar.css"
 import { Navbar, Container, Nav, Button, Spinner, Card } from "react-bootstrap"
 import { BsCheckCircleFill, BsFillPlayCircleFill, BsXCircleFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export function CustomNavbar(props) {
 
     const navigate = useNavigate();
+    const [spin, setSpin] = useState(true)
+
+    const REFRESH = 5000;
+
+    useEffect(() => {
+        if(props.user.role === "Expert"){
+            const interval = setInterval(() => {
+                console.log("tickets")
+                props.getTickets(props.user)
+            }, REFRESH);
+
+            return() => clearTimeout(interval);// This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+        }
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => { //Use spin state instead of loadingMessages to avoid Spinner animation at every poll
+        if(props.loadingMessages === false && spin === true){
+            setSpin(false);
+        }
+        // eslint-disable-next-line
+    }, [props.loadingMessages]);
 
     return (
 
@@ -27,7 +50,7 @@ export function CustomNavbar(props) {
                     <Nav.Link onClick={() => navigate("/")}>Your Tickets</Nav.Link>
                 </Nav> : null}
                 {props.user.role === "Expert" ?
-                    !props.loadingTickets ?
+                    spin ?
                         <Card className="p-1">
                             <span>Ticket stats: {props.tickets.filter(t => t.status === "IN_PROGRESS").length} <BsFillPlayCircleFill color="#ffc107" size="20px" className="me-2" />
                                 {props.tickets.filter(t => t.status === "RESOLVED").length} <BsCheckCircleFill color="green" size="20px" className="me-2"/>
