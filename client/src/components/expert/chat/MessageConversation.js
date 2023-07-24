@@ -114,7 +114,7 @@ function MessageConversation(props) {
                                             {send !== "" || attachments.length > 0 ? <Button disabled={ticket.status !== "IN_PROGRESS"} onClick={() => handleSend()}>Send</Button> : null}
                                         </InputGroup>
                                     </Form.Group>
-                                    <Form.Group controlId="formFile" onChange={handleFileChange}>
+                                    <Form.Group onChange={handleFileChange}>
                                         <Form.Control type="file" id="fileForm" multiple />
                                     </Form.Group>
                                 </Form> : null}

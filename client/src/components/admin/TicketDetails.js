@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Container, ListGroup, Row } from "react-bootstrap";
+import { Card, Container, ListGroup, Row } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "../../API";
 import Notification from "../../utils/Notifications";
 import Divider from '@mui/material/Divider'
+import formatDateTime from "../../utils/DateTimeFormatter";
+import MessageItem from "../expert/chat/MessageItem";
 
-function TicketDetails(){
+function TicketDetails(props){
     const navigate = useNavigate();
     const params = useParams();
     const {state} = useLocation();
@@ -142,9 +144,9 @@ function TicketDetails(){
                     {histories.map((history,index)=>
                         <ListGroup.Item key={`history${history.id}`} as='li' className="d-flex justify-content-beetween mb-3 py-3">
                         <Container>{history.state}</Container>
-                        <Container>{history.date.replace('T','   ').split('.')[0]}</Container>
-                        <Container>{history.employee.id}</Container>
-                        <Container>{history.employee.email}</Container>
+                        <Container>{formatDateTime(history.date)}</Container>
+                        <Container>{history.employee ? history.employee.id : ""}</Container>
+                        <Container>{history.employee ? history.employee.email : ""}</Container>
                         </ListGroup.Item>
                     )}
             </ListGroup>
@@ -158,26 +160,10 @@ function TicketDetails(){
         <Container className="d-flex justify-content-center align-items-center">
             <h3 className="m-0">Messages</h3>
         </Container>
-        <Container className="d-flex justify-content-center align-items-center">
-            <h5 className="m-0"><i> - about the ticket - </i></h5>
-        </Container>
         <Row key="r5" className="d-flex justify-content-center mt-4">
             <ListGroup key="lg5" variant="flush" className="px-3">
-                <ListGroup.Item key="attr7" as='li' className="d-flex justify-content-beetween list-titles">
-                        <Container>Date</Container>
-                        <Container>List Of Attachments</Container>
-                        <Container>Expert Id</Container>
-                </ListGroup.Item>
-                {messages.map((message,index)=><Container key={index}>
-                    <ListGroup.Item key={`message${message.id}`} as='li' className="d-flex justify-content-beetween mb-3 py-3">
-                        <Container>{message.date.replace('T','   ').split('.')[0]}</Container>
-                        <Container>{message.listOfAttachments}</Container>
-                        <Container>{message.expert}</Container>
-                    </ListGroup.Item>
-                    <ListGroup.Item key={`messageBody${index}`} as='li' className="d-flex justify-content-beetween mb-3 py-3">
-                        <Container style={{'backgroundColor':'white','align':'center'}}>{message.body}</Container>
-                    </ListGroup.Item>
-                    <Divider><i>next message</i></Divider>
+                {messages.map((m,index)=><Container key={index}>
+                    <MessageItem ticket={ticket} user={props.user} key={m.id} message={m}></MessageItem>
                 </Container>)}
             </ListGroup>
         </Row>

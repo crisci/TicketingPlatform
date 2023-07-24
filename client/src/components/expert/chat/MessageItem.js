@@ -40,6 +40,7 @@ function MessageItem(props) {
                 props.message.expert != null
                 ?
                 <>
+                {props.user.role === "Manager" ? <span className="d-flex justify-content-end">{`${props.message.expert}`}&nbsp;</span> : null}
                     <Container className="d-flex justify-content-end">
                         <ListGroup.Item active key={props.message.id} as='li' className="d-flex mb-3 py-3 w-50">
                             <Col style={{ padding: 0 }}>

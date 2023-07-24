@@ -255,7 +255,7 @@ function MainApp(props) {
             ? <>
               <Route path="/" element={<AdminMainPage handleLogout={handleLogout} />} />
               <Route path="/expertRegistration" element={<ExpertRegistration handleCreateExpert={handleCreateExpert} handleLogout={handleLogout} loadingExpertRegistration={loadingExpertRegistration} />} />
-              <Route path="/:ticketId/details" element={<TicketDetails />} />
+              <Route path="/:ticketId/details" element={<TicketDetails user={user}/>} />
               <Route path="/products" element={<Products/>} />
               <Route path="/experts" element={<ExpertList/>} />
             </>
