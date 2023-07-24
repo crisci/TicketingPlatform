@@ -25,7 +25,7 @@ function LandingPage(props) {
         props.user.role === "Expert"
         ?
             <>
-            <CustomNavbar handleLogout={props.handleLogout} user={props.user} tickets={props.tickets} loadingTickets={props.loadingTickets}/>
+            <CustomNavbar handleLogout={props.handleLogout} user={props.user} tickets={props.tickets} loadingTickets={props.loadingTickets} getTickets={props.getTickets}/>
             { renderLandingPage(props.user.role) }
             </>
         : 

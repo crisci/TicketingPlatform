@@ -395,7 +395,7 @@ function getMessages(ticketId) {
                 res.json().then(messages => resolve(messages)).catch(_ => reject("Unable to parse the response."))
             } else if(res.status === 401) {
                 refreshToken().then(_ => {
-                        getMessages().then(messages => resolve(messages)).catch(err => reject(err))
+                        getMessages(ticketId).then(messages => resolve(messages)).catch(err => reject(err))
                 }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))

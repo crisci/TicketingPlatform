@@ -19,6 +19,9 @@ function AdminMainPage(props) {
     const [expertTickets, setExpertToTickets] = useState({});
     
     const [assigned, setAssigned] = useState(true);
+    const [spin, setSpin] = useState(true)
+
+    const REFRESH = 5000;
 
     useEffect(() => {
         if (assigned) {
@@ -44,7 +47,29 @@ function AdminMainPage(props) {
         }
     }, [experts, tickets, assigned])
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log("tickets")
+            API.getManagerTickets().then((res) => {
+                setTickets(res);
+                setTicketMsg("Waiting for server response");
+                setTicketWait(false)
+            }).catch(err => {
+                Notification.showError(err.detail);
+                setTicketMsg("Error trying to contact the server.");
+            });
+        }, REFRESH);
 
+        return() => clearTimeout(interval);// This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => { //Use spin state instead of loadingMessages to avoid Spinner animation at every poll
+        if(props.loadingMessages === false && spin === true){
+            setSpin(false);
+        }
+        // eslint-disable-next-line
+    }, [props.loadingMessages]);
 
     const refreshTickets = () => {
         setAssigned(true);
