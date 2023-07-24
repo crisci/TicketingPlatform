@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import API from "../../API";
-import { Container, ListGroup, Row } from "react-bootstrap";
+import { Container, Form, ListGroup, Row } from "react-bootstrap";
 import Notification from "../../utils/Notifications";
 
 function ExpertList(){
     const [expertMsg, setExpertMsg] = useState("Waiting for server response");
     const [experts, setExperts] = useState(null);
     const [expertWait, setExpertWait] = useState(true);
+    const [nameFilter, setNameFilter] = useState("")
 
     useEffect(()=>{
         API.getExperts().then((res) => {
@@ -23,12 +24,18 @@ function ExpertList(){
             <Container className="d-flex justify-content-center align-items-center">
                 <h1 className="m-0">List of Experts</h1>
             </Container>
+            <Form className="d-flex justify-content-center pt-3">
+                    <Form.Group className="w-50">
+                        <Form.Control type="text" placeholder="Search by id..." value={nameFilter} onChange={event => setNameFilter(event.target.value)} />
+                    </Form.Group>
+                </Form>
+
             <Row className="d-flex justify-content-center mt-4">
             {
                 expertWait ? 
                     expertMsg
                 : 
-                    <ExpertTable experts={experts}/>
+                    <ExpertTable experts={experts} nameFilter={nameFilter}/>
             }
             </Row>
         </Container>
@@ -46,7 +53,7 @@ function ExpertTable(props) {
             </ListGroup.Item>
             {!props.experts || props.experts.length === 0 ?
                 <h2>0 experts found.</h2>
-                : props.experts.map((expert) => <ExpertItem key={expert.id} expert={expert}/>)}
+                : props.experts.filter(e => e.id.startsWith(props.nameFilter)).map((expert) => <ExpertItem key={expert.id} expert={expert}/>)}
         </ListGroup>
     </>
 }

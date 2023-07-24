@@ -37,8 +37,8 @@ function TicketModal(props) {
                                 <Col style={{ display: "contents" }}>
                                     <h5 className='m-0'>Status: </h5>
                                 </Col>
-                                <Col>
-                                    <Badge className='d-flex w-25 justify-content-center' pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>
+                                <Col style={{ display: "contents" }}>
+                                    <Badge className='d-flex justify-content-center mx-2' pill text={props.ticket.status === "IN_PROGRESS" ? "dark" : null} bg={mapStatus(props.ticket.status)}>
                                         {props.ticket.status}
                                     </Badge>
                                 </Col>
