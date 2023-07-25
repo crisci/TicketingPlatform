@@ -661,12 +661,12 @@ function addManagerProduct(ean, brand, name) {
 }
 
 
-function updateManagerProduct(oldEan, newEan, brand, name) {
+function updateManagerProduct(ean, brand, name) {
     return new Promise((resolve, reject) => {
-        return fetch(`${APIURL}/products/${oldEan}`, {
+        return fetch(`${APIURL}/products/${ean}`, {
             method: 'PUT',
             credentials: 'include',
-            body: JSON.stringify({ean: newEan, brand, name}),
+            body: JSON.stringify({ean, brand, name}),
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
                 'Content-Type': 'application/json'
@@ -676,7 +676,7 @@ function updateManagerProduct(oldEan, newEan, brand, name) {
                 resolve(true)
             } else if (res.status === 401) {
                 refreshToken().then(_ => {
-                    updateManagerProduct(oldEan, brand, name).then(() => resolve(true)).catch(err => reject(err))
+                    updateManagerProduct(ean, brand, name).then(() => resolve(true)).catch(err => reject(err))
                 }).catch(err => reject(err))
             } else {
                 res.json().then(err => reject(err)).catch(_ => reject("Unable to parse the response."))
