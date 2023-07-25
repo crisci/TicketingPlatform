@@ -1,0 +1,7 @@
+const expertStatus = ["ALL", "IN_PROGRESS", "CLOSED", "RESOLVED"]
+
+<<<<<<< HEAD
+export default expertStatus;
+=======
+export default expertStatus;
+>>>>>>> 58fc71bfa07095ed6c1e85af7bc67b9a8d3505cf

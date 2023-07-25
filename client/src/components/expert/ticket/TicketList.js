@@ -21,8 +21,8 @@ function TicketList(props) {
                 <Container>Actions</Container>
             </ListGroup.Item>
             {   numberOfFilteredTickets === 0 
-                    ?  <h2>0 tickets found.</h2>
-                    : props.tickets.filter(a => {return a.title.toLowerCase().startsWith(props.nameFilter.toLowerCase())}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleS={handleS} ticket={ticket}/>)
+                    ?  <h3 className="mt-4">0 {props.selectedStatus.replace("_", " ").toLowerCase()} tickets found.</h3> 
+                    : props.tickets.filter(a => {return a.title.startsWith(props.nameFilter)}).sort((a,b) => a.dateTime < b.dateTime).map(ticket => <TicketItem key={ticket.id} tooltip={tooltip} handleS={handleS} ticket={ticket}/>)
             }
         </ListGroup>
     )
