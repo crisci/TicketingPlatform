@@ -20,6 +20,7 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()
             .authorizeHttpRequests()
+            .requestMatchers(HttpMethod.GET, "/actuator/prometheus").permitAll()
             .requestMatchers(HttpMethod.GET, "/API/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/API/login", "/API/signup", "/API/refresh").permitAll()
             .requestMatchers(HttpMethod.GET, "/API/products").permitAll()

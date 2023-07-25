@@ -5,9 +5,18 @@ import jakarta.validation.constraints.NotNull
 import org.aspectj.lang.ProceedingJoinPoint
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import io.micrometer.core.instrument.MeterRegistry
 
+
+/*
+ * The extended class AbstractLogAspect is for the classes that I didn’t put the 
+ * @Observed on it, but still want to log around them. 
+ * So I extract the logic for others @Aspect to use.
+*/
 
 open class AbstractLogAspect {
+    
     @Throws(Throwable::class)
     open fun logInfoAround(joinPoint: ProceedingJoinPoint): Any? {
         val logInfo = getLogInfo(joinPoint)
