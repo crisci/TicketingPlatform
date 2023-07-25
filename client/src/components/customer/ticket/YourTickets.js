@@ -21,12 +21,12 @@ function YourTickets(props) {
         // eslint-disable-next-line
     }, []);
 
-    useEffect(() => { //Use spin state instead of loadingMessages to avoid Spinner animation at every poll
-        if(props.loadingMessages === false && spin === true){
+    useEffect(() => { //Use spin state instead of loadingTickets to avoid Spinner animation at every poll
+        if(props.loadingTickets === false && spin === true){
             setSpin(false);
         }
         // eslint-disable-next-line
-    }, [props.loadingMessages]);
+    }, [props.loadingTickets]);
 
     return (
         <Container className="mt-3">
@@ -40,7 +40,7 @@ function YourTickets(props) {
                 </Form.Group>
             </Form>
             <Row className="d-flex justify-content-center mt-4">
-                {spin
+                {!spin
                     ? props.tickets.length !== 0 
                         ? <TicketList tickets={props.tickets} nameFilter={nameFilter} closeTicket={props.closeTicket} resolveTicket={props.resolveTicket} reopenTicket={props.reopenTicket}/> 
                         : <h2>You don't have opened a ticket yet!</h2>

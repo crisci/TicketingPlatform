@@ -24,12 +24,12 @@ export function CustomNavbar(props) {
         // eslint-disable-next-line
     }, []);
 
-    useEffect(() => { //Use spin state instead of loadingMessages to avoid Spinner animation at every poll
-        if(props.loadingMessages === false && spin === true){
+    useEffect(() => { //Use spin state instead of loadingTickets to avoid Spinner animation at every poll
+        if(props.loadingTickets === false && spin === true){
             setSpin(false);
         }
         // eslint-disable-next-line
-    }, [props.loadingMessages]);
+    }, [props.loadingTickets]);
 
     return (
 
@@ -50,7 +50,7 @@ export function CustomNavbar(props) {
                     <Nav.Link onClick={() => navigate("/")}>Your Tickets</Nav.Link>
                 </Nav> : null}
                 {props.user.role === "Expert" ?
-                    spin ?
+                    !spin ?
                         <Card className="p-1">
                             <span>Ticket stats: {props.tickets.filter(t => t.status === "IN_PROGRESS").length} <BsFillPlayCircleFill color="#ffc107" size="20px" className="me-2" />
                                 {props.tickets.filter(t => t.status === "RESOLVED").length} <BsCheckCircleFill color="green" size="20px" className="me-2"/>

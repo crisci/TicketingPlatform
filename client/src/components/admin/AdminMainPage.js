@@ -19,7 +19,6 @@ function AdminMainPage(props) {
     const [expertTickets, setExpertToTickets] = useState({});
     
     const [assigned, setAssigned] = useState(true);
-    const [spin, setSpin] = useState(true)
 
     const REFRESH = 5000;
 
@@ -63,13 +62,6 @@ function AdminMainPage(props) {
         return() => clearTimeout(interval);// This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
         // eslint-disable-next-line
     }, []);
-
-    useEffect(() => { //Use spin state instead of loadingMessages to avoid Spinner animation at every poll
-        if(props.loadingMessages === false && spin === true){
-            setSpin(false);
-        }
-        // eslint-disable-next-line
-    }, [props.loadingMessages]);
 
     const refreshTickets = () => {
         setAssigned(true);
