@@ -29,7 +29,7 @@ function MessageItem(props) {
         return (
           <div className='d-flex py-2'>
             <BsFilePdfFill style={{ display: 'inline-block', width: '25px', height: '25px' }}/>
-            <text style={{ display: 'inline-block', width: '100px', height: '25px', cursor:"pointer" }} onClick={handleDownload}>Download</text>
+            <p style={{ display: 'inline-block', fontSize:"1rem" , cursor:"pointer" }} onClick={handleDownload}>Download</p>
           </div>
         );
       };

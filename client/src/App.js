@@ -100,7 +100,8 @@ function MainApp(props) {
     return API.signup(credentials)
       .then(() => {
         doLogIn({ username: credentials.username, password: credentials.password })
-      }).catch(err => { Notification.showError(err.detail) })
+      }).catch(err => {
+        Notification.showError(err) })
   }
 
   const handleLogout = () => {
@@ -247,7 +248,8 @@ function MainApp(props) {
             <Route path="/yourproducts" element={<YourProducts products={products} addProduct={addProduct} removeProduct={removeProduct} />} />
             <Route path="/openticket" element={<OpenTicket products={products} openTicket={openTicket} />} />
             <Route path="/chat/:id" element={<MessageConversation user={user} tickets={tickets} getMessages={getMessages} messages={messages} loadingMessages={loadingMessages} handleCloseChat={handleCloseChat} addMessage={user.role === "Client" ? addClientMessage : addExpertMessage} />} />
-            <Route path="/:ticketId/details" element={<TicketDetails />} /></>
+            <Route path="/:ticketId/details" element={<TicketDetails />} />
+            <Route path='/products' element={<Products role={user.role}/>}/></>
           : null
         }
         {
@@ -256,7 +258,7 @@ function MainApp(props) {
               <Route path="/" element={<AdminMainPage handleLogout={handleLogout} />} />
               <Route path="/expertRegistration" element={<ExpertRegistration handleCreateExpert={handleCreateExpert} handleLogout={handleLogout} loadingExpertRegistration={loadingExpertRegistration} />} />
               <Route path="/:ticketId/details" element={<TicketDetails user={user}/>} />
-              <Route path="/products" element={<Products/>} />
+              <Route path="/products" element={<Products role={user.role}/>} />
               <Route path="/experts" element={<ExpertList/>} />
             </>
             : null

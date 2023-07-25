@@ -20,7 +20,7 @@ function AdminMainPage(props) {
     
     const [assigned, setAssigned] = useState(true);
 
-    const REFRESH = 5000;
+
 
     useEffect(() => {
         if (assigned) {
@@ -45,23 +45,6 @@ function AdminMainPage(props) {
             });
         }
     }, [experts, tickets, assigned])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            console.log("tickets")
-            API.getManagerTickets().then((res) => {
-                setTickets(res);
-                setTicketMsg("Waiting for server response");
-                setTicketWait(false)
-            }).catch(err => {
-                Notification.showError(err.detail);
-                setTicketMsg("Error trying to contact the server.");
-            });
-        }, REFRESH);
-
-        return() => clearTimeout(interval);// This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-        // eslint-disable-next-line
-    }, []);
 
     const refreshTickets = () => {
         setAssigned(true);

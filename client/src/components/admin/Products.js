@@ -3,6 +3,7 @@ import API from "../../API";
 import Notification from "../../utils/Notifications";
 import { Button, Container, Form, ListGroup, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { BsCheckCircleFill, BsPencilSquare, BsXCircleFill } from "react-icons/bs";
+import ProductCustomerList from "../customer/product/ProductCustomerList";
 
 
 function Products(props) {
@@ -53,10 +54,10 @@ function Products(props) {
         <>
             <Container className="justify-content-center align-items-center">
                 <h1 className="m-0">Products</h1>
-                {!productForm ? <Button style={{ fontWeight: "700" }} className="mx-3 py-2" onClick={() => { setProductForm(true) }}>{"Add Product"}</Button> : null}
+                {!productForm && props.role !== "Client" ? <Button style={{ fontWeight: "700" }} className="mx-3 py-2" onClick={() => { setProductForm(true) }}>{"Add Product"}</Button> : null}
             </Container>
             {
-                productForm
+                productForm && props.role !== "Client"
                     ? <ProductForm closeForm={closeForm} addedSuccessfully={addedSuccessfully} />
                     : null
             }
@@ -69,7 +70,9 @@ function Products(props) {
                 {
                     loadingProducts
                         ? <Spinner variant="primary" />
-                        : <ProductManagerList products={products} updateProduct={updateProduct} nameFilter={nameFilter} />
+                        : props.role === "Client"
+                            ? <ProductCustomerList products={products} nameFilter={nameFilter} />
+                            : <ProductManagerList products={products} updateProduct={updateProduct} nameFilter={nameFilter} />
                 }
             </Container>
         </>

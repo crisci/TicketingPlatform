@@ -54,7 +54,7 @@ async function signup(user) {
         if (res.ok) {
             return true
         } else {
-            throw Error("An error occurred while signing up.")
+            throw await res.json().then(err => err.detail)
         }
     })
 
@@ -661,12 +661,12 @@ function addManagerProduct(ean, brand, name) {
 }
 
 
-function updateManagerProduct(oldEan, brand, name) {
+function updateManagerProduct(oldEan, newEan, brand, name) {
     return new Promise((resolve, reject) => {
         return fetch(`${APIURL}/products/${oldEan}`, {
             method: 'PUT',
             credentials: 'include',
-            body: JSON.stringify({ean: oldEan, brand, name}),
+            body: JSON.stringify({ean: newEan, brand, name}),
             headers: {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("jwt")).access_token,
                 'Content-Type': 'application/json'

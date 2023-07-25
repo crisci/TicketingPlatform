@@ -6,10 +6,6 @@ services:
       POSTGRES_DB: ${POSTGRESQL_DB}
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-    volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
-      - ./imports:/var/lib/postgresql/data/imports
 
     ports:
       - "5432:5432"

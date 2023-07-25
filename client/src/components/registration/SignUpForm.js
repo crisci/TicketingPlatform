@@ -36,7 +36,6 @@ function SignUpForm(props) {
             setErrorMessage('Password is mandatory.')
         } else {
             //registration api than login asynch await
-            console.log(JSON.stringify({ username, password, firstName, lastName, email, dob, address, phoneNumber }))
             props.signup({ username, password, firstName, lastName, email, dob, address, phoneNumber }).catch(err => { setErrorMessage(err.message) });
         }
     }
@@ -82,7 +81,7 @@ function SignUpForm(props) {
                             <Col>
                                 <Form.Group controlId='phone_number'>
                                     <Form.Label>Phone number</Form.Label>
-                                    <Form.Control type="tel" value={phoneNumber} maxLength={13} onChange={(event) => { setPhoneNumber(event.target.value) }} />
+                                    <Form.Control type="tel" value={phoneNumber} maxLength={10} onChange={(event) => { setPhoneNumber(event.target.value) }} />
                                 </Form.Group>
                             </Col>
                         </Row>
