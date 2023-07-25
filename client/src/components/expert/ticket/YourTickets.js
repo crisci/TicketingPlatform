@@ -1,11 +1,17 @@
 import { Container, Form, Row, Spinner } from "react-bootstrap";
 import TicketList from "./TicketList";
 import { useState, useEffect } from "react";
+import TicketStats from "./TicketsStats";
 
 function ExpertTickets(props) {
 
     const [nameFilter, setNameFilter] = useState("")
     const [spin, setSpin] = useState(true)
+    const [selectedStatus, setSelectedStatus] = useState("");
+
+    const onItemClick = (item) => {
+        setSelectedStatus(item);
+    };
 
     const REFRESH = 5000;
 
@@ -28,9 +34,10 @@ function ExpertTickets(props) {
 
     return (
         <Container className="mt-3">
-            <Container className="d-flex justify-content-center align-items-center">
+            <Container className="d-flex justify-content-center align-items-center mb-4">
                 <h1 className="m-0">Expert Tickets</h1>
             </Container>
+            <TicketStats tickets={props.tickets} onItemClick={onItemClick} />
             <Form className="d-flex justify-content-center pt-3">
                 <Form.Group className="w-50">
                     <Form.Control type="text" placeholder="Search..." value={nameFilter} onChange={event => setNameFilter(event.target.value)}/>
@@ -38,7 +45,7 @@ function ExpertTickets(props) {
             </Form>
             <Row className="d-flex justify-content-center mt-4">
                 {!spin 
-                    ? <TicketList tickets={props.tickets.filter(t => ["IN_PROGRESS", "CLOSED", "RESOLVED"].includes(t.status))} messages={props.messages} loadingMessages={props.loadingMessages} nameFilter={nameFilter} getMessages={props.getMessages} stopTicket={props.stopTicket}/> 
+                    ? <TicketList selectedStatus={selectedStatus} tickets={selectedStatus === "" ? props.tickets.filter(t => ["IN_PROGRESS", "CLOSED", "RESOLVED"].includes(t.status)) : props.tickets.filter(t => t.status === selectedStatus)} messages={props.messages} loadingMessages={props.loadingMessages} nameFilter={nameFilter} getMessages={props.getMessages} stopTicket={props.stopTicket}/> 
                     : <Spinner  variant="primary"/>        
                 }
             </Row>

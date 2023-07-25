@@ -22,17 +22,10 @@ function LandingPage(props) {
     
 
     return(
-        props.user.role === "Expert"
-        ?
-            <>
-            <CustomNavbar handleLogout={props.handleLogout} user={props.user} tickets={props.tickets} loadingTickets={props.loadingTickets} getTickets={props.getTickets}/>
-            { renderLandingPage(props.user.role) }
-            </>
-        : 
-            <>
-            <CustomNavbar handleLogout={props.handleLogout} user={props.user}/>
-            { renderLandingPage(props.user.role) }
-            </>
+        <>
+        <CustomNavbar handleLogout={props.handleLogout} user={props.user}/>
+        { renderLandingPage(props.user.role) }
+        </>
     )
 }
 

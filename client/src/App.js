@@ -240,7 +240,7 @@ function MainApp(props) {
       <Route path="/" element={
         !loggedIn
           ? <Navigate to="/login" />
-          : <LandingPage user={user} tickets={tickets} loadingTickets={loadingTickets} getTickets={getTickets} handleLogout={handleLogout} />
+          : <LandingPage user={user} handleLogout={handleLogout} />
       }>
         {user.role === "Client"
           ? <><Route path="/" element={<YourTickets user={user} tickets={tickets} loadingTickets={loadingTickets} getTickets={getTickets} closeTicket={closeTicket} resolveTicket={resolveTicket} reopenTicket={reopenTicket} />} />
